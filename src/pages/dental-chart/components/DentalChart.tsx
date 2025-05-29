@@ -103,22 +103,42 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     const tooth = teeth.find(t => t.id === toothId);
     if (!tooth) return;
 
-    // Check if any area has this treatment
-    const hasThisTreatment = tooth.areas.some(area => area.treatment === selectedTreatment);
-
-    setTeeth((prevTeeth) =>
-      prevTeeth.map((tooth) =>
-        tooth.id === toothId
-          ? {
-              ...tooth,
-              areas: tooth.areas.map(area => ({
-                ...area,
-                treatment: hasThisTreatment ? undefined : selectedTreatment
-              }))
-            }
-          : tooth
-      )
-    );
+    // For extraction, always apply to all areas
+    if (selectedTreatment === 'extraction') {
+      const hasExtraction = tooth.areas.some(area => area.treatment === 'extraction');
+      setTeeth((prevTeeth) =>
+        prevTeeth.map((t) =>
+          t.id === toothId
+            ? {
+                ...t,
+                areas: t.areas.map(area => ({
+                  ...area,
+                  treatment: hasExtraction ? undefined : 'extraction'
+                }))
+              }
+            : t
+        )
+      );
+    } else {
+      // For other treatments, toggle only the clicked area
+      setTeeth((prevTeeth) =>
+        prevTeeth.map((t) =>
+          t.id === toothId
+            ? {
+                ...t,
+                areas: t.areas.map(area => ({
+                  ...area,
+                  treatment: area.name === areaName
+                    ? area.treatment === selectedTreatment
+                      ? undefined
+                      : selectedTreatment
+                    : area.treatment
+                }))
+              }
+            : t
+        )
+      );
+    }
     onUpdate();
   };
 
@@ -291,10 +311,10 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       </div>
       
       <div className="mt-4 text-sm text-center text-muted-foreground">
-        {selectedTreatment ? (
-          <>Click on any area of a tooth to add or remove {selectedTreatment}</>
+        {selectedTreatment === 'extraction' ? (
+          <>Click on any area of a tooth to mark it for extraction</>
         ) : (
-          <>Select a treatment from the list to begin</>
+          <>Click on a specific area to add {selectedTreatment}</>
         )}
       </div>
     </div>
