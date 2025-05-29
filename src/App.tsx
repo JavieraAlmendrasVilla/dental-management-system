@@ -15,6 +15,7 @@ const Billing = lazy(() => import('./pages/billing/BillingPage'));
 const Reports = lazy(() => import('./pages/reports/ReportsPage'));
 const Login = lazy(() => import('./pages/auth/LoginPage'));
 const Settings = lazy(() => import('./pages/settings/SettingsPage'));
+const WebsiteBuilder = lazy(() => import('./pages/website-builder/WebsiteBuilderPage'));
 
 function App() {
   // Use mock authentication for development
@@ -36,7 +37,7 @@ function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login\" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     );
@@ -55,12 +56,11 @@ function App() {
           <Route path="billing" element={<Billing />} />
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="website-builder" element={<WebsiteBuilder />} />
         </Route>
-        <Route path="/login" element={<Navigate to="/\" replace />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
 }
-
-export default App;

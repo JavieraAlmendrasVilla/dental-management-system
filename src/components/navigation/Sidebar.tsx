@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Calendar, CreditCard, FileText, Home, PieChart, Settings, Bluetooth as Tooth, Users } from 'lucide-react';
+import { Calendar, CreditCard, FileText, Globe, Home, PieChart, Settings, Bluetooth as Tooth, Users } from 'lucide-react';
 import { cn } from '../../lib/utils';
 
 interface NavLinkProps {
@@ -40,6 +40,7 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
     { to: '/treatments', icon: <Tooth className="h-5 w-5" />, label: 'Treatments' },
     { to: '/billing', icon: <CreditCard className="h-5 w-5" />, label: 'Billing' },
     { to: '/reports', icon: <PieChart className="h-5 w-5" />, label: 'Reports' },
+    { to: '/website-builder', icon: <Globe className="h-5 w-5" />, label: 'Website Builder' },
     { to: '/settings', icon: <Settings className="h-5 w-5" />, label: 'Settings' },
   ];
 
