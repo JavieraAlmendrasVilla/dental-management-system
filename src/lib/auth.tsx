@@ -20,6 +20,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
+        connection: 'google-oauth2',
+        prompt: 'select_account',
       }}
     >
       {children}

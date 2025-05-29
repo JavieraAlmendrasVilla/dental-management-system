@@ -4,6 +4,14 @@ import { Bluetooth as Tooth } from 'lucide-react';
 const LoginPage = () => {
   const { loginWithRedirect } = useAuth0();
 
+  const handleGoogleLogin = () => {
+    loginWithRedirect({
+      authorizationParams: {
+        connection: 'google-oauth2',
+      }
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col sm:flex-row">
       {/* Left side - Branding */}
@@ -63,10 +71,15 @@ const LoginPage = () => {
           </div>
           
           <button
-            onClick={() => loginWithRedirect()}
-            className="w-full rounded-md bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+            onClick={handleGoogleLogin}
+            className="w-full flex items-center justify-center rounded-md bg-white border border-gray-300 px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors mb-4"
           >
-            Continue with Auth0
+            <img 
+              src="https://www.google.com/favicon.ico" 
+              alt="Google" 
+              className="w-5 h-5 mr-3" 
+            />
+            Continue with Google
           </button>
           
           <div className="mt-6 text-center text-sm text-muted-foreground">
