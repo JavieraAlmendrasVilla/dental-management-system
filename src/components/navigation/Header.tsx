@@ -1,6 +1,7 @@
-import { Bell, Moon, Search, Sun, User } from 'lucide-react';
+import { Bell, Moon, Search, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { LanguageSelector } from './LanguageSelector';
+import { DoctorSelector } from './DoctorSelector';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 interface HeaderProps {
@@ -66,14 +67,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
 
           <LanguageSelector />
           
-          <div className="relative">
-            <button className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground">
-                <User className="h-4 w-4" />
-              </div>
-              <span className="hidden text-sm font-medium md:block">Dr. Morgan</span>
-            </button>
-          </div>
+          <DoctorSelector />
         </div>
       </div>
     </header>
