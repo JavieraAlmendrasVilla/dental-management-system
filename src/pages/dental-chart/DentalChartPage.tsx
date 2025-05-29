@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Calendar, FilePlus, History, Printer, Save } from 'lucide-react';
+import { Calendar, FilePlus, History, Printer, Save, Clock, X } from 'lucide-react';
 import DentalChart from './components/DentalChart';
 
 const TREATMENT_TYPES = [
@@ -12,18 +12,26 @@ const TREATMENT_TYPES = [
   { id: 'bridge', name: 'Bridge', color: '#6366f1' },
 ];
 
+// Available time slots
+const TIME_SLOTS = [
+  '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
+  '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
+];
+
 const DentalChartPage = () => {
   const { patientId } = useParams<{ patientId: string }>();
   const [selectedTreatment, setSelectedTreatment] = useState(TREATMENT_TYPES[0].id);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+  const [showScheduleModal, setShowScheduleModal] = useState(false);
+  const [appointmentDate, setAppointmentDate] = useState('');
+  const [appointmentTime, setAppointmentTime] = useState('');
+  const [selectedDoctor, setSelectedDoctor] = useState('');
 
   const patientName = 'John Smith';
 
   const handleSaveChart = (teeth: any) => {
-    // In a real app, this would make an API call to save the dental chart
     console.log('Saving dental chart:', teeth);
     setHasUnsavedChanges(false);
-    // Show success message
     alert('Dental chart saved successfully!');
   };
 
@@ -31,9 +39,26 @@ const DentalChartPage = () => {
     setHasUnsavedChanges(true);
   };
 
+  const handleScheduleAppointment = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, this would make an API call to schedule the appointment
+    console.log('Scheduling appointment:', {
+      patientId,
+      date: appointmentDate,
+      time: appointmentTime,
+      doctor: selectedDoctor
+    });
+    alert('Appointment scheduled successfully!');
+    setShowScheduleModal(false);
+  };
+
+  // Get tomorrow's date as the minimum date for scheduling
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+
   return (
     <div className="space-y-6 animate-fade-in max-w-7xl mx-auto px-4">
-      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dental Chart</h1>
@@ -61,6 +86,78 @@ const DentalChartPage = () => {
           )}
         </div>
       </div>
+
+      {/* Schedule Appointment Modal */}
+      {showScheduleModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card rounded-lg shadow-lg w-full max-w-md">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-lg font-semibold">Schedule Appointment</h2>
+              <button 
+                onClick={() => setShowScheduleModal(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <form onSubmit={handleScheduleAppointment} className="p-4 space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Date</label>
+                <input
+                  type="date"
+                  min={minDate}
+                  value={appointmentDate}
+                  onChange={(e) => setAppointmentDate(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Time</label>
+                <select
+                  value={appointmentTime}
+                  onChange={(e) => setAppointmentTime(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                >
+                  <option value="">Select a time</option>
+                  {TIME_SLOTS.map((time) => (
+                    <option key={time} value={time}>{time}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Doctor</label>
+                <select
+                  value={selectedDoctor}
+                  onChange={(e) => setSelectedDoctor(e.target.value)}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                >
+                  <option value="">Select a doctor</option>
+                  <option value="dr-morgan">Dr. Morgan</option>
+                  <option value="dr-anderson">Dr. Anderson</option>
+                </select>
+              </div>
+              <div className="pt-4 border-t flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowScheduleModal(false)}
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+                >
+                  Schedule Appointment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Main Grid */}
       <div className="grid gap-6 md:grid-cols-4">
@@ -107,7 +204,10 @@ const DentalChartPage = () => {
                 <p className="text-sm">December 15, 2023</p>
               </div>
               <div className="mt-4">
-                <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium w-full hover:bg-muted transition-colors">
+                <button 
+                  onClick={() => setShowScheduleModal(true)}
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium w-full hover:bg-muted transition-colors"
+                >
                   <Calendar className="mr-2 h-4 w-4" />
                   Schedule Appointment
                 </button>
