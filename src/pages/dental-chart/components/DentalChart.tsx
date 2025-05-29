@@ -188,6 +188,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   };
 
   const getToothPath = (tooth: Tooth): string => {
+    // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
     const cx = 50;
     const cy = 50;
     const outerR = 40;
