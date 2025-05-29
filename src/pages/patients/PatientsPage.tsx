@@ -62,10 +62,6 @@ const PatientsPage = () => {
     patient.phone.includes(searchTerm)
   );
 
-  const handleDentalChartClick = (patientId: string) => {
-    navigate(`/dental-chart/${patientId}`);
-  };
-
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -156,7 +152,7 @@ const PatientsPage = () => {
                   <td className="py-3 px-4 text-right">
                     <div className="flex justify-end gap-2">
                       <button
-                        onClick={() => handleDentalChartClick(patient.id)}
+                        onClick={() => navigate(`/dental-chart/${patient.id}`)}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
                       >
                         <Stethoscope className="h-4 w-4" />
