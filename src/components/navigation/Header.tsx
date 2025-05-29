@@ -1,5 +1,7 @@
 import { Bell, Moon, Search, Sun, User } from 'lucide-react';
 import { useState } from 'react';
+import { LanguageSelector } from './LanguageSelector';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -7,10 +9,10 @@ interface HeaderProps {
 
 const Header = ({ onMenuClick }: HeaderProps) => {
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const { t } = useLanguage();
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
-    // In a real implementation, this would toggle dark mode classes on the html element
   };
 
   return (
@@ -41,7 +43,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
           <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             type="search"
-            placeholder="Search..."
+            placeholder={t('common.search')}
             className="w-64 rounded-md border border-input bg-background pl-8 pr-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
           />
         </div>
@@ -61,6 +63,8 @@ const Header = ({ onMenuClick }: HeaderProps) => {
               <Moon className="h-5 w-5" />
             )}
           </button>
+
+          <LanguageSelector />
           
           <div className="relative">
             <button className="flex items-center gap-2">
