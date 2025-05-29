@@ -87,6 +87,9 @@ const createAdultTeeth = (): Tooth[] => {
 
 const ADULT_TEETH = createAdultTeeth();
 
+// List of treatments that should be applied to the entire tooth
+const FULL_TOOTH_TREATMENTS = ['extraction', 'crown'];
+
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, onUpdate, initialTeeth }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(initialTeeth || ADULT_TEETH);
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
@@ -94,25 +97,32 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   const handleToothClick = (toothId: number) => {
     if (!selectedTreatment) return;
     
-    setTeeth((prevTeeth) =>
-      prevTeeth.map((tooth) =>
-        tooth.id === toothId
-          ? {
-              ...tooth,
-              areas: tooth.areas.map(area => ({
-                ...area,
-                treatment: selectedTreatment
-              }))
-            }
-          : tooth
-      )
-    );
-    onUpdate();
+    // For extractions and crowns, apply to all areas
+    if (FULL_TOOTH_TREATMENTS.includes(selectedTreatment)) {
+      setTeeth((prevTeeth) =>
+        prevTeeth.map((tooth) =>
+          tooth.id === toothId
+            ? {
+                ...tooth,
+                areas: tooth.areas.map(area => ({
+                  ...area,
+                  treatment: area.treatment === selectedTreatment ? undefined : selectedTreatment
+                }))
+              }
+            : tooth
+        )
+      );
+      onUpdate();
+      return;
+    }
+
+    // For other treatments, do nothing on tooth click
+    setSelectedTooth(toothId);
   };
 
   const handleAreaClick = (e: React.MouseEvent, toothId: number, areaName: string) => {
     e.stopPropagation();
-    if (!selectedTreatment) return;
+    if (!selectedTreatment || FULL_TOOTH_TREATMENTS.includes(selectedTreatment)) return;
 
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) =>
@@ -301,7 +311,11 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       
       <div className="mt-4 text-sm text-center text-muted-foreground">
         {selectedTreatment ? (
-          <>Click on a tooth area to add or remove {selectedTreatment}</>
+          FULL_TOOTH_TREATMENTS.includes(selectedTreatment) ? (
+            <>Click on a tooth to add or remove {selectedTreatment}</>
+          ) : (
+            <>Click on a tooth area to add or remove {selectedTreatment}</>
+          )
         ) : (
           <>Select a treatment from the list to begin</>
         )}
