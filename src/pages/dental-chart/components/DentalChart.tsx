@@ -24,54 +24,57 @@ const TREATMENT_COLORS: Record<string, string> = {
 
 // Create adult teeth with FDI numbering system
 const ADULT_TEETH: Tooth[] = [
-  // Upper right (1-8)
-  ...Array.from({ length: 8 }, (_, index): Tooth => ({
-    id: index + 1,
-    name: (index + 1).toString(),
+  // Upper Right (FDI 18–11)
+  ...Array.from({ length: 8 }, (_, i): Tooth => ({
+    id: 18 - i,
+    name: (18 - i).toString(),
     adult: true,
     treatments: [],
     position: 'upper',
-    type: index < 3 ? 'molar' 
-        : index < 5 ? 'premolar'
-        : index < 6 ? 'canine'
-        : 'incisor'
+    type: i < 3 ? 'molar'
+      : i < 5 ? 'premolar'
+      : i < 6 ? 'canine'
+      : 'incisor',
   })),
-  // Upper left (9-16)
-  ...Array.from({ length: 8 }, (_, index): Tooth => ({
-    id: index + 9,
-    name: (index + 9).toString(),
+
+  // Upper Left (FDI 21–28)
+  ...Array.from({ length: 8 }, (_, i): Tooth => ({
+    id: 21 + i,
+    name: (21 + i).toString(),
     adult: true,
     treatments: [],
     position: 'upper',
-    type: index > 5 ? 'molar'
-        : index > 3 ? 'premolar'
-        : index > 2 ? 'canine'
-        : 'incisor'
+    type: i < 2 ? 'incisor'
+      : i < 3 ? 'canine'
+      : i < 5 ? 'premolar'
+      : 'molar',
   })),
-  // Lower left (32-25)
-  ...Array.from({ length: 8 }, (_, index): Tooth => ({
-    id: 32 - index,
-    name: (32 - index).toString(),
+
+  // Lower Left (FDI 38–31)
+  ...Array.from({ length: 8 }, (_, i): Tooth => ({
+    id: 38 - i,
+    name: (38 - i).toString(),
     adult: true,
     treatments: [],
     position: 'lower',
-    type: index < 2 ? 'molar'
-        : index < 4 ? 'premolar'
-        : index < 5 ? 'canine'
-        : 'incisor'
+    type: i < 3 ? 'molar'
+      : i < 5 ? 'premolar'
+      : i < 6 ? 'canine'
+      : 'incisor',
   })),
-  // Lower right (24-17)
-  ...Array.from({ length: 8 }, (_, index): Tooth => ({
-    id: 24 - index,
-    name: (24 - index).toString(),
+
+  // Lower Right (FDI 41–48)
+  ...Array.from({ length: 8 }, (_, i): Tooth => ({
+    id: 41 + i,
+    name: (41 + i).toString(),
     adult: true,
     treatments: [],
     position: 'lower',
-    type: index > 5 ? 'molar'
-        : index > 3 ? 'premolar'
-        : index > 2 ? 'canine'
-        : 'incisor'
-  }))
+    type: i < 2 ? 'incisor'
+      : i < 3 ? 'canine'
+      : i < 5 ? 'premolar'
+      : 'molar',
+  })),
 ];
 
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
@@ -79,7 +82,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
 
   const handleToothClick = (toothId: number) => {
     if (!selectedTreatment) return;
-    
+
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) => {
         if (tooth.id === toothId) {
@@ -106,9 +109,9 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
 
   const renderTooth = (tooth: Tooth) => {
     const isUpper = tooth.position === 'upper';
-    
+
     return (
-      <div 
+      <div
         key={tooth.id}
         className="flex flex-col items-center mx-1 cursor-pointer group"
         onClick={() => handleToothClick(tooth.id)}
@@ -117,7 +120,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
         <div className="relative w-12 h-16">
           <svg
             viewBox="0 0 100 160"
-            className={`w-full h-full transition-transform group-hover:scale-110`}
+            className="w-full h-full transition-transform group-hover:scale-110"
           >
             {/* Crown */}
             <path
@@ -177,39 +180,34 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
     );
   };
 
-  // Group teeth into quadrants
-  const upperRight = teeth.slice(0, 8);
-  const upperLeft = teeth.slice(8, 16);
-  const lowerLeft = teeth.slice(16, 24);
-  const lowerRight = teeth.slice(24, 32);
+  // Group by quadrant using FDI
+  const quadrant1 = teeth.filter(t => t.id >= 11 && t.id <= 18).sort((a, b) => b.id - a.id); // Upper Right
+  const quadrant2 = teeth.filter(t => t.id >= 21 && t.id <= 28).sort((a, b) => a.id - b.id); // Upper Left
+  const quadrant3 = teeth.filter(t => t.id >= 31 && t.id <= 38).sort((a, b) => a.id - b.id); // Lower Left
+  const quadrant4 = teeth.filter(t => t.id >= 41 && t.id <= 48).sort((a, b) => b.id - a.id); // Lower Right
 
   return (
     <div className="flex flex-col items-center">
       <h3 className="text-lg font-medium mb-4">Adult Teeth (FDI System)</h3>
-      
+
       {/* Upper jaw */}
       <div className="mb-8">
         <div className="flex justify-center mb-2">
-          {upperRight.map(renderTooth)}
-        </div>
-        <div className="flex justify-center">
-          {upperLeft.map(renderTooth)}
+          {quadrant1.map(renderTooth)}
+          {quadrant2.map(renderTooth)}
         </div>
       </div>
-      
-      {/* Jaw separator */}
+
       <div className="w-full border-t-2 border-dashed border-gray-400 mb-8"></div>
-      
+
       {/* Lower jaw */}
       <div>
         <div className="flex justify-center">
-          {lowerLeft.map(renderTooth)}
-        </div>
-        <div className="flex justify-center mt-2">
-          {lowerRight.map(renderTooth)}
+          {quadrant4.map(renderTooth)}
+          {quadrant3.map(renderTooth)}
         </div>
       </div>
-      
+
       <div className="mt-8 text-sm text-center text-muted-foreground">
         {selectedTreatment ? (
           <>Click on a tooth to add or remove {selectedTreatment}</>
