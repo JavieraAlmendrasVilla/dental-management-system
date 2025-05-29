@@ -15,14 +15,20 @@ const TREATMENT_TYPES = [
 const DentalChartPage = () => {
   const { patientId } = useParams<{ patientId: string }>();
   const [selectedTreatment, setSelectedTreatment] = useState(TREATMENT_TYPES[0].id);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const patientName = 'John Smith';
 
   const handleSaveChart = (teeth: any) => {
     // In a real app, this would make an API call to save the dental chart
     console.log('Saving dental chart:', teeth);
+    setHasUnsavedChanges(false);
     // Show success message
     alert('Dental chart saved successfully!');
+  };
+
+  const handleTeethUpdate = () => {
+    setHasUnsavedChanges(true);
   };
 
   return (
@@ -35,7 +41,7 @@ const DentalChartPage = () => {
             Patient: {patientName} (ID: {patientId})
           </p>
         </div>
-        <div className="flex gap-2 flex-wrap">
+        <div className="flex gap-2">
           <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
             <History className="mr-2 h-4 w-4" />
             History
@@ -44,6 +50,15 @@ const DentalChartPage = () => {
             <Printer className="mr-2 h-4 w-4" />
             Print
           </button>
+          {hasUnsavedChanges && (
+            <button 
+              onClick={() => handleSaveChart([])}
+              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+            >
+              <Save className="mr-2 h-4 w-4" />
+              Save Changes
+            </button>
+          )}
         </div>
       </div>
 
@@ -121,43 +136,8 @@ const DentalChartPage = () => {
               <DentalChart 
                 selectedTreatment={selectedTreatment}
                 onSave={handleSaveChart}
+                onUpdate={handleTeethUpdate}
               />
-            </div>
-          </div>
-        </div>
-
-        {/* Notes and Legend */}
-        <div className="md:col-span-4 grid gap-6 md:grid-cols-2">
-          {/* Notes */}
-          <div className="rounded-lg border bg-card">
-            <div className="p-4 border-b">
-              <h2 className="font-semibold">Chart Notes</h2>
-            </div>
-            <div className="p-4">
-              <textarea
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[120px]"
-                placeholder="Add notes about the patient's dental chart..."
-              ></textarea>
-            </div>
-          </div>
-
-          {/* Legend */}
-          <div className="rounded-lg border bg-card">
-            <div className="p-4 border-b">
-              <h2 className="font-semibold">Legend</h2>
-            </div>
-            <div className="p-4">
-              <div className="grid grid-cols-2 gap-4">
-                {TREATMENT_TYPES.map((treatment) => (
-                  <div key={treatment.id} className="flex items-center">
-                    <div
-                      className="mr-2 h-4 w-4 rounded-full"
-                      style={{ backgroundColor: treatment.color }}
-                    />
-                    <span className="text-sm">{treatment.name}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         </div>
