@@ -87,40 +87,12 @@ const createAdultTeeth = (): Tooth[] => {
 
 const ADULT_TEETH = createAdultTeeth();
 
-// List of treatments that should be applied to the entire tooth
-const FULL_TOOTH_TREATMENTS = ['extraction', 'crown'];
-
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, onUpdate, initialTeeth }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(initialTeeth || ADULT_TEETH);
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
 
   const handleToothClick = (toothId: number) => {
     if (!selectedTreatment) return;
-
-    const tooth = teeth.find(t => t.id === toothId);
-    if (!tooth) return;
-
-    // Check if any area is already treated
-    const hasAnyTreatment = tooth.areas.some(area => area.treatment);
-
-    if (FULL_TOOTH_TREATMENTS.includes(selectedTreatment) && hasAnyTreatment) {
-      setTeeth((prevTeeth) =>
-        prevTeeth.map((tooth) =>
-          tooth.id === toothId
-            ? {
-                ...tooth,
-                areas: tooth.areas.map(area => ({
-                  ...area,
-                  treatment: selectedTreatment
-                }))
-              }
-            : tooth
-        )
-      );
-      onUpdate();
-      return;
-    }
-
     setSelectedTooth(toothId);
   };
 
@@ -128,16 +100,21 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     e.stopPropagation();
     if (!selectedTreatment) return;
 
+    const tooth = teeth.find(t => t.id === toothId);
+    if (!tooth) return;
+
+    // Check if any area has this treatment
+    const hasThisTreatment = tooth.areas.some(area => area.treatment === selectedTreatment);
+
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) =>
         tooth.id === toothId
           ? {
               ...tooth,
-              areas: tooth.areas.map(area =>
-                area.name === areaName
-                  ? { ...area, treatment: area.treatment === selectedTreatment ? undefined : selectedTreatment }
-                  : area
-              )
+              areas: tooth.areas.map(area => ({
+                ...area,
+                treatment: hasThisTreatment ? undefined : selectedTreatment
+              }))
             }
           : tooth
       )
@@ -315,11 +292,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       
       <div className="mt-4 text-sm text-center text-muted-foreground">
         {selectedTreatment ? (
-          FULL_TOOTH_TREATMENTS.includes(selectedTreatment) ? (
-            <>Click on a treated tooth to apply {selectedTreatment} to all areas</>
-          ) : (
-            <>Click on a tooth area to add or remove {selectedTreatment}</>
-          )
+          <>Click on any area of a tooth to add or remove {selectedTreatment}</>
         ) : (
           <>Select a treatment from the list to begin</>
         )}
