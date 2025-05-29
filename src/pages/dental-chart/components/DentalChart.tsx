@@ -276,7 +276,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
                 d={getAreaPath(tooth, index)}
                 fill={getAreaColor(area)}
                 stroke="#666"
-                strokeWidth="0.5"
+                strokeWidth="1"
                 onClick={(e) => handleAreaClick(e, tooth.id, area.name)}
                 className="transition-colors hover:brightness-95"
               />
