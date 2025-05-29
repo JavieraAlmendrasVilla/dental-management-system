@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Calendar, Clock, FileText, History, Mail, MapPin, Phone, Bluetooth as Tooth, User } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 
@@ -63,6 +63,7 @@ const APPOINTMENT_HISTORY = [
 
 const PatientDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   
   // In a real app, we'd fetch the patient data based on the ID
   // For now, we'll just use our mock data
@@ -82,7 +83,10 @@ const PatientDetailsPage = () => {
             <Calendar className="mr-2 h-4 w-4" />
             Schedule Appointment
           </button>
-          <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
+          <button 
+            onClick={() => navigate(`/dental-chart/${id}`)}
+            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+          >
             <Tooth className="mr-2 h-4 w-4" />
             Dental Chart
           </button>
