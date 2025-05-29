@@ -145,12 +145,12 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
             return (
               <input
                 key={`measurement-${index}`}
-                type="number"
-                min="0"
-                max="10"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={value}
                 onChange={(e) => handleInputChange(e, tooth.id, index)}
-                className="absolute w-10 h-10 text-center text-base border rounded bg-white"
+                className="absolute w-10 h-10 text-center text-base border rounded bg-white [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                 style={{
                   left: `${pos.x}%`,
                   top: `${pos.y}%`,
