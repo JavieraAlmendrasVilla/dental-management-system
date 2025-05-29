@@ -96,9 +96,14 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
 
   const handleToothClick = (toothId: number) => {
     if (!selectedTreatment) return;
-    
-    // For extractions and crowns, apply to all areas
-    if (FULL_TOOTH_TREATMENTS.includes(selectedTreatment)) {
+
+    const tooth = teeth.find(t => t.id === toothId);
+    if (!tooth) return;
+
+    // Check if any area is already treated
+    const hasAnyTreatment = tooth.areas.some(area => area.treatment);
+
+    if (FULL_TOOTH_TREATMENTS.includes(selectedTreatment) && hasAnyTreatment) {
       setTeeth((prevTeeth) =>
         prevTeeth.map((tooth) =>
           tooth.id === toothId
@@ -106,7 +111,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
                 ...tooth,
                 areas: tooth.areas.map(area => ({
                   ...area,
-                  treatment: area.treatment === selectedTreatment ? undefined : selectedTreatment
+                  treatment: selectedTreatment
                 }))
               }
             : tooth
@@ -116,13 +121,12 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       return;
     }
 
-    // For other treatments, do nothing on tooth click
     setSelectedTooth(toothId);
   };
 
   const handleAreaClick = (e: React.MouseEvent, toothId: number, areaName: string) => {
     e.stopPropagation();
-    if (!selectedTreatment || FULL_TOOTH_TREATMENTS.includes(selectedTreatment)) return;
+    if (!selectedTreatment) return;
 
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) =>
@@ -312,7 +316,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       <div className="mt-4 text-sm text-center text-muted-foreground">
         {selectedTreatment ? (
           FULL_TOOTH_TREATMENTS.includes(selectedTreatment) ? (
-            <>Click on a tooth to add or remove {selectedTreatment}</>
+            <>Click on a treated tooth to apply {selectedTreatment} to all areas</>
           ) : (
             <>Click on a tooth area to add or remove {selectedTreatment}</>
           )
