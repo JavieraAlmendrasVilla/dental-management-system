@@ -137,7 +137,6 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   };
 
   const getToothPath = (tooth: Tooth): string => {
-    // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
     const cx = 50;
     const cy = 50;
     const outerR = 40;
@@ -183,36 +182,41 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     const innerR = 10;
     const sqrt2over2 = 0.7071;
 
-    // Define the paths for each area
     switch (areaIndex) {
       case 0: // Lingual (top)
-        return `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+        return `M${cx},${cy}
+                L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}
+                L${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2}
                 A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2}
-                L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}
-                A${innerR},${innerR} 0 0,0 ${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
+                L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
 
       case 1: // Mesial (right)
-        return `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+        return `M${cx},${cy}
+                L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}
+                L${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2}
                 A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2}
-                L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}
-                A${innerR},${innerR} 0 0,0 ${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
+                L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}Z`;
 
       case 2: // Buccal (bottom)
-        return `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2}
-                A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+        return `M${cx},${cy}
                 L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}
-                A${innerR},${innerR} 0 0,0 ${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}Z`;
+                L${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                A${outerR},${outerR} 0 0,1 ${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}Z`;
 
       case 3: // Distal (left)
-        return `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2}
-                A${outerR},${outerR} 0 0,1 ${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+        return `M${cx},${cy}
                 L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}
-                A${innerR},${innerR} 0 0,0 ${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
+                L${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                A${outerR},${outerR} 0 0,1 ${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+                L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
 
       case 4: // Occlusal (center)
-        return `M${cx + innerR},${cy}
-                A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
-                A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}Z`;
+        return `M${cx},${cy}
+                m${-innerR * sqrt2over2},${-innerR * sqrt2over2}
+                l${innerR * sqrt2over2 * 2},0
+                l0,${innerR * sqrt2over2 * 2}
+                l${-innerR * sqrt2over2 * 2},0Z`;
 
       default:
         return '';
