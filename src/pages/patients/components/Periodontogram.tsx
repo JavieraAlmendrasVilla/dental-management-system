@@ -115,6 +115,46 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
     onUpdate();
   };
 
+  const getToothPath = (tooth: Tooth): string => {
+    // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
+    const cx = 50;
+    const cy = 50;
+    const outerR = 40;
+    const innerR = 10;
+    const sqrt2over2 = 0.7071;
+
+    // Coordinates for outer circle
+    const outerCircle = `M${cx + outerR},${cy}
+      A${outerR},${outerR} 0 1,0 ${cx - outerR},${cy}
+      A${outerR},${outerR} 0 1,0 ${cx + outerR},${cy}`;
+
+    // Coordinates for inner circle
+    const innerCircle = `M${cx + innerR},${cy}
+      A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
+      A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`;
+
+    // Diagonal lines (outer to inner circle border)
+    const lines = [
+      // NE ↙ SW
+      `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+       L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+      
+      // NW ↘ SE
+      `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+       L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+      
+      // SW ↗ NE
+      `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+       L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}`,
+      
+      // SE ↖ NW
+      `M${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+       L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}`
+    ];
+
+    return [outerCircle, innerCircle, ...lines].join(' ');
+  };
+
   const renderTooth = (tooth: Tooth) => {
     return (
       <div key={tooth.id} className="flex flex-col items-center mx-2">
@@ -133,6 +173,18 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
                 P
               </button>
             ))}
+          </div>
+
+          {/* Tooth diagram */}
+          <div className="w-20 h-20">
+            <svg viewBox="0 0 100 100" className="w-full h-full">
+              <path
+                d={getToothPath(tooth)}
+                fill="none"
+                stroke="#666"
+                strokeWidth="1"
+              />
+            </svg>
           </div>
 
           {/* Measurements */}
