@@ -88,59 +88,45 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
   };
 
   const getToothPath = (tooth: Tooth): string => {
-  const isUpper = tooth.position === 'upper';
+  // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
+  const cx = 50;
+  const cy = 50;
+  const outerR = 40;
+  const innerR = 10;
+  const sqrt2over2 = 0.7071;
 
-  switch (tooth.type) {
-    case 'molar':
-      return `
-        M30,20
-        C40,10 60,10 70,20
-        C75,25 75,35 70,40
-        C75,45 75,55 70,60
-        C60,70 40,70 30,60
-        C25,55 25,45 30,40
-        C25,35 25,25 30,20
-        M45,30
-        C47,28 53,28 55,30
-        C57,32 57,38 55,40
-        C53,42 47,42 45,40
-        C43,38 43,32 45,30`;
+  // Coordinates for outer circle
+  const outerCircle = `M${cx + outerR},${cy}
+    A${outerR},${outerR} 0 1,0 ${cx - outerR},${cy}
+    A${outerR},${outerR} 0 1,0 ${cx + outerR},${cy}`;
 
-    case 'premolar':
-      return `
-        M35,25
-        C45,15 55,15 65,25
-        C70,30 70,60 65,65
-        C55,75 45,75 35,65
-        C30,60 30,30 35,25
-        M45,45
-        C47,42 53,42 55,45
-        C57,47 57,53 55,55
-        C53,58 47,58 45,55
-        C43,53 43,47 45,45`;
+  // Coordinates for inner circle
+  const innerCircle = `M${cx + innerR},${cy}
+    A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
+    A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`;
 
-    case 'canine':
-      return `
-        M48,15
-        C52,5 58,5 62,15
-        L62,65
-        C62,70 58,75 55,75
-        C52,75 48,70 48,65
-        Z`;
+  // Diagonal lines (outer to inner circle border)
+  const lines = [
+    // NE ↙ SW
+    `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+     L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+    
+    // NW ↘ SE
+    `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+     L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+    
+    // SW ↗ NE
+    `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+     L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}`,
+    
+    // SE ↖ NW
+    `M${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+     L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}`
+  ];
 
-    case 'incisor':
-      return `
-        M40,15
-        C42,10 58,10 60,15
-        L60,65
-        C60,70 58,75 50,75
-        C42,75 40,70 40,65
-        Z`;
-
-    default:
-      return '';
-  }
+  return [outerCircle, innerCircle, ...lines].join(' ');
 };
+
 
 
 
