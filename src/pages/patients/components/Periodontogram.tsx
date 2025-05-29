@@ -128,9 +128,9 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
 
   const renderTooth = (tooth: Tooth) => {
     return (
-      <div key={tooth.id} className="flex flex-col items-center mx-2">
-        <span className="text-xs font-medium mb-1">{tooth.name}</span>
-        <div className="w-20 h-20 relative">
+      <div key={tooth.id} className="flex flex-col items-center mx-4">
+        <span className="text-sm font-medium mb-2">{tooth.name}</span>
+        <div className="w-32 h-32 relative">
           <svg viewBox="0 0 100 100" className="w-full h-full">
             <path
               d={getToothPath(tooth)}
@@ -150,7 +150,7 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
                 max="10"
                 value={value}
                 onChange={(e) => handleInputChange(e, tooth.id, index)}
-                className="absolute w-8 h-8 text-center text-sm border rounded bg-white"
+                className="absolute w-10 h-10 text-center text-base border rounded bg-white"
                 style={{
                   left: `${pos.x}%`,
                   top: `${pos.y}%`,
@@ -171,8 +171,8 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
 
   return (
     <div className="flex flex-col items-center">      
-      <div className="mb-8">
-        <div className="flex justify-center mb-4">
+      <div className="mb-12">
+        <div className="flex justify-center mb-6">
           {upperRight.map(renderTooth)}
         </div>
         <div className="flex justify-center">
@@ -180,10 +180,10 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
         </div>
       </div>
       
-      <div className="w-full border-t-2 border-dashed border-gray-400 mb-8"></div>
+      <div className="w-full border-t-2 border-dashed border-gray-400 mb-12"></div>
       
       <div>
-        <div className="flex justify-center mb-4">
+        <div className="flex justify-center mb-6">
           {lowerLeft.map(renderTooth)}
         </div>
         <div className="flex justify-center">
@@ -191,7 +191,7 @@ const Periodontogram: React.FC<PeriodontogramProps> = ({ onSave, onUpdate }) => 
         </div>
       </div>
       
-      <div className="mt-4 text-sm text-center text-muted-foreground">
+      <div className="mt-6 text-sm text-center text-muted-foreground">
         Enter values between 0-10 for each measurement
       </div>
     </div>
