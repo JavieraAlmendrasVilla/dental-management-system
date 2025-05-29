@@ -81,6 +81,14 @@ const RECENT_TREATMENTS = [
 const TreatmentsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [showAddTreatmentModal, setShowAddTreatmentModal] = useState(false);
+  const [newTreatment, setNewTreatment] = useState({
+    name: '',
+    category: '',
+    duration: '',
+    cost: '',
+    description: '',
+  });
 
   const filteredTreatments = TREATMENTS.filter((treatment) => {
     const matchesSearch = treatment.name.toLowerCase().includes(searchTerm.toLowerCase());
@@ -89,6 +97,20 @@ const TreatmentsPage = () => {
   });
 
   const categories = ['all', ...new Set(TREATMENTS.map((t) => t.category))];
+
+  const handleAddTreatment = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, this would make an API call to add the treatment
+    console.log('Adding treatment:', newTreatment);
+    setShowAddTreatmentModal(false);
+    setNewTreatment({
+      name: '',
+      category: '',
+      duration: '',
+      cost: '',
+      description: '',
+    });
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -99,11 +121,90 @@ const TreatmentsPage = () => {
             Manage dental treatments and procedures
           </p>
         </div>
-        <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
+        <button 
+          onClick={() => setShowAddTreatmentModal(true)}
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+        >
           <Plus className="mr-2 h-4 w-4" />
           Add Treatment
         </button>
       </div>
+
+      {/* Add Treatment Modal */}
+      {showAddTreatmentModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card rounded-lg shadow-lg w-full max-w-md p-6">
+            <h2 className="text-lg font-semibold mb-4">Add New Treatment</h2>
+            <form onSubmit={handleAddTreatment} className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium mb-1">Treatment Name</label>
+                <input
+                  type="text"
+                  value={newTreatment.name}
+                  onChange={(e) => setNewTreatment({ ...newTreatment, name: e.target.value })}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Category</label>
+                <input
+                  type="text"
+                  value={newTreatment.category}
+                  onChange={(e) => setNewTreatment({ ...newTreatment, category: e.target.value })}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Duration (minutes)</label>
+                <input
+                  type="number"
+                  value={newTreatment.duration}
+                  onChange={(e) => setNewTreatment({ ...newTreatment, duration: e.target.value })}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Cost ($)</label>
+                <input
+                  type="number"
+                  value={newTreatment.cost}
+                  onChange={(e) => setNewTreatment({ ...newTreatment, cost: e.target.value })}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Description</label>
+                <textarea
+                  value={newTreatment.description}
+                  onChange={(e) => setNewTreatment({ ...newTreatment, description: e.target.value })}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  rows={3}
+                  required
+                />
+              </div>
+              <div className="flex justify-end gap-2 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowAddTreatmentModal(false)}
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+                >
+                  Add Treatment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="grid gap-6 md:grid-cols-7">
         {/* Treatment List */}
