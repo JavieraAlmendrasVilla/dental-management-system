@@ -21,6 +21,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       authorizationParams={{
         redirect_uri: redirectUri,
       }}
+      cacheLocation="localstorage"
     >
       {children}
     </Auth0Provider>
