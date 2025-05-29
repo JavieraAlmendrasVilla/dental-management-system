@@ -112,12 +112,13 @@ const DentalChartPage = () => {
         </div>
 
         {/* Dental Chart Section */}
-        <div className="md:col-span-3 flex justify-center">
-          <div className="rounded-lg border bg-card p-4 w-full max-w-4xl">
-            <DentalChart selectedTreatment={selectedTreatment} />
+        <div className="md:col-span-3">
+          <div className="rounded-lg border bg-card p-4 w-full max-w-full overflow-x-auto">
+              <div className="mx-auto max-w-[1024px]">
+                <DentalChart selectedTreatment={selectedTreatment} />
+              </div>
           </div>
         </div>
-      </div>
 
       {/* Notes and Legend */}
       <div className="grid gap-6 md:grid-cols-2">
