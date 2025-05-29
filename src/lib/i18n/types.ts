@@ -10,6 +10,12 @@ export interface Translations {
       delete: string;
       search: string;
       filter: string;
+      viewAll: string;
+      today: string;
+      upcoming: string;
+      completed: string;
+      registered: string;
+      completedToday: string;
     };
     auth: {
       signIn: string;

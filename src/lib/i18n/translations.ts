@@ -10,6 +10,12 @@ export const translations: Translations = {
       delete: 'Delete',
       search: 'Search',
       filter: 'Filter',
+      viewAll: 'View all',
+      today: 'Today',
+      upcoming: 'Upcoming',
+      completed: 'Completed',
+      registered: 'Registered',
+      completedToday: 'Completed today',
     },
     auth: {
       signIn: 'Sign In',
@@ -29,7 +35,7 @@ export const translations: Translations = {
     },
     dashboard: {
       welcome: 'Welcome back, Dr. Morgan',
-      todayOverview: "Here's what's happening today",
+      todayOverview: "Today's Appointments",
       stats: {
         appointments: "Today's Appointments",
         completed: 'Completed',
@@ -134,6 +140,12 @@ export const translations: Translations = {
       delete: 'Eliminar',
       search: 'Buscar',
       filter: 'Filtrar',
+      viewAll: 'Ver todo',
+      today: 'Hoy',
+      upcoming: 'Próximo',
+      completed: 'Completado',
+      registered: 'Registrados',
+      completedToday: 'Completados hoy',
     },
     auth: {
       signIn: 'Iniciar Sesión',
@@ -153,7 +165,7 @@ export const translations: Translations = {
     },
     dashboard: {
       welcome: 'Bienvenido de nuevo, Dr. Morgan',
-      todayOverview: 'Esto es lo que sucede hoy',
+      todayOverview: 'Citas de Hoy',
       stats: {
         appointments: 'Citas de Hoy',
         completed: 'Completadas',

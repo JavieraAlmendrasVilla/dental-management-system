@@ -1,8 +1,11 @@
 import { Calendar, Bluetooth as Tooth, User, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate, formatTime } from '../lib/utils';
+import { useLanguage } from '../lib/i18n/LanguageContext';
 
 const Dashboard = () => {
+  const { t } = useLanguage();
+  
   // Mock data - would be fetched from an API in a real app
   const upcomingAppointments = [
     {
@@ -39,9 +42,9 @@ const Dashboard = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dashboard</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('navigation.dashboard')}</h1>
           <p className="text-muted-foreground">
-            Welcome back, Dr. Morgan. Here's what's happening today.
+            {t('dashboard.welcome')}
           </p>
         </div>
         <div className="mt-4 md:mt-0">
@@ -56,14 +59,14 @@ const Dashboard = () => {
         <div className="rounded-lg border bg-card p-4 transition-all hover:shadow-md">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Today's Appointments</span>
+            <span className="text-sm font-medium">{t('dashboard.stats.appointments')}</span>
           </div>
           <div className="mt-3 flex items-end justify-between">
             <div>
               <p className="text-2xl font-bold">
                 {todayStats.appointmentsCompleted}/{todayStats.appointmentsTotal}
               </p>
-              <p className="text-xs text-muted-foreground">Completed</p>
+              <p className="text-xs text-muted-foreground">{t('dashboard.stats.completed')}</p>
             </div>
             <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
               <Calendar className="h-4 w-4 text-primary" />
@@ -74,12 +77,12 @@ const Dashboard = () => {
         <div className="rounded-lg border bg-card p-4 transition-all hover:shadow-md">
           <div className="flex items-center gap-2">
             <User className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">New Patients</span>
+            <span className="text-sm font-medium">{t('dashboard.stats.newPatients')}</span>
           </div>
           <div className="mt-3 flex items-end justify-between">
             <div>
               <p className="text-2xl font-bold">{todayStats.newPatients}</p>
-              <p className="text-xs text-muted-foreground">Today</p>
+              <p className="text-xs text-muted-foreground">{t('common.today')}</p>
             </div>
             <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-secondary/10">
               <User className="h-4 w-4 text-secondary" />
@@ -90,12 +93,12 @@ const Dashboard = () => {
         <div className="rounded-lg border bg-card p-4 transition-all hover:shadow-md">
           <div className="flex items-center gap-2">
             <Users className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Total Patients</span>
+            <span className="text-sm font-medium">{t('dashboard.stats.totalPatients')}</span>
           </div>
           <div className="mt-3 flex items-end justify-between">
             <div>
               <p className="text-2xl font-bold">{todayStats.totalPatients}</p>
-              <p className="text-xs text-muted-foreground">Registered</p>
+              <p className="text-xs text-muted-foreground">{t('common.registered')}</p>
             </div>
             <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-accent/10">
               <Users className="h-4 w-4 text-accent" />
@@ -106,12 +109,12 @@ const Dashboard = () => {
         <div className="rounded-lg border bg-card p-4 transition-all hover:shadow-md">
           <div className="flex items-center gap-2">
             <Tooth className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Treatments</span>
+            <span className="text-sm font-medium">{t('dashboard.stats.treatments')}</span>
           </div>
           <div className="mt-3 flex items-end justify-between">
             <div>
               <p className="text-2xl font-bold">3</p>
-              <p className="text-xs text-muted-foreground">Completed today</p>
+              <p className="text-xs text-muted-foreground">{t('common.completedToday')}</p>
             </div>
             <div className="ml-2 flex h-8 w-8 items-center justify-center rounded-full bg-success/10">
               <Tooth className="h-4 w-4 text-success" />
@@ -123,12 +126,12 @@ const Dashboard = () => {
       {/* Upcoming Appointments */}
       <div className="rounded-lg border bg-card">
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-lg font-semibold">Today's Appointments</h2>
+          <h2 className="text-lg font-semibold">{t('dashboard.todayOverview')}</h2>
           <Link
             to="/appointments"
             className="text-sm font-medium text-primary hover:underline"
           >
-            View all
+            {t('common.viewAll')}
           </Link>
         </div>
         <div className="divide-y">
@@ -152,7 +155,7 @@ const Dashboard = () => {
                 <div className="text-right">
                   <p className="font-medium">{formatTime(appointment.time)}</p>
                   <p className="text-sm text-muted-foreground">
-                    {appointment.time < new Date() ? 'Completed' : 'Upcoming'}
+                    {appointment.time < new Date() ? t('common.completed') : t('common.upcoming')}
                   </p>
                 </div>
               </div>
