@@ -32,7 +32,7 @@
     --border: 214 32% 91%;
     --input: 214 32% 91%;
     
-    --ring: 199 89% 48%;
+    --ring: var(--primary);
     --radius: 0.5rem;
   }
 
@@ -63,7 +63,11 @@
   body {
     @apply bg-background text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
-    font-family: 'Inter', sans-serif;
+    font-family: var(--font-family, 'Inter'), sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading, 'Inter'), sans-serif;
   }
 }
 

@@ -1,8 +1,37 @@
 import { useState } from 'react';
 import { Bell, Globe, Lock, Mail, Moon, Palette, Shield, Sun, User } from 'lucide-react';
+import { useTheme } from '../../lib/theme/ThemeContext';
+
+const FONT_OPTIONS = [
+  'Inter',
+  'Roboto',
+  'Poppins',
+  'Montserrat',
+  'Open Sans',
+  'Lato',
+];
+
+const RADIUS_OPTIONS = [
+  { label: 'None', value: '0' },
+  { label: 'Small', value: '0.25rem' },
+  { label: 'Medium', value: '0.5rem' },
+  { label: 'Large', value: '0.75rem' },
+  { label: 'Extra Large', value: '1rem' },
+];
 
 const SettingsPage = () => {
   const [darkMode, setDarkMode] = useState(false);
+  const { theme, updateTheme } = useTheme();
+  const [showColorPicker, setShowColorPicker] = useState<'primary' | 'secondary' | 'accent' | null>(null);
+
+  const handleColorChange = (color: string, type: 'primary' | 'secondary' | 'accent') => {
+    updateTheme({
+      colors: {
+        [type]: color,
+      },
+    });
+    setShowColorPicker(null);
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -84,7 +113,7 @@ const SettingsPage = () => {
           <div className="p-4 border-b">
             <h2 className="text-lg font-semibold">Appearance</h2>
           </div>
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 {darkMode ? (
@@ -107,15 +136,127 @@ const SettingsPage = () => {
                 />
               </button>
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Theme Color</label>
-              <div className="grid grid-cols-5 gap-2">
-                {['#0ea5e9', '#8b5cf6', '#10b981', '#f59e0b', '#ef4444'].map((color) => (
+
+            {/* Color Settings */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Colors</h3>
+              <div className="grid grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Primary</label>
                   <button
-                    key={color}
-                    className="h-8 w-8 rounded-full border-2 border-transparent hover:border-primary transition-colors"
-                    style={{ backgroundColor: color }}
+                    className="h-10 w-full rounded-md border"
+                    style={{ backgroundColor: theme.colors.primary }}
+                    onClick={() => setShowColorPicker('primary')}
                   />
+                  {showColorPicker === 'primary' && (
+                    <div className="absolute mt-2 p-2 bg-card rounded-md border shadow-lg">
+                      <div className="grid grid-cols-5 gap-2">
+                        {['#0ea5e9', '#3b82f6', '#6366f1', '#8b5cf6', '#d946ef'].map((color) => (
+                          <button
+                            key={color}
+                            className="w-6 h-6 rounded-full border-2 border-transparent hover:border-primary transition-colors"
+                            style={{ backgroundColor: color }}
+                            onClick={() => handleColorChange(color, 'primary')}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Secondary</label>
+                  <button
+                    className="h-10 w-full rounded-md border"
+                    style={{ backgroundColor: theme.colors.secondary }}
+                    onClick={() => setShowColorPicker('secondary')}
+                  />
+                  {showColorPicker === 'secondary' && (
+                    <div className="absolute mt-2 p-2 bg-card rounded-md border shadow-lg">
+                      <div className="grid grid-cols-5 gap-2">
+                        {['#3f9b9b', '#10b981', '#14b8a6', '#06b6d4', '#0ea5e9'].map((color) => (
+                          <button
+                            key={color}
+                            className="w-6 h-6 rounded-full border-2 border-transparent hover:border-primary transition-colors"
+                            style={{ backgroundColor: color }}
+                            onClick={() => handleColorChange(color, 'secondary')}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Accent</label>
+                  <button
+                    className="h-10 w-full rounded-md border"
+                    style={{ backgroundColor: theme.colors.accent }}
+                    onClick={() => setShowColorPicker('accent')}
+                  />
+                  {showColorPicker === 'accent' && (
+                    <div className="absolute mt-2 p-2 bg-card rounded-md border shadow-lg">
+                      <div className="grid grid-cols-5 gap-2">
+                        {['#f97316', '#ef4444', '#ec4899', '#f59e0b', '#84cc16'].map((color) => (
+                          <button
+                            key={color}
+                            className="w-6 h-6 rounded-full border-2 border-transparent hover:border-primary transition-colors"
+                            style={{ backgroundColor: color }}
+                            onClick={() => handleColorChange(color, 'accent')}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Font Settings */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Typography</h3>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Base Font</label>
+                  <select
+                    value={theme.font.family}
+                    onChange={(e) => updateTheme({ font: { family: e.target.value } })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    {FONT_OPTIONS.map((font) => (
+                      <option key={font} value={font}>{font}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm text-muted-foreground">Heading Font</label>
+                  <select
+                    value={theme.font.heading}
+                    onChange={(e) => updateTheme({ font: { heading: e.target.value } })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  >
+                    {FONT_OPTIONS.map((font) => (
+                      <option key={font} value={font}>{font}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Border Radius Settings */}
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium">Border Radius</h3>
+              <div className="grid grid-cols-5 gap-2">
+                {RADIUS_OPTIONS.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => updateTheme({ radius: option.value })}
+                    className={`p-2 text-xs font-medium rounded-md border ${
+                      theme.radius === option.value
+                        ? 'bg-primary text-white'
+                        : 'hover:bg-muted'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
                 ))}
               </div>
             </div>
