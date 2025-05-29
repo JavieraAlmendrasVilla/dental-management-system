@@ -151,12 +151,12 @@ const PatientsPage = () => {
                   </td>
                   <td className="py-3 px-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <button
-                        onClick={() => navigate(`/dental-chart/${patient.id}`)}
+                      <Link
+                        to={`/dental-chart/${patient.id}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
                       >
                         <Stethoscope className="h-4 w-4" />
-                      </button>
+                      </Link>
                       <Link
                         to={`/patients/${patient.id}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
