@@ -176,29 +176,44 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     return [outerCircle, innerCircle, ...lines].join(' ');
   };
 
-  const getAreaPath = (areaIndex: number): string => {
+  const getAreaPath = (tooth: Tooth, areaIndex: number): string => {
     const cx = 50;
     const cy = 50;
     const outerR = 40;
     const innerR = 10;
     const sqrt2over2 = 0.7071;
 
+    // Define the paths for each area
     switch (areaIndex) {
       case 0: // Lingual (top)
-        return `M${cx},${cy - outerR} A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2}
-                L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2} A${innerR},${innerR} 0 0,0 ${cx},${cy - innerR} Z`;
+        return `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+                A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+                L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}
+                A${innerR},${innerR} 0 0,0 ${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
+
       case 1: // Mesial (right)
-        return `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2} A${outerR},${outerR} 0 0,1 ${cx + outerR},${cy}
-                L${cx + innerR},${cy} A${innerR},${innerR} 0 0,0 ${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2} Z`;
+        return `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+                A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}
+                A${innerR},${innerR} 0 0,0 ${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
+
       case 2: // Buccal (bottom)
-        return `M${cx + outerR},${cy} A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2}
-                L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2} A${innerR},${innerR} 0 0,0 ${cx + innerR},${cy} Z`;
+        return `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                A${outerR},${outerR} 0 0,1 ${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}
+                A${innerR},${innerR} 0 0,0 ${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}Z`;
+
       case 3: // Distal (left)
-        return `M${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2} A${outerR},${outerR} 0 0,1 ${cx},${cy + outerR}
-                L${cx},${cy + innerR} A${innerR},${innerR} 0 0,0 ${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2} Z`;
+        return `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2}
+                A${outerR},${outerR} 0 0,1 ${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2}
+                L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}
+                A${innerR},${innerR} 0 0,0 ${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}Z`;
+
       case 4: // Occlusal (center)
-        return `M${cx + innerR},${cy} A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
-                A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`;
+        return `M${cx + innerR},${cy}
+                A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
+                A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}Z`;
+
       default:
         return '';
     }
@@ -221,6 +236,19 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
               isSelected ? 'scale-110' : 'group-hover:scale-105'
             }`}
           >
+            {/* Render each area */}
+            {tooth.areas.map((area, index) => (
+              <path
+                key={area.name}
+                d={getAreaPath(tooth, index)}
+                fill={getAreaColor(area)}
+                stroke="#666"
+                strokeWidth="0.5"
+                onClick={(e) => handleAreaClick(e, tooth.id, area.name)}
+                className="transition-colors hover:brightness-95"
+              />
+            ))}
+            
             {/* Base tooth structure */}
             <path
               d={getToothPath(tooth)}
@@ -228,18 +256,6 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
               stroke={isSelected ? '#3b82f6' : '#666'}
               strokeWidth={isSelected ? '2' : '1'}
             />
-            
-            {/* Render each area */}
-            {tooth.areas.map((area, index) => (
-              <path
-                key={area.name}
-                d={getAreaPath(index)}
-                fill={getAreaColor(area)}
-                stroke="none"
-                onClick={(e) => handleAreaClick(e, tooth.id, area.name)}
-                className="transition-colors hover:brightness-95"
-              />
-            ))}
           </svg>
         </div>
       </div>
