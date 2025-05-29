@@ -139,7 +139,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
 
   return (
     <div className="flex flex-col items-center w-full px-2 sm:px-4">
-      <h3 className="text-lg font-medium mb-4 text-center">Adult Teeth (FDI System)</h3>
+      <h3 className="text-lg font-medium mb-4 text-center">Adult Teeth</h3>
 
       {/* Upper Jaw */}
       <div className="flex flex-wrap justify-center gap-4 mb-8">
