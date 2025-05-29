@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Filter, Plus, Search, User, Stethoscope } from 'lucide-react';
+import { Filter, Plus, Search, User, Stethoscope, FileText, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../lib/utils';
 
