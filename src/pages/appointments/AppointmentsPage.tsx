@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Calendar, ChevronLeft, ChevronRight, Clock, Filter, Plus, Search, User } from 'lucide-react';
+import { Bell, Calendar, ChevronLeft, ChevronRight, Clock, Filter, Plus, Search, User, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate, formatTime } from '../../lib/utils';
 
@@ -92,10 +92,34 @@ const DENTISTS = [
   { id: '2', name: 'Dr. Anderson' },
 ];
 
+// Treatment types
+const TREATMENT_TYPES = [
+  'Regular Checkup',
+  'Cleaning',
+  'Filling',
+  'Root Canal',
+  'Crown',
+  'Bridge',
+  'Extraction',
+  'Consultation',
+  'Emergency',
+];
+
 const AppointmentsPage = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [view, setView] = useState<'day' | 'week' | 'list'>('day');
   const [searchTerm, setSearchTerm] = useState('');
+  const [showNewAppointmentModal, setShowNewAppointmentModal] = useState(false);
+  const [newAppointment, setNewAppointment] = useState({
+    patientName: '',
+    patientId: '',
+    date: formatDate(new Date()).split(',')[0],
+    time: '09:00',
+    duration: '30',
+    type: 'Regular Checkup',
+    dentist: DENTISTS[0].id,
+    notes: '',
+  });
   
   // Filter appointments based on the selected date and search term
   const filteredAppointments = APPOINTMENTS.filter((appointment) => {
@@ -134,6 +158,46 @@ const AppointmentsPage = () => {
     );
   };
 
+  const handleCreateAppointment = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, this would make an API call to create the appointment
+    console.log('Creating appointment:', newAppointment);
+    
+    // Add the new appointment to the list (mock implementation)
+    const appointment = {
+      id: Math.random().toString(36).substr(2, 9),
+      patientId: newAppointment.patientId,
+      patientName: newAppointment.patientName,
+      date: newAppointment.date,
+      time: newAppointment.time,
+      duration: parseInt(newAppointment.duration),
+      type: newAppointment.type,
+      dentist: DENTISTS.find(d => d.id === newAppointment.dentist)?.name || '',
+      notes: newAppointment.notes,
+      status: 'scheduled',
+    };
+    
+    APPOINTMENTS.push(appointment);
+    
+    // Reset form and close modal
+    setNewAppointment({
+      patientName: '',
+      patientId: '',
+      date: formatDate(new Date()).split(',')[0],
+      time: '09:00',
+      duration: '30',
+      type: 'Regular Checkup',
+      dentist: DENTISTS[0].id,
+      notes: '',
+    });
+    setShowNewAppointmentModal(false);
+  };
+
+  // Get tomorrow's date as the minimum date for scheduling
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const minDate = tomorrow.toISOString().split('T')[0];
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -143,11 +207,145 @@ const AppointmentsPage = () => {
             Schedule and manage patient appointments
           </p>
         </div>
-        <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
+        <button 
+          onClick={() => setShowNewAppointmentModal(true)}
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+        >
           <Plus className="mr-2 h-4 w-4" />
           New Appointment
         </button>
       </div>
+
+      {/* New Appointment Modal */}
+      {showNewAppointmentModal && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-card rounded-lg shadow-lg w-full max-w-lg">
+            <div className="flex items-center justify-between p-4 border-b">
+              <h2 className="text-lg font-semibold">New Appointment</h2>
+              <button 
+                onClick={() => setShowNewAppointmentModal(false)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <form onSubmit={handleCreateAppointment} className="p-4 space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Patient Name</label>
+                  <input
+                    type="text"
+                    value={newAppointment.patientName}
+                    onChange={(e) => setNewAppointment({...newAppointment, patientName: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Patient ID</label>
+                  <input
+                    type="text"
+                    value={newAppointment.patientId}
+                    onChange={(e) => setNewAppointment({...newAppointment, patientId: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Date</label>
+                  <input
+                    type="date"
+                    min={minDate}
+                    value={newAppointment.date}
+                    onChange={(e) => setNewAppointment({...newAppointment, date: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Time</label>
+                  <select
+                    value={newAppointment.time}
+                    onChange={(e) => setNewAppointment({...newAppointment, time: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  >
+                    {TIME_SLOTS.map((time) => (
+                      <option key={time} value={time}>{time}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Duration (minutes)</label>
+                  <select
+                    value={newAppointment.duration}
+                    onChange={(e) => setNewAppointment({...newAppointment, duration: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  >
+                    <option value="15">15</option>
+                    <option value="30">30</option>
+                    <option value="45">45</option>
+                    <option value="60">60</option>
+                    <option value="90">90</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Type</label>
+                  <select
+                    value={newAppointment.type}
+                    onChange={(e) => setNewAppointment({...newAppointment, type: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  >
+                    {TREATMENT_TYPES.map((type) => (
+                      <option key={type} value={type}>{type}</option>
+                    ))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Doctor</label>
+                  <select
+                    value={newAppointment.dentist}
+                    onChange={(e) => setNewAppointment({...newAppointment, dentist: e.target.value})}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  >
+                    {DENTISTS.map((dentist) => (
+                      <option key={dentist.id} value={dentist.id}>{dentist.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-1">Notes</label>
+                <textarea
+                  value={newAppointment.notes}
+                  onChange={(e) => setNewAppointment({...newAppointment, notes: e.target.value})}
+                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                  rows={3}
+                  placeholder="Add any additional notes..."
+                />
+              </div>
+              <div className="pt-4 border-t flex justify-end gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowNewAppointmentModal(false)}
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+                >
+                  Create Appointment
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       <div className="rounded-lg border bg-card">
         <div className="p-4 border-b">
@@ -257,9 +455,20 @@ const AppointmentsPage = () => {
                               </div>
                             </div>
                           ) : (
-                            <div className="h-full rounded-md border border-dashed border-muted hover:border-muted-foreground transition-colors cursor-pointer flex items-center justify-center">
+                            <button 
+                              onClick={() => {
+                                setNewAppointment({
+                                  ...newAppointment,
+                                  time,
+                                  dentist: dentist.id,
+                                  date: formatDate(selectedDate).split(',')[0]
+                                });
+                                setShowNewAppointmentModal(true);
+                              }}
+                              className="h-full w-full rounded-md border border-dashed border-muted hover:border-muted-foreground transition-colors cursor-pointer flex items-center justify-center"
+                            >
                               <div className="text-xs text-muted-foreground">Available</div>
-                            </div>
+                            </button>
                           )}
                         </div>
                       );
