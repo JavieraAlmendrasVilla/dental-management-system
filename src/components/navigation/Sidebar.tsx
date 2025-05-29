@@ -1,6 +1,7 @@
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, CreditCard, FileText, Globe, Home, PieChart, Settings, Bluetooth as Tooth, Users } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 interface NavLinkProps {
   to: string;
@@ -32,16 +33,17 @@ interface SidebarProps {
 const Sidebar = ({ open, onClose }: SidebarProps) => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const { t } = useLanguage();
 
   const navItems = [
-    { to: '/', icon: <Home className="h-5 w-5" />, label: 'Dashboard' },
-    { to: '/patients', icon: <Users className="h-5 w-5" />, label: 'Patients' },
-    { to: '/appointments', icon: <Calendar className="h-5 w-5" />, label: 'Appointments' },
-    { to: '/treatments', icon: <Tooth className="h-5 w-5" />, label: 'Treatments' },
-    { to: '/billing', icon: <CreditCard className="h-5 w-5" />, label: 'Billing' },
-    { to: '/reports', icon: <PieChart className="h-5 w-5" />, label: 'Reports' },
-    { to: '/website-builder', icon: <Globe className="h-5 w-5" />, label: 'Website Builder' },
-    { to: '/settings', icon: <Settings className="h-5 w-5" />, label: 'Settings' },
+    { to: '/', icon: <Home className="h-5 w-5" />, label: t('navigation.dashboard') },
+    { to: '/patients', icon: <Users className="h-5 w-5" />, label: t('navigation.patients') },
+    { to: '/appointments', icon: <Calendar className="h-5 w-5" />, label: t('navigation.appointments') },
+    { to: '/treatments', icon: <Tooth className="h-5 w-5" />, label: t('navigation.treatments') },
+    { to: '/billing', icon: <CreditCard className="h-5 w-5" />, label: t('navigation.billing') },
+    { to: '/reports', icon: <PieChart className="h-5 w-5" />, label: t('navigation.reports') },
+    { to: '/website-builder', icon: <Globe className="h-5 w-5" />, label: t('navigation.websiteBuilder') },
+    { to: '/settings', icon: <Settings className="h-5 w-5" />, label: t('navigation.settings') },
   ];
 
   return (
