@@ -22,37 +22,54 @@ const TREATMENT_COLORS: Record<string, string> = {
   'bridge': '#6366f1',
 };
 
-const TOOTH_PATHS = {
-  molar: 'M4,2 C2,2 0,3.5 0,6 C0,7.5 0.5,8.5 1.5,9.5 C2.5,10.5 4,11 4,12 C4,13 2.5,13.5 1.5,14.5 C0.5,15.5 0,16.5 0,18 C0,20.5 2,22 4,22 C6,22 8,20.5 8,18 C8,16.5 7.5,15.5 6.5,14.5 C5.5,13.5 4,13 4,12 C4,11 5.5,10.5 6.5,9.5 C7.5,8.5 8,7.5 8,6 C8,3.5 6,2 4,2 Z M4,4 C5,4 6,4.5 6,6 C6,7 5.5,7.5 5,8 C4.5,8.5 4,9 4,9.5 C4,10 4.5,10.5 5,11 C5.5,11.5 6,12 6,13 C6,14.5 5,15 4,15 C3,15 2,14.5 2,13 C2,12 2.5,11.5 3,11 C3.5,10.5 4,10 4,9.5 C4,9 3.5,8.5 3,8 C2.5,7.5 2,7 2,6 C2,4.5 3,4 4,4 Z',
-  premolar: 'M4,2 C2,2 0,3.5 0,6 C0,7.5 0.5,8.5 1.5,9.5 C2.5,10.5 4,11 4,12 C4,13 2.5,13.5 1.5,14.5 C0.5,15.5 0,16.5 0,18 C0,20.5 2,22 4,22 C6,22 8,20.5 8,18 C8,16.5 7.5,15.5 6.5,14.5 C5.5,13.5 4,13 4,12 C4,11 5.5,10.5 6.5,9.5 C7.5,8.5 8,7.5 8,6 C8,3.5 6,2 4,2 Z M4,4 C5,4 6,4.5 6,6 C6,7 5.5,7.5 5,8 C4.5,8.5 4,9 4,9.5 C4,10 4.5,10.5 5,11 C5.5,11.5 6,12 6,13 C6,14.5 5,15 4,15 C3,15 2,14.5 2,13 C2,12 2.5,11.5 3,11 C3.5,10.5 4,10 4,9.5 C4,9 3.5,8.5 3,8 C2.5,7.5 2,7 2,6 C2,4.5 3,4 4,4 Z',
-  canine: 'M4,2 C2,2 0,3.5 0,6 C0,8 1,9.5 2,10.5 C3,11.5 4,12 4,13 C4,14 3,14.5 2,15.5 C1,16.5 0,18 0,20 C0,21.5 2,22 4,22 C6,22 8,21.5 8,20 C8,18 7,16.5 6,15.5 C5,14.5 4,14 4,13 C4,12 5,11.5 6,10.5 C7,9.5 8,8 8,6 C8,3.5 6,2 4,2 Z M4,4 C5,4 6,4.5 6,6 C6,7 5.5,7.5 5,8 C4.5,8.5 4,9 4,9.5 C4,10 4.5,10.5 5,11 C5.5,11.5 6,12 6,13 C6,14.5 5,15 4,15 C3,15 2,14.5 2,13 C2,12 2.5,11.5 3,11 C3.5,10.5 4,10 4,9.5 C4,9 3.5,8.5 3,8 C2.5,7.5 2,7 2,6 C2,4.5 3,4 4,4 Z',
-  incisor: 'M4,2 C2,2 0,3.5 0,6 C0,8 1,9.5 2,10.5 C3,11.5 4,12 4,13 C4,14 3,14.5 2,15.5 C1,16.5 0,18 0,20 C0,21.5 2,22 4,22 C6,22 8,21.5 8,20 C8,18 7,16.5 6,15.5 C5,14.5 4,14 4,13 C4,12 5,11.5 6,10.5 C7,9.5 8,8 8,6 C8,3.5 6,2 4,2 Z M4,4 C5,4 6,4.5 6,6 C6,7 5.5,7.5 5,8 C4.5,8.5 4,9 4,9.5 C4,10 4.5,10.5 5,11 C5.5,11.5 6,12 6,13 C6,14.5 5,15 4,15 C3,15 2,14.5 2,13 C2,12 2.5,11.5 3,11 C3.5,10.5 4,10 4,9.5 C4,9 3.5,8.5 3,8 C2.5,7.5 2,7 2,6 C2,4.5 3,4 4,4 Z'
-};
-
-// Create adult teeth with proper types
+// Create adult teeth with FDI numbering system
 const ADULT_TEETH: Tooth[] = [
-  // Upper teeth (1-16)
-  ...Array.from({ length: 16 }, (_, index): Tooth => ({
+  // Upper right (1-8)
+  ...Array.from({ length: 8 }, (_, index): Tooth => ({
     id: index + 1,
     name: (index + 1).toString(),
     adult: true,
     treatments: [],
     position: 'upper',
-    type: index < 3 || index > 12 ? 'molar' 
-        : index < 5 || index > 10 ? 'premolar'
-        : index < 6 || index > 9 ? 'canine'
+    type: index < 3 ? 'molar' 
+        : index < 5 ? 'premolar'
+        : index < 6 ? 'canine'
         : 'incisor'
   })),
-  // Lower teeth (17-32)
-  ...Array.from({ length: 16 }, (_, index): Tooth => ({
-    id: index + 17,
-    name: (index + 17).toString(),
+  // Upper left (9-16)
+  ...Array.from({ length: 8 }, (_, index): Tooth => ({
+    id: index + 9,
+    name: (index + 9).toString(),
+    adult: true,
+    treatments: [],
+    position: 'upper',
+    type: index > 5 ? 'molar'
+        : index > 3 ? 'premolar'
+        : index > 2 ? 'canine'
+        : 'incisor'
+  })),
+  // Lower left (32-25)
+  ...Array.from({ length: 8 }, (_, index): Tooth => ({
+    id: 32 - index,
+    name: (32 - index).toString(),
     adult: true,
     treatments: [],
     position: 'lower',
-    type: index < 3 || index > 12 ? 'molar'
-        : index < 5 || index > 10 ? 'premolar'
-        : index < 6 || index > 9 ? 'canine'
+    type: index < 2 ? 'molar'
+        : index < 4 ? 'premolar'
+        : index < 5 ? 'canine'
+        : 'incisor'
+  })),
+  // Lower right (24-17)
+  ...Array.from({ length: 8 }, (_, index): Tooth => ({
+    id: 24 - index,
+    name: (24 - index).toString(),
+    adult: true,
+    treatments: [],
+    position: 'lower',
+    type: index > 5 ? 'molar'
+        : index > 3 ? 'premolar'
+        : index > 2 ? 'canine'
         : 'incisor'
   }))
 ];
@@ -87,53 +104,96 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
     return TREATMENT_COLORS[tooth.treatments[tooth.treatments.length - 1]] || '#ffffff';
   };
 
-  const renderTooth = (tooth: Tooth) => (
-    <div 
-      key={tooth.id}
-      className="flex flex-col items-center mx-1 cursor-pointer group"
-      onClick={() => handleToothClick(tooth.id)}
-    >
-      <div className="relative w-10 h-14">
-        <svg
-          viewBox="0 0 8 24"
-          className={`w-full h-full transition-transform ${
-            tooth.position === 'lower' ? 'rotate-180' : ''
-          } group-hover:scale-110`}
-        >
-          <path
-            d={TOOTH_PATHS[tooth.type]}
-            fill={getToothColor(tooth)}
-            stroke={tooth.treatments.length > 0 ? '#000' : '#666'}
-            strokeWidth="0.2"
-          />
-        </svg>
-        {tooth.treatments.length > 0 && (
-          <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
-            <span className="text-[10px] text-white font-bold">
-              {tooth.treatments.length}
-            </span>
-          </div>
-        )}
+  const renderTooth = (tooth: Tooth) => {
+    const isUpper = tooth.position === 'upper';
+    
+    return (
+      <div 
+        key={tooth.id}
+        className="flex flex-col items-center mx-1 cursor-pointer group"
+        onClick={() => handleToothClick(tooth.id)}
+      >
+        <span className="text-xs font-medium mb-1">{tooth.name}</span>
+        <div className="relative w-12 h-16">
+          <svg
+            viewBox="0 0 100 160"
+            className={`w-full h-full transition-transform group-hover:scale-110`}
+          >
+            {/* Crown */}
+            <path
+              d={isUpper ? `
+                M50,10 
+                C30,10 10,25 10,50
+                C10,65 20,75 35,85
+                C45,92 50,95 50,100
+                C50,95 55,92 65,85
+                C80,75 90,65 90,50
+                C90,25 70,10 50,10
+                Z
+              ` : `
+                M50,60
+                C30,60 10,75 10,100
+                C10,115 20,125 35,135
+                C45,142 50,145 50,150
+                C50,145 55,142 65,135
+                C80,125 90,115 90,100
+                C90,75 70,60 50,60
+                Z
+              `}
+              fill={getToothColor(tooth)}
+              stroke="#666"
+              strokeWidth="2"
+            />
+            {/* Root */}
+            <path
+              d={isUpper ? `
+                M35,85
+                C45,92 50,95 50,100
+                L50,150
+                M65,85
+                C55,92 50,95 50,100
+              ` : `
+                M35,135
+                C45,142 50,145 50,150
+                L50,100
+                M65,135
+                C55,142 50,145 50,150
+              `}
+              fill="none"
+              stroke="#666"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+          </svg>
+          {tooth.treatments.length > 0 && (
+            <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
+              <span className="text-[10px] text-white font-bold">
+                {tooth.treatments.length}
+              </span>
+            </div>
+          )}
+        </div>
       </div>
-      <span className="text-xs mt-1 font-medium">{tooth.name}</span>
-    </div>
-  );
+    );
+  };
 
-  // Group teeth into upper and lower jaws
-  const upperTeeth = teeth.slice(0, 16);
-  const lowerTeeth = teeth.slice(16, 32);
+  // Group teeth into quadrants
+  const upperRight = teeth.slice(0, 8);
+  const upperLeft = teeth.slice(8, 16);
+  const lowerLeft = teeth.slice(16, 24);
+  const lowerRight = teeth.slice(24, 32);
 
   return (
     <div className="flex flex-col items-center">
-      <h3 className="text-lg font-medium mb-4">Adult Teeth</h3>
+      <h3 className="text-lg font-medium mb-4">Adult Teeth (FDI System)</h3>
       
       {/* Upper jaw */}
       <div className="mb-8">
         <div className="flex justify-center mb-2">
-          {upperTeeth.slice(0, 8).map(renderTooth)}
+          {upperRight.map(renderTooth)}
         </div>
         <div className="flex justify-center">
-          {upperTeeth.slice(8, 16).reverse().map(renderTooth)}
+          {upperLeft.map(renderTooth)}
         </div>
       </div>
       
@@ -143,10 +203,10 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
       {/* Lower jaw */}
       <div>
         <div className="flex justify-center">
-          {lowerTeeth.slice(0, 8).map(renderTooth)}
+          {lowerLeft.map(renderTooth)}
         </div>
         <div className="flex justify-center mt-2">
-          {lowerTeeth.slice(8, 16).reverse().map(renderTooth)}
+          {lowerRight.map(renderTooth)}
         </div>
       </div>
       
