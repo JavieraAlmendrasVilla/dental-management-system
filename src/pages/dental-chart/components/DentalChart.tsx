@@ -98,74 +98,45 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   };
 
   const getToothPath = (tooth: Tooth): string => {
-    const type = tooth.type;
-    const position = tooth.position;
+  // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
+  const cx = 50;
+  const cy = 50;
+  const outerR = 40;
+  const innerR = 10;
+  const sqrt2over2 = 0.7071;
+
+  // Coordinates for outer circle
+  const outerCircle = `M${cx + outerR},${cy}
+    A${outerR},${outerR} 0 1,0 ${cx - outerR},${cy}
+    A${outerR},${outerR} 0 1,0 ${cx + outerR},${cy}`;
+
+  // Coordinates for inner circle
+  const innerCircle = `M${cx + innerR},${cy}
+    A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
+    A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`;
+
+  // Diagonal lines (outer to inner circle border)
+  const lines = [
+    // NE ↙ SW
+    `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+     L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
     
-    // Base dimensions
-    const width = 40;
-    const height = position === 'upper' ? 60 : 60;
-    const x = 30;
-    const y = position === 'upper' ? 20 : 20;
+    // NW ↘ SE
+    `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+     L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+    
+    // SW ↗ NE
+    `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+     L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}`,
+    
+    // SE ↖ NW
+    `M${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+     L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}`
+  ];
 
-    switch (type) {
-      case 'molar':
-        return `
-          M ${x} ${y}
-          h ${width}
-          v ${height}
-          h -${width}
-          Z
-          M ${x} ${y + height * 0.25}
-          h ${width}
-          M ${x} ${y + height * 0.5}
-          h ${width}
-          M ${x} ${y + height * 0.75}
-          h ${width}
-          M ${x + width * 0.33} ${y}
-          v ${height}
-          M ${x + width * 0.67} ${y}
-          v ${height}
-        `;
+  return [outerCircle, innerCircle, ...lines].join(' ');
+};
 
-      case 'premolar':
-        return `
-          M ${x} ${y}
-          h ${width}
-          v ${height}
-          h -${width}
-          Z
-          M ${x} ${y + height * 0.33}
-          h ${width}
-          M ${x} ${y + height * 0.67}
-          h ${width}
-          M ${x + width * 0.5} ${y}
-          v ${height}
-        `;
-
-      case 'canine':
-        return `
-          M ${x} ${y}
-          h ${width}
-          l -${width/2} ${height}
-          l -${width/2} -${height}
-          Z
-        `;
-
-      case 'incisor':
-        return `
-          M ${x} ${y}
-          h ${width}
-          v ${height * 0.8}
-          l -${width/2} ${height * 0.2}
-          l -${width/2} -${height * 0.2}
-          v -${height * 0.8}
-          Z
-        `;
-
-      default:
-        return '';
-    }
-  };
 
   const renderTooth = (tooth: Tooth) => {
     const isSelected = tooth.id === selectedTooth;
