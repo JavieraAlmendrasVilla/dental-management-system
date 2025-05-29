@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 interface ToothArea {
   name: 'lingual' | 'mesial' | 'buccal' | 'distal' | 'occlusal';
   treatment?: string;
+  condition?: string;
 }
 
 interface Tooth {
@@ -23,6 +24,7 @@ interface DentalChartProps {
 }
 
 const TREATMENT_COLORS: Record<string, string> = {
+  'caries': '#dc2626',
   'filling': '#3b82f6',
   'crown': '#f59e0b',
   'extraction': '#ef4444',
@@ -103,7 +105,26 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     const tooth = teeth.find(t => t.id === toothId);
     if (!tooth) return;
 
-    if (selectedTreatment === 'extraction' || selectedTreatment === 'bridge') {
+    if (selectedTreatment === 'caries') {
+      // For caries, toggle condition on the clicked area
+      setTeeth((prevTeeth) =>
+        prevTeeth.map((t) =>
+          t.id === toothId
+            ? {
+                ...t,
+                areas: t.areas.map(area => ({
+                  ...area,
+                  condition: area.name === areaName
+                    ? area.condition === 'caries'
+                      ? undefined
+                      : 'caries'
+                    : area.condition
+                }))
+              }
+            : t
+        )
+      );
+    } else if (selectedTreatment === 'extraction' || selectedTreatment === 'bridge') {
       // For extraction and bridge, apply to all areas
       const hasTreatment = tooth.areas.some(area => area.treatment === selectedTreatment);
       setTeeth((prevTeeth) =>
@@ -161,6 +182,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   };
 
   const getAreaColor = (area: ToothArea) => {
+    if (area.condition === 'caries') return TREATMENT_COLORS['caries'];
     if (!area.treatment) return '#ffffff';
     return TREATMENT_COLORS[area.treatment] || '#ffffff';
   };
@@ -329,7 +351,9 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       </div>
       
       <div className="mt-4 text-sm text-center text-muted-foreground">
-        {selectedTreatment === 'extraction' || selectedTreatment === 'bridge' ? (
+        {selectedTreatment === 'caries' ? (
+          <>Click on a specific area to mark caries</>
+        ) : selectedTreatment === 'extraction' || selectedTreatment === 'bridge' ? (
           <>Click on any area of a tooth to mark it for {selectedTreatment}</>
         ) : selectedTreatment === 'crown' ? (
           <>Click on any area of a tooth to add a crown</>

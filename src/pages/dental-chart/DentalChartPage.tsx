@@ -4,6 +4,7 @@ import { Calendar, FilePlus, History, Printer, Save, Clock, X, Plus, Trash2 } fr
 import DentalChart from './components/DentalChart';
 
 const TREATMENT_TYPES = [
+  { id: 'caries', name: 'Caries', color: '#dc2626', cost: 0 },
   { id: 'filling', name: 'Filling', color: '#3b82f6', cost: 150 },
   { id: 'crown', name: 'Crown', color: '#f59e0b', cost: 800 },
   { id: 'extraction', name: 'Extraction', color: '#ef4444', cost: 200 },
