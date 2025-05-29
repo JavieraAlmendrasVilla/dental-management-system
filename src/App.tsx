@@ -8,6 +8,7 @@ import LoadingScreen from './components/ui/LoadingScreen';
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Patients = lazy(() => import('./pages/patients/PatientsPage'));
 const PatientDetails = lazy(() => import('./pages/patients/PatientDetailsPage'));
+const Periodontogram = lazy(() => import('./pages/patients/PeriodontogramPage'));
 const Appointments = lazy(() => import('./pages/appointments/AppointmentsPage'));
 const DentalChart = lazy(() => import('./pages/dental-chart/DentalChartPage'));
 const Treatments = lazy(() => import('./pages/treatments/TreatmentsPage'));
@@ -51,6 +52,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="patients" element={<Patients />} />
           <Route path="patients/:id" element={<PatientDetails />} />
+          <Route path="periodontogram/:patientId" element={<Periodontogram />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="dental-chart/:patientId" element={<DentalChart />} />
           <Route path="treatments" element={<Treatments />} />
@@ -66,5 +68,3 @@ function App() {
     </Suspense>
   );
 }
-
-export default App;

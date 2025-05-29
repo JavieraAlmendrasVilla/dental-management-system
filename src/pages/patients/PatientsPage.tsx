@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Filter, Plus, Search, User, Stethoscope } from 'lucide-react';
+import { Filter, Plus, Search, User, Stethoscope, Activity } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 
 // Mock patient data
@@ -156,6 +156,12 @@ const PatientsPage = () => {
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
                       >
                         <Stethoscope className="h-4 w-4" />
+                      </Link>
+                      <Link
+                        to={`/periodontogram/${patient.id}`}
+                        className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
+                      >
+                        <Activity className="h-4 w-4" />
                       </Link>
                       <Link
                         to={`/patients/${patient.id}`}
