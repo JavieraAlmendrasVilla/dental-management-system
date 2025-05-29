@@ -1,20 +1,8 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Lock, Mail, Bluetooth as Tooth } from 'lucide-react';
+import { useAuth0 } from '@auth0/auth0-react';
+import { Bluetooth as Tooth } from 'lucide-react';
 
 const LoginPage = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
-  const navigate = useNavigate();
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, we would handle authentication here
-    // For this demo, we'll just redirect to the dashboard
-    navigate('/');
-  };
+  const { loginWithRedirect } = useAuth0();
 
   return (
     <div className="min-h-screen flex flex-col sm:flex-row">
@@ -68,87 +56,24 @@ const LoginPage = () => {
           </div>
           
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold">Sign in to your account</h2>
+            <h2 className="text-2xl font-bold">Welcome Back</h2>
             <p className="text-muted-foreground mt-2">
-              Enter your credentials to access your account
+              Sign in to access your account
             </p>
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email Address
-              </label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  id="email"
-                  type="email"
-                  placeholder="name@example.com"
-                  className="w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-            
-            <div className="space-y-2">
-              <div className="flex items-center justify-between">
-                <label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </label>
-                <a href="#" className="text-sm font-medium text-primary hover:underline">
-                  Forgot password?
-                </a>
-              </div>
-              <div className="relative">
-                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                <input
-                  id="password"
-                  type={showPassword ? "text" : "password"}
-                  placeholder="••••••••"
-                  className="w-full rounded-md border border-input bg-background pl-10 pr-10 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-                <button
-                  type="button"
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                </button>
-              </div>
-            </div>
-            
-            <div className="flex items-center">
-              <input
-                id="remember-me"
-                type="checkbox"
-                className="h-4 w-4 rounded border-input bg-background"
-                checked={rememberMe}
-                onChange={(e) => setRememberMe(e.target.checked)}
-              />
-              <label htmlFor="remember-me" className="ml-2 text-sm text-muted-foreground">
-                Remember me for 30 days
-              </label>
-            </div>
-            
-            <button
-              type="submit"
-              className="w-full rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
-            >
-              Sign In
-            </button>
-          </form>
+          <button
+            onClick={() => loginWithRedirect()}
+            className="w-full rounded-md bg-primary px-4 py-3 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+          >
+            Continue with Auth0
+          </button>
           
           <div className="mt-6 text-center text-sm text-muted-foreground">
-            Don't have an account?{' '}
-            <a href="#" className="font-medium text-primary hover:underline">
-              Contact your administrator
-            </a>
+            By continuing, you agree to our{' '}
+            <a href="#" className="font-medium text-primary hover:underline">Terms of Service</a>
+            {' '}and{' '}
+            <a href="#" className="font-medium text-primary hover:underline">Privacy Policy</a>
           </div>
         </div>
       </div>

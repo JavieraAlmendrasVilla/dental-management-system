@@ -1,5 +1,6 @@
 import { Suspense, lazy } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
+import { useAuth0 } from '@auth0/auth0-react';
 import DashboardLayout from './layouts/DashboardLayout';
 import LoadingScreen from './components/ui/LoadingScreen';
 
@@ -16,15 +17,18 @@ const Login = lazy(() => import('./pages/auth/LoginPage'));
 const Settings = lazy(() => import('./pages/settings/SettingsPage'));
 
 function App() {
-  // Mock authentication state - would be replaced with a real auth system
-  const isAuthenticated = true;
+  const { isAuthenticated, isLoading } = useAuth0();
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   if (!isAuthenticated) {
     return (
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login\" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     );
@@ -44,8 +48,8 @@ function App() {
           <Route path="reports" element={<Reports />} />
           <Route path="settings" element={<Settings />} />
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
