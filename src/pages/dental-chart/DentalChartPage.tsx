@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import DentalChart from './components/DentalChart';
 import { Calendar, FilePlus, History, Printer, Save } from 'lucide-react';
 
-// Treatment options for the dental chart
 const TREATMENT_TYPES = [
   { id: 'filling', name: 'Filling', color: '#3b82f6' },
   { id: 'crown', name: 'Crown', color: '#f59e0b' },
@@ -17,11 +16,11 @@ const DentalChartPage = () => {
   const { patientId } = useParams<{ patientId: string }>();
   const [selectedTreatment, setSelectedTreatment] = useState(TREATMENT_TYPES[0].id);
 
-  // Mock patient data - would be fetched from an API in a real app
   const patientName = 'John Smith';
 
   return (
-    <div className="space-y-6 animate-fade-in">
+    <div className="space-y-6 animate-fade-in max-w-7xl mx-auto px-4">
+      {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight">Dental Chart</h1>
@@ -29,7 +28,7 @@ const DentalChartPage = () => {
             Patient: {patientName} (ID: {patientId})
           </p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
             <History className="mr-2 h-4 w-4" />
             History
@@ -45,9 +44,11 @@ const DentalChartPage = () => {
         </div>
       </div>
 
+      {/* Main Grid */}
       <div className="grid gap-6 md:grid-cols-4">
-        {/* Treatment Selection */}
+        {/* Treatment Options Panel */}
         <div className="md:col-span-1 space-y-6">
+          {/* Treatment Types */}
           <div className="rounded-lg border bg-card">
             <div className="p-4 border-b">
               <h2 className="font-semibold">Treatment Types</h2>
@@ -73,6 +74,7 @@ const DentalChartPage = () => {
             </div>
           </div>
 
+          {/* Patient Info */}
           <div className="rounded-lg border bg-card">
             <div className="p-4 border-b">
               <h2 className="font-semibold">Patient Information</h2>
@@ -95,6 +97,7 @@ const DentalChartPage = () => {
             </div>
           </div>
 
+          {/* Treatment Plan */}
           <div className="rounded-lg border bg-card">
             <div className="p-4 border-b">
               <h2 className="font-semibold">Treatment Plan</h2>
@@ -108,9 +111,9 @@ const DentalChartPage = () => {
           </div>
         </div>
 
-        {/* Dental Chart */}
-        <div className="md:col-span-3">
-          <div className="rounded-lg border bg-card p-4">
+        {/* Dental Chart Section */}
+        <div className="md:col-span-3 flex justify-center">
+          <div className="rounded-lg border bg-card p-4 w-full max-w-4xl">
             <DentalChart selectedTreatment={selectedTreatment} />
           </div>
         </div>
@@ -118,6 +121,7 @@ const DentalChartPage = () => {
 
       {/* Notes and Legend */}
       <div className="grid gap-6 md:grid-cols-2">
+        {/* Notes */}
         <div className="rounded-lg border bg-card">
           <div className="p-4 border-b">
             <h2 className="font-semibold">Chart Notes</h2>
@@ -130,6 +134,7 @@ const DentalChartPage = () => {
           </div>
         </div>
 
+        {/* Legend */}
         <div className="rounded-lg border bg-card">
           <div className="p-4 border-b">
             <h2 className="font-semibold">Legend</h2>
