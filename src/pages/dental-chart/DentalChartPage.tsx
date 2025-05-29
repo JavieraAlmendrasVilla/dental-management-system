@@ -114,43 +114,44 @@ const DentalChartPage = () => {
         {/* Dental Chart Section */}
         <div className="md:col-span-3">
           <div className="rounded-lg border bg-card p-4 w-full max-w-full overflow-x-auto">
-              <div className="mx-auto max-w-[1024px]">
-                <DentalChart selectedTreatment={selectedTreatment} />
+            <div className="mx-auto max-w-[1024px]">
+              <DentalChart selectedTreatment={selectedTreatment} />
+            </div>
+          </div>
+        </div>
+
+        {/* Notes and Legend */}
+        <div className="md:col-span-4 grid gap-6 md:grid-cols-2">
+          {/* Notes */}
+          <div className="rounded-lg border bg-card">
+            <div className="p-4 border-b">
+              <h2 className="font-semibold">Chart Notes</h2>
+            </div>
+            <div className="p-4">
+              <textarea
+                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[120px]"
+                placeholder="Add notes about the patient's dental chart..."
+              ></textarea>
+            </div>
+          </div>
+
+          {/* Legend */}
+          <div className="rounded-lg border bg-card">
+            <div className="p-4 border-b">
+              <h2 className="font-semibold">Legend</h2>
+            </div>
+            <div className="p-4">
+              <div className="grid grid-cols-2 gap-4">
+                {TREATMENT_TYPES.map((treatment) => (
+                  <div key={treatment.id} className="flex items-center">
+                    <div
+                      className="mr-2 h-4 w-4 rounded-full"
+                      style={{ backgroundColor: treatment.color }}
+                    />
+                    <span className="text-sm">{treatment.name}</span>
+                  </div>
+                ))}
               </div>
-          </div>
-        </div>
-
-      {/* Notes and Legend */}
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Notes */}
-        <div className="rounded-lg border bg-card">
-          <div className="p-4 border-b">
-            <h2 className="font-semibold">Chart Notes</h2>
-          </div>
-          <div className="p-4">
-            <textarea
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring min-h-[120px]"
-              placeholder="Add notes about the patient's dental chart..."
-            ></textarea>
-          </div>
-        </div>
-
-        {/* Legend */}
-        <div className="rounded-lg border bg-card">
-          <div className="p-4 border-b">
-            <h2 className="font-semibold">Legend</h2>
-          </div>
-          <div className="p-4">
-            <div className="grid grid-cols-2 gap-4">
-              {TREATMENT_TYPES.map((treatment) => (
-                <div key={treatment.id} className="flex items-center">
-                  <div
-                    className="mr-2 h-4 w-4 rounded-full"
-                    style={{ backgroundColor: treatment.color }}
-                  />
-                  <span className="text-sm">{treatment.name}</span>
-                </div>
-              ))}
             </div>
           </div>
         </div>
