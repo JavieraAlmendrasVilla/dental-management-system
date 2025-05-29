@@ -11,6 +11,8 @@ interface Tooth {
 
 interface DentalChartProps {
   selectedTreatment: string;
+  onSave: (teeth: Tooth[]) => void;
+  initialTeeth?: Tooth[];
 }
 
 const TREATMENT_COLORS: Record<string, string> = {
@@ -62,9 +64,10 @@ const ADULT_TEETH: Tooth[] = [
   }))
 ];
 
-const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
-  const [teeth, setTeeth] = useState<Tooth[]>(ADULT_TEETH);
+const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, initialTeeth }) => {
+  const [teeth, setTeeth] = useState<Tooth[]>(initialTeeth || ADULT_TEETH);
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const handleToothClick = (toothId: number) => {
     setSelectedTooth(toothId);
@@ -85,6 +88,12 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
           : tooth
       )
     );
+    setHasUnsavedChanges(true);
+  };
+
+  const handleSave = () => {
+    onSave(teeth);
+    setHasUnsavedChanges(false);
   };
 
   const getToothColor = (tooth: Tooth) => {
@@ -245,6 +254,14 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
           >
             Apply {selectedTreatment || 'Treatment'}
           </button>
+          {hasUnsavedChanges && (
+            <button
+              onClick={handleSave}
+              className="inline-flex items-center justify-center rounded-md bg-success px-4 py-2 text-sm font-medium text-white hover:bg-success/90 transition-colors"
+            >
+              Save Changes
+            </button>
+          )}
         </div>
       )}
       

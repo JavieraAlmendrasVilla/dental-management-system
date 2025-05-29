@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import DentalChart from './components/DentalChart';
 import { Calendar, FilePlus, History, Printer, Save } from 'lucide-react';
+import DentalChart from './components/DentalChart';
 
 const TREATMENT_TYPES = [
   { id: 'filling', name: 'Filling', color: '#3b82f6' },
@@ -17,6 +17,13 @@ const DentalChartPage = () => {
   const [selectedTreatment, setSelectedTreatment] = useState(TREATMENT_TYPES[0].id);
 
   const patientName = 'John Smith';
+
+  const handleSaveChart = (teeth: any) => {
+    // In a real app, this would make an API call to save the dental chart
+    console.log('Saving dental chart:', teeth);
+    // Show success message
+    alert('Dental chart saved successfully!');
+  };
 
   return (
     <div className="space-y-6 animate-fade-in max-w-7xl mx-auto px-4">
@@ -36,10 +43,6 @@ const DentalChartPage = () => {
           <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
             <Printer className="mr-2 h-4 w-4" />
             Print
-          </button>
-          <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
-            <Save className="mr-2 h-4 w-4" />
-            Save Changes
           </button>
         </div>
       </div>
@@ -115,7 +118,10 @@ const DentalChartPage = () => {
         <div className="md:col-span-3">
           <div className="rounded-lg border bg-card p-4 w-full max-w-full overflow-x-auto">
             <div className="mx-auto max-w-[1024px]">
-              <DentalChart selectedTreatment={selectedTreatment} />
+              <DentalChart 
+                selectedTreatment={selectedTreatment}
+                onSave={handleSaveChart}
+              />
             </div>
           </div>
         </div>
