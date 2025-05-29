@@ -5,13 +5,14 @@ interface Tooth {
   name: string;
   adult: boolean;
   treatments: string[];
+  position: 'upper' | 'lower';
+  type: 'molar' | 'premolar' | 'canine' | 'incisor';
 }
 
 interface DentalChartProps {
   selectedTreatment: string;
 }
 
-// Define treatment colors for visualization
 const TREATMENT_COLORS: Record<string, string> = {
   'filling': '#3b82f6',
   'crown': '#f59e0b',
@@ -21,13 +22,41 @@ const TREATMENT_COLORS: Record<string, string> = {
   'bridge': '#6366f1',
 };
 
-// Adult teeth (simplified model)
-const ADULT_TEETH: Tooth[] = Array.from({ length: 32 }, (_, index) => ({
-  id: index + 1,
-  name: (index + 1).toString(),
-  adult: true,
-  treatments: [],
-}));
+// Define tooth shapes based on type
+const TOOTH_SHAPES = {
+  molar: `M3 2C1.5 2 0 3 0 5.5C0 7 1 8.5 2 9.5C3 10.5 4 11 4 12C4 13 3 13.5 2 14.5C1 15.5 0 17 0 18.5C0 21 1.5 22 3 22C4.5 22 6 21 6 18.5C6 17 5 15.5 4 14.5C3 13.5 2 13 2 12C2 11 3 10.5 4 9.5C5 8.5 6 7 6 5.5C6 3 4.5 2 3 2Z`,
+  premolar: `M3 2C1.5 2 0 3 0 5.5C0 7 0.5 8 2 9C3.5 10 4 10.5 4 12C4 13.5 3.5 14 2 15C0.5 16 0 17 0 18.5C0 21 1.5 22 3 22C4.5 22 6 21 6 18.5C6 17 5.5 16 4 15C2.5 14 2 13.5 2 12C2 10.5 2.5 10 4 9C5.5 8 6 7 6 5.5C6 3 4.5 2 3 2Z`,
+  canine: `M3 2C1.5 2 0 3 0 5.5C0 7 0.5 8 1.5 9C2.5 10 3 10.5 3 12C3 13.5 2.5 14 1.5 15C0.5 16 0 17 0 18.5C0 21 1.5 22 3 22C4.5 22 6 21 6 18.5C6 17 5.5 16 4.5 15C3.5 14 3 13.5 3 12C3 10.5 3.5 10 4.5 9C5.5 8 6 7 6 5.5C6 3 4.5 2 3 2Z`,
+  incisor: `M3 2C1.5 2 0 3 0 5.5C0 7 0.5 8 1 9C1.5 10 2 10.5 2 12C2 13.5 1.5 14 1 15C0.5 16 0 17 0 18.5C0 21 1.5 22 3 22C4.5 22 6 21 6 18.5C6 17 5.5 16 5 15C4.5 14 4 13.5 4 12C4 10.5 4.5 10 5 9C5.5 8 6 7 6 5.5C6 3 4.5 2 3 2Z`,
+};
+
+// Create adult teeth with proper types
+const ADULT_TEETH: Tooth[] = [
+  // Upper teeth (1-16)
+  ...Array.from({ length: 16 }, (_, index): Tooth => ({
+    id: index + 1,
+    name: (index + 1).toString(),
+    adult: true,
+    treatments: [],
+    position: 'upper',
+    type: index < 3 || index > 12 ? 'molar' 
+        : index < 5 || index > 10 ? 'premolar'
+        : index < 6 || index > 9 ? 'canine'
+        : 'incisor'
+  })),
+  // Lower teeth (17-32)
+  ...Array.from({ length: 16 }, (_, index): Tooth => ({
+    id: index + 17,
+    name: (index + 17).toString(),
+    adult: true,
+    treatments: [],
+    position: 'lower',
+    type: index < 3 || index > 12 ? 'molar'
+        : index < 5 || index > 10 ? 'premolar'
+        : index < 6 || index > 9 ? 'canine'
+        : 'incisor'
+  }))
+];
 
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(ADULT_TEETH);
@@ -38,14 +67,12 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) => {
         if (tooth.id === toothId) {
-          // If treatment already exists, remove it
           if (tooth.treatments.includes(selectedTreatment)) {
             return {
               ...tooth,
               treatments: tooth.treatments.filter((t) => t !== selectedTreatment),
             };
           }
-          // Otherwise add the treatment
           return {
             ...tooth,
             treatments: [...tooth.treatments, selectedTreatment],
@@ -61,6 +88,39 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
     return TREATMENT_COLORS[tooth.treatments[tooth.treatments.length - 1]] || '#ffffff';
   };
 
+  const renderTooth = (tooth: Tooth) => (
+    <div 
+      key={tooth.id}
+      className="flex flex-col items-center mx-1 cursor-pointer"
+      onClick={() => handleToothClick(tooth.id)}
+    >
+      <div className="relative w-8 h-12">
+        <svg
+          viewBox="0 0 6 24"
+          className="w-full h-full"
+          style={{
+            transform: tooth.position === 'lower' ? 'rotate(180deg)' : 'none'
+          }}
+        >
+          <path
+            d={TOOTH_SHAPES[tooth.type]}
+            fill={getToothColor(tooth)}
+            stroke={tooth.treatments.length > 0 ? '#000' : '#666'}
+            strokeWidth="0.2"
+          />
+        </svg>
+        {tooth.treatments.length > 0 && (
+          <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
+            <span className="text-[10px] text-white font-bold">
+              {tooth.treatments.length}
+            </span>
+          </div>
+        )}
+      </div>
+      <span className="text-xs mt-1">{tooth.name}</span>
+    </div>
+  );
+
   // Group teeth into upper and lower jaws
   const upperTeeth = teeth.slice(0, 16);
   const lowerTeeth = teeth.slice(16, 32);
@@ -72,61 +132,10 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
       {/* Upper jaw */}
       <div className="mb-8">
         <div className="flex justify-center mb-2">
-          {upperTeeth.slice(0, 8).map((tooth) => (
-            <div 
-              key={tooth.id} 
-              className="flex flex-col items-center mx-1"
-              onClick={() => handleToothClick(tooth.id)}
-            >
-              <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
-                style={{ 
-                  backgroundColor: getToothColor(tooth),
-                  borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
-                  borderWidth: tooth.treatments.length > 0 ? '2px' : '1px'
-                }}
-              >
-                <span className="text-xs font-medium">{tooth.id}</span>
-                {tooth.treatments.length > 0 && (
-                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-[10px] text-white font-bold">
-                      {tooth.treatments.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <span className="text-xs mt-1">{tooth.name}</span>
-            </div>
-          ))}
+          {upperTeeth.slice(0, 8).map(renderTooth)}
         </div>
-        
         <div className="flex justify-center">
-          {upperTeeth.slice(8, 16).reverse().map((tooth) => (
-            <div 
-              key={tooth.id} 
-              className="flex flex-col items-center mx-1"
-              onClick={() => handleToothClick(tooth.id)}
-            >
-              <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
-                style={{ 
-                  backgroundColor: getToothColor(tooth),
-                  borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
-                  borderWidth: tooth.treatments.length > 0 ? '2px' : '1px'
-                }}
-              >
-                <span className="text-xs font-medium">{tooth.id}</span>
-                {tooth.treatments.length > 0 && (
-                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-[10px] text-white font-bold">
-                      {tooth.treatments.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <span className="text-xs mt-1">{tooth.name}</span>
-            </div>
-          ))}
+          {upperTeeth.slice(8, 16).reverse().map(renderTooth)}
         </div>
       </div>
       
@@ -136,61 +145,10 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
       {/* Lower jaw */}
       <div>
         <div className="flex justify-center">
-          {lowerTeeth.slice(0, 8).map((tooth) => (
-            <div 
-              key={tooth.id} 
-              className="flex flex-col items-center mx-1"
-              onClick={() => handleToothClick(tooth.id)}
-            >
-              <span className="text-xs mb-1">{tooth.name}</span>
-              <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
-                style={{ 
-                  backgroundColor: getToothColor(tooth),
-                  borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
-                  borderWidth: tooth.treatments.length > 0 ? '2px' : '1px'
-                }}
-              >
-                <span className="text-xs font-medium">{tooth.id}</span>
-                {tooth.treatments.length > 0 && (
-                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-[10px] text-white font-bold">
-                      {tooth.treatments.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+          {lowerTeeth.slice(0, 8).map(renderTooth)}
         </div>
-        
         <div className="flex justify-center mt-2">
-          {lowerTeeth.slice(8, 16).reverse().map((tooth) => (
-            <div 
-              key={tooth.id} 
-              className="flex flex-col items-center mx-1"
-              onClick={() => handleToothClick(tooth.id)}
-            >
-              <span className="text-xs mb-1">{tooth.name}</span>
-              <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
-                style={{ 
-                  backgroundColor: getToothColor(tooth),
-                  borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
-                  borderWidth: tooth.treatments.length > 0 ? '2px' : '1px'
-                }}
-              >
-                <span className="text-xs font-medium">{tooth.id}</span>
-                {tooth.treatments.length > 0 && (
-                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
-                    <span className="text-[10px] text-white font-bold">
-                      {tooth.treatments.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
-          ))}
+          {lowerTeeth.slice(8, 16).reverse().map(renderTooth)}
         </div>
       </div>
       

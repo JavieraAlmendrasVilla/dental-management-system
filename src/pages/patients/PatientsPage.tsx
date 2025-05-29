@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Filter, Plus, Search, User, Stethoscope } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 
@@ -54,12 +54,17 @@ const PATIENTS = [
 
 const PatientsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
+  const navigate = useNavigate();
   
   const filteredPatients = PATIENTS.filter((patient) =>
     patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
     patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
     patient.phone.includes(searchTerm)
   );
+
+  const handleDentalChartClick = (patientId: string) => {
+    navigate(`/dental-chart/${patientId}`);
+  };
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -150,12 +155,12 @@ const PatientsPage = () => {
                   </td>
                   <td className="py-3 px-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <Link
-                        to={`/dental-chart/${patient.id}`}
+                      <button
+                        onClick={() => handleDentalChartClick(patient.id)}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
                       >
                         <Stethoscope className="h-4 w-4" />
-                      </Link>
+                      </button>
                       <Link
                         to={`/patients/${patient.id}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
