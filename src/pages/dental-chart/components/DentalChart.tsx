@@ -103,8 +103,8 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     const tooth = teeth.find(t => t.id === toothId);
     if (!tooth) return;
 
-    // For extraction, always apply to all areas
     if (selectedTreatment === 'extraction') {
+      // For extraction, apply to all areas
       const hasExtraction = tooth.areas.some(area => area.treatment === 'extraction');
       setTeeth((prevTeeth) =>
         prevTeeth.map((t) =>
@@ -114,6 +114,24 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
                 areas: t.areas.map(area => ({
                   ...area,
                   treatment: hasExtraction ? undefined : 'extraction'
+                }))
+              }
+            : t
+        )
+      );
+    } else if (selectedTreatment === 'crown') {
+      // For crown, apply to all outer areas (excluding occlusal)
+      const hasCrown = tooth.areas.some(area => area.treatment === 'crown');
+      setTeeth((prevTeeth) =>
+        prevTeeth.map((t) =>
+          t.id === toothId
+            ? {
+                ...t,
+                areas: t.areas.map(area => ({
+                  ...area,
+                  treatment: area.name !== 'occlusal'
+                    ? hasCrown ? undefined : 'crown'
+                    : area.treatment
                 }))
               }
             : t
@@ -313,6 +331,8 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       <div className="mt-4 text-sm text-center text-muted-foreground">
         {selectedTreatment === 'extraction' ? (
           <>Click on any area of a tooth to mark it for extraction</>
+        ) : selectedTreatment === 'crown' ? (
+          <>Click on any area of a tooth to add a crown</>
         ) : (
           <>Click on a specific area to add {selectedTreatment}</>
         )}
