@@ -33,6 +33,8 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(ADULT_TEETH);
 
   const handleToothClick = (toothId: number) => {
+    if (!selectedTreatment) return;
+    
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) => {
         if (tooth.id === toothId) {
@@ -77,7 +79,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
               onClick={() => handleToothClick(tooth.id)}
             >
               <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors"
+                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
                 style={{ 
                   backgroundColor: getToothColor(tooth),
                   borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
@@ -85,6 +87,13 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
                 }}
               >
                 <span className="text-xs font-medium">{tooth.id}</span>
+                {tooth.treatments.length > 0 && (
+                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-[10px] text-white font-bold">
+                      {tooth.treatments.length}
+                    </span>
+                  </div>
+                )}
               </div>
               <span className="text-xs mt-1">{tooth.name}</span>
             </div>
@@ -99,7 +108,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
               onClick={() => handleToothClick(tooth.id)}
             >
               <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors"
+                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
                 style={{ 
                   backgroundColor: getToothColor(tooth),
                   borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
@@ -107,6 +116,13 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
                 }}
               >
                 <span className="text-xs font-medium">{tooth.id}</span>
+                {tooth.treatments.length > 0 && (
+                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-[10px] text-white font-bold">
+                      {tooth.treatments.length}
+                    </span>
+                  </div>
+                )}
               </div>
               <span className="text-xs mt-1">{tooth.name}</span>
             </div>
@@ -128,7 +144,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
             >
               <span className="text-xs mb-1">{tooth.name}</span>
               <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors"
+                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
                 style={{ 
                   backgroundColor: getToothColor(tooth),
                   borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
@@ -136,6 +152,13 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
                 }}
               >
                 <span className="text-xs font-medium">{tooth.id}</span>
+                {tooth.treatments.length > 0 && (
+                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-[10px] text-white font-bold">
+                      {tooth.treatments.length}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -150,7 +173,7 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
             >
               <span className="text-xs mb-1">{tooth.name}</span>
               <div 
-                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors"
+                className="w-10 h-12 border border-gray-400 flex items-center justify-center cursor-pointer hover:bg-muted transition-colors relative"
                 style={{ 
                   backgroundColor: getToothColor(tooth),
                   borderColor: tooth.treatments.length > 0 ? 'black' : '#e5e7eb',
@@ -158,6 +181,13 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
                 }}
               >
                 <span className="text-xs font-medium">{tooth.id}</span>
+                {tooth.treatments.length > 0 && (
+                  <div className="absolute -top-2 -right-2 h-4 w-4 bg-primary rounded-full flex items-center justify-center">
+                    <span className="text-[10px] text-white font-bold">
+                      {tooth.treatments.length}
+                    </span>
+                  </div>
+                )}
               </div>
             </div>
           ))}
@@ -165,7 +195,11 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
       </div>
       
       <div className="mt-8 text-sm text-center text-muted-foreground">
-        Click on a tooth to add or remove the selected treatment
+        {selectedTreatment ? (
+          <>Click on a tooth to add or remove {selectedTreatment}</>
+        ) : (
+          <>Select a treatment from the list to begin</>
+        )}
       </div>
     </div>
   );
