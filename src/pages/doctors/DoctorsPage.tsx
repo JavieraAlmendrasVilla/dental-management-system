@@ -175,114 +175,122 @@ const DoctorsPage = () => {
 
       {/* Doctor Modal */}
       {showDoctorModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-card rounded-lg shadow-lg w-full max-w-lg p-6">
-            <h2 className="text-lg font-semibold mb-4">
-              {editingDoctor ? 'Edit Doctor' : 'Add New Doctor'}
-            </h2>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Name</label>
-                <input
-                  type="text"
-                  value={doctorForm.name}
-                  onChange={(e) => setDoctorForm({ ...doctorForm, name: e.target.value })}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Email</label>
-                <input
-                  type="email"
-                  value={doctorForm.email}
-                  onChange={(e) => setDoctorForm({ ...doctorForm, email: e.target.value })}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Specialization</label>
-                <input
-                  type="text"
-                  value={doctorForm.specialization}
-                  onChange={(e) => setDoctorForm({ ...doctorForm, specialization: e.target.value })}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Phone</label>
-                <input
-                  type="tel"
-                  value={doctorForm.phone}
-                  onChange={(e) => setDoctorForm({ ...doctorForm, phone: e.target.value })}
-                  className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">Working Hours</label>
-                <div className="flex gap-4">
-                  <div>
-                    <label className="block text-xs text-muted-foreground">Start Time</label>
-                    <input
-                      type="time"
-                      value={doctorForm.schedule?.start}
-                      onChange={(e) => setDoctorForm({
-                        ...doctorForm,
-                        schedule: { ...doctorForm.schedule!, start: e.target.value }
-                      })}
-                      className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-muted-foreground">End Time</label>
-                    <input
-                      type="time"
-                      value={doctorForm.schedule?.end}
-                      onChange={(e) => setDoctorForm({
-                        ...doctorForm,
-                        schedule: { ...doctorForm.schedule!, end: e.target.value }
-                      })}
-                      className="rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    />
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-card rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] flex flex-col">
+            <div className="p-6 border-b">
+              <h2 className="text-lg font-semibold">
+                {editingDoctor ? 'Edit Doctor' : 'Add New Doctor'}
+              </h2>
+            </div>
+            
+            <div className="p-6 overflow-y-auto">
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Name</label>
+                  <input
+                    type="text"
+                    value={doctorForm.name}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, name: e.target.value })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Email</label>
+                  <input
+                    type="email"
+                    value={doctorForm.email}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, email: e.target.value })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Specialization</label>
+                  <input
+                    type="text"
+                    value={doctorForm.specialization}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, specialization: e.target.value })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Phone</label>
+                  <input
+                    type="tel"
+                    value={doctorForm.phone}
+                    onChange={(e) => setDoctorForm({ ...doctorForm, phone: e.target.value })}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">Working Hours</label>
+                  <div className="flex gap-4">
+                    <div>
+                      <label className="block text-xs text-muted-foreground">Start Time</label>
+                      <input
+                        type="time"
+                        value={doctorForm.schedule?.start}
+                        onChange={(e) => setDoctorForm({
+                          ...doctorForm,
+                          schedule: { ...doctorForm.schedule!, start: e.target.value }
+                        })}
+                        className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs text-muted-foreground">End Time</label>
+                      <input
+                        type="time"
+                        value={doctorForm.schedule?.end}
+                        onChange={(e) => setDoctorForm({
+                          ...doctorForm,
+                          schedule: { ...doctorForm.schedule!, end: e.target.value }
+                        })}
+                        className="rounded-md border border-input bg-background px-3 py-2 text-sm"
+                      />
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="space-y-2">
-                <label className="block text-sm font-medium">Days Off</label>
-                <div className="flex flex-wrap gap-2">
-                  {DAYS.map((day, index) => (
-                    <button
-                      key={day}
-                      type="button"
-                      onClick={() => toggleDayOff(index)}
-                      className={`px-3 py-1 rounded-md text-sm ${
-                        doctorForm.schedule?.daysOff.includes(index)
-                          ? 'bg-primary text-white'
-                          : 'bg-muted hover:bg-muted/80'
-                      }`}
-                    >
-                      {day}
-                    </button>
-                  ))}
+                <div className="space-y-2">
+                  <label className="block text-sm font-medium">Days Off</label>
+                  <div className="flex flex-wrap gap-2">
+                    {DAYS.map((day, index) => (
+                      <button
+                        key={day}
+                        type="button"
+                        onClick={() => toggleDayOff(index)}
+                        className={`px-3 py-1 rounded-md text-sm ${
+                          doctorForm.schedule?.daysOff.includes(index)
+                            ? 'bg-primary text-white'
+                            : 'bg-muted hover:bg-muted/80'
+                        }`}
+                      >
+                        {day}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="flex justify-end gap-2 mt-6">
-              <button
-                onClick={() => setShowDoctorModal(false)}
-                className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSaveDoctor}
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
-              >
-                {editingDoctor ? 'Save Changes' : 'Add Doctor'}
-              </button>
+
+            <div className="p-6 border-t mt-auto">
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowDoctorModal(false)}
+                  className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveDoctor}
+                  className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+                >
+                  {editingDoctor ? 'Save Changes' : 'Add Doctor'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
