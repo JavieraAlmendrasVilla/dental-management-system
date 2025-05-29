@@ -63,8 +63,10 @@ function App() {
           <Route path="doctors" element={<Doctors />} />
         </Route>
         <Route path="/login" element={<Navigate to="/\" replace />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="*\" element={<Navigate to="/\" replace />} />
       </Routes>
     </Suspense>
   );
 }
+
+export default App
