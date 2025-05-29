@@ -90,16 +90,24 @@ const ADULT_TEETH = createAdultTeeth();
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, onUpdate, initialTeeth }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(initialTeeth || ADULT_TEETH);
   const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
-  const [selectedArea, setSelectedArea] = useState<string | null>(null);
 
   const handleToothClick = (toothId: number) => {
-    if (selectedTooth === toothId) {
-      setSelectedTooth(null);
-      setSelectedArea(null);
-    } else {
-      setSelectedTooth(toothId);
-      setSelectedArea(null);
-    }
+    if (!selectedTreatment) return;
+    
+    setTeeth((prevTeeth) =>
+      prevTeeth.map((tooth) =>
+        tooth.id === toothId
+          ? {
+              ...tooth,
+              areas: tooth.areas.map(area => ({
+                ...area,
+                treatment: selectedTreatment
+              }))
+            }
+          : tooth
+      )
+    );
+    onUpdate();
   };
 
   const handleAreaClick = (e: React.MouseEvent, toothId: number, areaName: string) => {
@@ -128,27 +136,48 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
     return TREATMENT_COLORS[area.treatment] || '#ffffff';
   };
 
-  const getToothPath = (tooth: Tooth): { [key: string]: string } => {
+  const getToothPath = (tooth: Tooth): string => {
+    // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
     const cx = 50;
     const cy = 50;
     const outerR = 40;
-    const innerR = 15;
+    const innerR = 10;
+    const sqrt2over2 = 0.7071;
 
-    // Calculate points for the five areas
-    const paths: { [key: string]: string } = {
-      occlusal: `M${cx + innerR},${cy} A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy} A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`,
-      buccal: `M${cx + innerR},${cy} L${cx + outerR},${cy} A${outerR},${outerR} 0 0,1 ${cx},${cy + outerR} L${cx},${cy + innerR} A${innerR},${innerR} 0 0,0 ${cx + innerR},${cy}`,
-      lingual: `M${cx - innerR},${cy} L${cx - outerR},${cy} A${outerR},${outerR} 0 0,0 ${cx},${cy - outerR} L${cx},${cy - innerR} A${innerR},${innerR} 0 0,1 ${cx - innerR},${cy}`,
-      mesial: `M${cx},${cy - innerR} L${cx},${cy - outerR} A${outerR},${outerR} 0 0,1 ${cx + outerR},${cy} L${cx + innerR},${cy} A${innerR},${innerR} 0 0,0 ${cx},${cy - innerR}`,
-      distal: `M${cx},${cy + innerR} L${cx},${cy + outerR} A${outerR},${outerR} 0 0,0 ${cx - outerR},${cy} L${cx - innerR},${cy} A${innerR},${innerR} 0 0,1 ${cx},${cy + innerR}`
-    };
+    // Coordinates for outer circle
+    const outerCircle = `M${cx + outerR},${cy}
+      A${outerR},${outerR} 0 1,0 ${cx - outerR},${cy}
+      A${outerR},${outerR} 0 1,0 ${cx + outerR},${cy}`;
 
-    return paths;
+    // Coordinates for inner circle
+    const innerCircle = `M${cx + innerR},${cy}
+      A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
+      A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`;
+
+    // Diagonal lines (outer to inner circle border)
+    const lines = [
+      // NE ↙ SW
+      `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+       L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+      
+      // NW ↘ SE
+      `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
+       L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+      
+      // SW ↗ NE
+      `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+       L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}`,
+      
+      // SE ↖ NW
+      `M${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
+       L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}`
+    ];
+
+    return [outerCircle, innerCircle, ...lines].join(' ');
   };
 
   const renderTooth = (tooth: Tooth) => {
-    const isSelected = tooth.id === selectedTooth;
-    const paths = getToothPath(tooth);
+    const isSelected = selectedTooth === tooth.id;
     
     return (
       <div 
@@ -164,17 +193,24 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
               isSelected ? 'scale-110' : 'group-hover:scale-105'
             }`}
           >
-            {tooth.areas.map((area) => (
-              <path
-                key={area.name}
-                d={paths[area.name]}
-                fill={getAreaColor(area)}
-                stroke={isSelected ? '#3b82f6' : '#666'}
-                strokeWidth={isSelected ? '2' : '1'}
-                onClick={(e) => handleAreaClick(e, tooth.id, area.name)}
-                className="transition-colors hover:brightness-95"
-              />
-            ))}
+            {/* Render each area */}
+            {tooth.areas.map((area, index) => {
+              const areaPath = getToothPath(tooth);
+              return (
+                <path
+                  key={area.name}
+                  d={areaPath}
+                  fill={getAreaColor(area)}
+                  stroke={isSelected ? '#3b82f6' : '#666'}
+                  strokeWidth={isSelected ? '2' : '1'}
+                  onClick={(e) => handleAreaClick(e, tooth.id, area.name)}
+                  className="transition-colors hover:brightness-95"
+                  style={{
+                    clipPath: `polygon(${index * 20}% 0%, ${(index + 1) * 20}% 0%, ${(index + 1) * 20}% 100%, ${index * 20}% 100%)`
+                  }}
+                />
+              );
+            })}
           </svg>
         </div>
       </div>
@@ -215,12 +251,10 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
       </div>
       
       <div className="mt-4 text-sm text-center text-muted-foreground">
-        {!selectedTooth ? (
-          <>Click on a tooth to select it</>
-        ) : !selectedTreatment ? (
-          <>Select a treatment to apply to tooth {teeth.find(t => t.id === selectedTooth)?.name}</>
+        {selectedTreatment ? (
+          <>Click on a tooth area to add or remove {selectedTreatment}</>
         ) : (
-          <>Click on a tooth area to apply {selectedTreatment}</>
+          <>Select a treatment from the list to begin</>
         )}
       </div>
     </div>
