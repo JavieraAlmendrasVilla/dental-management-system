@@ -64,13 +64,18 @@ const ADULT_TEETH: Tooth[] = [
 
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(ADULT_TEETH);
+  const [selectedTooth, setSelectedTooth] = useState<number | null>(null);
 
   const handleToothClick = (toothId: number) => {
-    if (!selectedTreatment) return;
+    setSelectedTooth(toothId);
+  };
+
+  const handleTreatmentApply = () => {
+    if (!selectedTooth || !selectedTreatment) return;
     
     setTeeth((prevTeeth) =>
       prevTeeth.map((tooth) =>
-        tooth.id === toothId
+        tooth.id === selectedTooth
           ? {
               ...tooth,
               treatments: tooth.treatments.includes(selectedTreatment)
@@ -83,54 +88,84 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
   };
 
   const getToothColor = (tooth: Tooth) => {
+    if (tooth.id === selectedTooth) return '#e5e7eb'; // Light gray for selected tooth
     if (tooth.treatments.length === 0) return '#ffffff';
     return TREATMENT_COLORS[tooth.treatments[tooth.treatments.length - 1]] || '#ffffff';
   };
 
   const getToothPath = (tooth: Tooth): string => {
-  // All teeth use the same simplified schematic: outer circle, inner circle, and diagonal lines
-  const cx = 50;
-  const cy = 50;
-  const outerR = 40;
-  const innerR = 10;
-  const sqrt2over2 = 0.7071;
-
-  // Coordinates for outer circle
-  const outerCircle = `M${cx + outerR},${cy}
-    A${outerR},${outerR} 0 1,0 ${cx - outerR},${cy}
-    A${outerR},${outerR} 0 1,0 ${cx + outerR},${cy}`;
-
-  // Coordinates for inner circle
-  const innerCircle = `M${cx + innerR},${cy}
-    A${innerR},${innerR} 0 1,0 ${cx - innerR},${cy}
-    A${innerR},${innerR} 0 1,0 ${cx + innerR},${cy}`;
-
-  // Diagonal lines (outer to inner circle border)
-  const lines = [
-    // NE ↙ SW
-    `M${cx + outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
-     L${cx + innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
+    const type = tooth.type;
+    const position = tooth.position;
     
-    // NW ↘ SE
-    `M${cx - outerR * sqrt2over2},${cy - outerR * sqrt2over2} 
-     L${cx - innerR * sqrt2over2},${cy - innerR * sqrt2over2}`,
-    
-    // SW ↗ NE
-    `M${cx - outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
-     L${cx - innerR * sqrt2over2},${cy + innerR * sqrt2over2}`,
-    
-    // SE ↖ NW
-    `M${cx + outerR * sqrt2over2},${cy + outerR * sqrt2over2} 
-     L${cx + innerR * sqrt2over2},${cy + innerR * sqrt2over2}`
-  ];
+    // Base dimensions
+    const width = 40;
+    const height = position === 'upper' ? 60 : 60;
+    const x = 30;
+    const y = position === 'upper' ? 20 : 20;
 
-  return [outerCircle, innerCircle, ...lines].join(' ');
-};
+    switch (type) {
+      case 'molar':
+        return `
+          M ${x} ${y}
+          h ${width}
+          v ${height}
+          h -${width}
+          Z
+          M ${x} ${y + height * 0.25}
+          h ${width}
+          M ${x} ${y + height * 0.5}
+          h ${width}
+          M ${x} ${y + height * 0.75}
+          h ${width}
+          M ${x + width * 0.33} ${y}
+          v ${height}
+          M ${x + width * 0.67} ${y}
+          v ${height}
+        `;
 
+      case 'premolar':
+        return `
+          M ${x} ${y}
+          h ${width}
+          v ${height}
+          h -${width}
+          Z
+          M ${x} ${y + height * 0.33}
+          h ${width}
+          M ${x} ${y + height * 0.67}
+          h ${width}
+          M ${x + width * 0.5} ${y}
+          v ${height}
+        `;
 
+      case 'canine':
+        return `
+          M ${x} ${y}
+          h ${width}
+          l -${width/2} ${height}
+          l -${width/2} -${height}
+          Z
+        `;
 
+      case 'incisor':
+        return `
+          M ${x} ${y}
+          h ${width}
+          v ${height * 0.8}
+          l -${width/2} ${height * 0.2}
+          l -${width/2} -${height * 0.2}
+          v -${height * 0.8}
+          Z
+        `;
+
+      default:
+        return '';
+    }
+  };
 
   const renderTooth = (tooth: Tooth) => {
+    const isSelected = tooth.id === selectedTooth;
+    
     return (
       <div 
         key={tooth.id}
@@ -140,14 +175,16 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
         <span className="text-xs font-medium mb-1">{tooth.name}</span>
         <div className="relative w-12 h-16">
           <svg
-            viewBox="0 0 100 160"
-            className="w-full h-full transition-transform group-hover:scale-110"
+            viewBox="0 0 100 100"
+            className={`w-full h-full transition-transform ${
+              isSelected ? 'scale-110' : 'group-hover:scale-105'
+            }`}
           >
             <path
               d={getToothPath(tooth)}
               fill={getToothColor(tooth)}
-              stroke="#666"
-              strokeWidth="2"
+              stroke={isSelected ? '#3b82f6' : '#666'}
+              strokeWidth={isSelected ? '3' : '2'}
             />
           </svg>
           {tooth.treatments.length > 0 && (
@@ -194,12 +231,30 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment }) => {
           {lowerRight.map(renderTooth)}
         </div>
       </div>
+
+      {/* Treatment Application */}
+      {selectedTooth && (
+        <div className="mt-8 flex items-center gap-4">
+          <span className="text-sm font-medium">
+            Selected Tooth: {teeth.find(t => t.id === selectedTooth)?.name}
+          </span>
+          <button
+            onClick={handleTreatmentApply}
+            disabled={!selectedTreatment}
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            Apply {selectedTreatment || 'Treatment'}
+          </button>
+        </div>
+      )}
       
-      <div className="mt-8 text-sm text-center text-muted-foreground">
-        {selectedTreatment ? (
-          <>Click on a tooth to add or remove {selectedTreatment}</>
+      <div className="mt-4 text-sm text-center text-muted-foreground">
+        {!selectedTooth ? (
+          <>Click on a tooth to select it</>
+        ) : !selectedTreatment ? (
+          <>Select a treatment to apply to tooth {teeth.find(t => t.id === selectedTooth)?.name}</>
         ) : (
-          <>Select a treatment from the list to begin</>
+          <>Click Apply to add {selectedTreatment} to tooth {teeth.find(t => t.id === selectedTooth)?.name}</>
         )}
       </div>
     </div>
