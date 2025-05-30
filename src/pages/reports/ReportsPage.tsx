@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BarChart3, Download, Filter, PieChart, TrendingUp, Users } from 'lucide-react';
+import { exportToCSV } from '../../lib/utils';
 
 // Mock report data
 const REVENUE_DATA = [
@@ -26,6 +27,33 @@ const ReportsPage = () => {
   const [dateRange, setDateRange] = useState('month');
   const [reportType, setReportType] = useState('all');
 
+  const handleExportReports = () => {
+    // Prepare data for export
+    const revenueReport = REVENUE_DATA.map(item => ({
+      Month: item.month,
+      Revenue: `$${item.amount}`,
+    }));
+
+    const treatmentReport = [{
+      'Total Treatments': TREATMENT_STATS.totalTreatments,
+      'Completed Treatments': TREATMENT_STATS.completedTreatments,
+      'Canceled Treatments': TREATMENT_STATS.canceledTreatments,
+      'Rescheduled Treatments': TREATMENT_STATS.rescheduledTreatments,
+    }];
+
+    const patientReport = [{
+      'Total Patients': PATIENT_STATS.totalPatients,
+      'New Patients': PATIENT_STATS.newPatients,
+      'Returning Patients': PATIENT_STATS.returningPatients,
+      'Average Visits': PATIENT_STATS.averageVisits,
+    }];
+
+    // Export each report
+    exportToCSV(revenueReport, 'revenue-report');
+    exportToCSV(treatmentReport, 'treatment-report');
+    exportToCSV(patientReport, 'patient-report');
+  };
+
   return (
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -46,7 +74,10 @@ const ReportsPage = () => {
             <option value="quarter">This Quarter</option>
             <option value="year">This Year</option>
           </select>
-          <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
+          <button 
+            onClick={handleExportReports}
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+          >
             <Download className="mr-2 h-4 w-4" />
             Export Reports
           </button>
@@ -229,7 +260,6 @@ const ReportsPage = () => {
                   <span className="font-medium">{PATIENT_STATS.returningPatients}</span>
                 </div>
                 <div className="mt-2 h-2 rounded-full bg-muted">
-                  
                   <div 
                     className="h-full rounded-full bg-secondary" 
                     style={{ 
