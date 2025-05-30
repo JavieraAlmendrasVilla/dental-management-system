@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Code, Layout, Palette, Plus, Wand2 } from 'lucide-react';
+import { Code, Layout, Palette, Plus, Wand2, Loader2 } from 'lucide-react';
+import { generateWebsite } from '../../lib/openai';
 
 // Website templates
 const TEMPLATES = [
@@ -27,14 +28,29 @@ const WebsiteBuilderPage = () => {
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [showAIPrompt, setShowAIPrompt] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [generatedContent, setGeneratedContent] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   
   const handleTemplateSelect = (templateId: string) => {
     setSelectedTemplate(templateId);
   };
 
-  const handleAIGenerate = () => {
-    // In a real app, this would call an AI service
-    console.log('Generating website with prompt:', aiPrompt);
+  const handleAIGenerate = async () => {
+    if (!aiPrompt.trim()) return;
+
+    setIsGenerating(true);
+    setError(null);
+    
+    try {
+      const content = await generateWebsite(aiPrompt);
+      setGeneratedContent(content);
+      setShowAIPrompt(false);
+    } catch (err) {
+      setError('Failed to generate website content. Please try again.');
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   return (
@@ -68,20 +84,35 @@ const WebsiteBuilderPage = () => {
               onChange={(e) => setAiPrompt(e.target.value)}
               placeholder="Example: I want a modern, professional website for my orthodontic practice with a focus on teen and adult patients..."
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[120px] mb-4"
+              disabled={isGenerating}
             />
+            {error && (
+              <p className="text-sm text-error mb-4">{error}</p>
+            )}
             <div className="flex justify-end gap-2">
               <button
                 onClick={() => setShowAIPrompt(false)}
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                disabled={isGenerating}
               >
                 Cancel
               </button>
               <button
                 onClick={handleAIGenerate}
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
+                disabled={isGenerating || !aiPrompt.trim()}
+                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors disabled:opacity-50"
               >
-                <Wand2 className="mr-2 h-4 w-4" />
-                Generate Website
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="mr-2 h-4 w-4" />
+                    Generate Website
+                  </>
+                )}
               </button>
             </div>
           </div>
@@ -127,7 +158,7 @@ const WebsiteBuilderPage = () => {
       </div>
 
       {/* Builder Tools */}
-      {selectedTemplate && (
+      {(selectedTemplate || generatedContent) && (
         <div className="grid gap-6 md:grid-cols-4">
           <div className="space-y-4">
             <div className="rounded-lg border bg-card">
@@ -188,10 +219,18 @@ const WebsiteBuilderPage = () => {
                 </button>
               </div>
             </div>
-            <div className="p-4 aspect-[16/9] bg-muted rounded-lg m-4">
-              <div className="w-full h-full flex items-center justify-center text-muted-foreground">
-                Website Preview
-              </div>
+            <div className="p-4">
+              {generatedContent ? (
+                <div className="prose max-w-none">
+                  <pre className="whitespace-pre-wrap text-sm">
+                    {generatedContent}
+                  </pre>
+                </div>
+              ) : (
+                <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
+                  Website Preview
+                </div>
+              )}
             </div>
           </div>
         </div>
