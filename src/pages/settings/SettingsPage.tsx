@@ -23,8 +23,7 @@ const RADIUS_OPTIONS = [
 const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 const SettingsPage = () => {
-  const [darkMode, setDarkMode] = useState(false);
-  const { theme, updateTheme } = useTheme();
+  const { theme, darkMode, updateTheme, toggleDarkMode } = useTheme();
   const { doctors, addDoctor, updateDoctor, removeDoctor } = useDoctors();
   const [showColorPicker, setShowColorPicker] = useState<'primary' | 'secondary' | 'accent' | null>(null);
   const [showDoctorModal, setShowDoctorModal] = useState(false);
@@ -196,7 +195,7 @@ const SettingsPage = () => {
                 <span className="text-sm font-medium">Dark Mode</span>
               </div>
               <button
-                onClick={() => setDarkMode(!darkMode)}
+                onClick={toggleDarkMode}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
                   darkMode ? 'bg-primary' : 'bg-muted'
                 }`}
@@ -498,5 +497,3 @@ const SettingsPage = () => {
     </div>
   );
 };
-
-export default SettingsPage;

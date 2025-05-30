@@ -2,7 +2,9 @@ import { createContext, useContext, useState, useEffect, ReactNode } from 'react
 
 interface ThemeContextType {
   theme: Theme;
+  darkMode: boolean;
   updateTheme: (newTheme: Partial<Theme>) => void;
+  toggleDarkMode: () => void;
 }
 
 interface Theme {
@@ -39,8 +41,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     return saved ? JSON.parse(saved) : defaultTheme;
   });
 
+  const [darkMode, setDarkMode] = useState(() => {
+    const saved = localStorage.getItem('dentasync-dark-mode');
+    return saved ? JSON.parse(saved) : false;
+  });
+
   useEffect(() => {
     localStorage.setItem('dentasync-theme', JSON.stringify(theme));
+    localStorage.setItem('dentasync-dark-mode', JSON.stringify(darkMode));
     
     // Update CSS variables
     const root = document.documentElement;
@@ -62,7 +70,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     
     // Border radius
     root.style.setProperty('--radius', theme.radius);
-  }, [theme]);
+
+    // Dark mode
+    if (darkMode) {
+      root.classList.add('dark');
+    } else {
+      root.classList.remove('dark');
+    }
+  }, [theme, darkMode]);
 
   const updateTheme = (newTheme: Partial<Theme>) => {
     setTheme((current) => ({
@@ -73,8 +88,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     }));
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode(prev => !prev);
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, updateTheme }}>
+    <ThemeContext.Provider value={{ theme, darkMode, updateTheme, toggleDarkMode }}>
       {children}
     </ThemeContext.Provider>
   );
