@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tooth } from 'lucide-react';
+import { Bluetooth as Tooth } from 'lucide-react';
 
 const LoadingScreen: React.FC = () => {
   return (
