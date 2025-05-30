@@ -120,3 +120,5 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
 };
 
 export default Sidebar;
+
+export default Sidebar
