@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Calendar, CreditCard, FileText, Globe, Home, PieChart, Settings, Bluetooth as Tooth, Users, UserCog } from 'lucide-react';
+import { Calendar, CreditCard, FileText, Globe, Home, PieChart, Settings, Tooth, Users, UserCog } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
