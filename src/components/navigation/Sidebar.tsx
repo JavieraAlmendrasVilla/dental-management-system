@@ -67,7 +67,7 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
         <div className="flex h-16 items-center justify-between px-4 border-b border-border">
           <Link to="/" className="flex items-center gap-2">
             <Tooth className="h-6 w-6 text-primary" />
-            <span className="text-xl font-bold">DentaSync</span>
+            <span className="text-xl font-bold">InnoDent</span>
           </Link>
           
           <button
@@ -108,7 +108,7 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
             <div className="flex items-center gap-3">
               <Tooth className="h-10 w-10 text-primary" />
               <div>
-                <p className="text-xs font-medium">DentaSync</p>
+                <p className="text-xs font-medium">InnoDent</p>
                 <p className="text-xs text-muted-foreground">v1.0.0</p>
               </div>
             </div>
