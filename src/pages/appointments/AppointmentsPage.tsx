@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Bell, Calendar, ChevronLeft, ChevronRight, Clock, Filter, Plus, Search, User, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate, formatTime } from '../../lib/utils';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 // Mock appointment data
 const APPOINTMENTS = [
@@ -106,6 +107,7 @@ const TREATMENT_TYPES = [
 ];
 
 const AppointmentsPage = () => {
+  const { t } = useLanguage();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [view, setView] = useState<'day' | 'week' | 'list'>('day');
   const [searchTerm, setSearchTerm] = useState('');
@@ -202,9 +204,9 @@ const AppointmentsPage = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Appointments</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('appointments.title')}</h1>
           <p className="text-muted-foreground">
-            Schedule and manage patient appointments
+            {t('appointments.subtitle')}
           </p>
         </div>
         <button 
@@ -212,17 +214,16 @@ const AppointmentsPage = () => {
           className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
         >
           <Plus className="mr-2 h-4 w-4" />
-          New Appointment
+          {t('appointments.newAppointment')}
         </button>
       </div>
 
-      {/* New Appointment Modal */}
       {showNewAppointmentModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] flex flex-col">
             <div className="p-4 border-b">
               <div className="flex items-center justify-between">
-                <h2 className="text-lg font-semibold">New Appointment</h2>
+                <h2 className="text-lg font-semibold">{t('appointments.newAppointment')}</h2>
                 <button 
                   onClick={() => setShowNewAppointmentModal(false)}
                   className="text-muted-foreground hover:text-foreground transition-colors"
@@ -236,7 +237,9 @@ const AppointmentsPage = () => {
               <div className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium mb-1">Patient Name</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.patientName')}
+                    </label>
                     <input
                       type="text"
                       value={newAppointment.patientName}
@@ -246,7 +249,9 @@ const AppointmentsPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Patient ID</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.patientId')}
+                    </label>
                     <input
                       type="text"
                       value={newAppointment.patientId}
@@ -256,7 +261,9 @@ const AppointmentsPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Date</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.date')}
+                    </label>
                     <input
                       type="date"
                       min={minDate}
@@ -267,7 +274,9 @@ const AppointmentsPage = () => {
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Time</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.time')}
+                    </label>
                     <select
                       value={newAppointment.time}
                       onChange={(e) => setNewAppointment({...newAppointment, time: e.target.value})}
@@ -280,7 +289,9 @@ const AppointmentsPage = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Duration (minutes)</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.duration')}
+                    </label>
                     <select
                       value={newAppointment.duration}
                       onChange={(e) => setNewAppointment({...newAppointment, duration: e.target.value})}
@@ -295,7 +306,9 @@ const AppointmentsPage = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Type</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.type')}
+                    </label>
                     <select
                       value={newAppointment.type}
                       onChange={(e) => setNewAppointment({...newAppointment, type: e.target.value})}
@@ -308,7 +321,9 @@ const AppointmentsPage = () => {
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium mb-1">Doctor</label>
+                    <label className="block text-sm font-medium mb-1">
+                      {t('appointments.form.dentist')}
+                    </label>
                     <select
                       value={newAppointment.dentist}
                       onChange={(e) => setNewAppointment({...newAppointment, dentist: e.target.value})}
@@ -322,13 +337,15 @@ const AppointmentsPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Notes</label>
+                  <label className="block text-sm font-medium mb-1">
+                    {t('appointments.form.notes')}
+                  </label>
                   <textarea
                     value={newAppointment.notes}
                     onChange={(e) => setNewAppointment({...newAppointment, notes: e.target.value})}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                     rows={3}
-                    placeholder="Add any additional notes..."
+                    placeholder={t('appointments.form.notesPlaceholder')}
                   />
                 </div>
               </div>
@@ -341,13 +358,13 @@ const AppointmentsPage = () => {
                   onClick={() => setShowNewAppointmentModal(false)}
                   className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleCreateAppointment}
                   className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
                 >
-                  Create Appointment
+                  {t('appointments.form.createAppointment')}
                 </button>
               </div>
             </div>
@@ -369,7 +386,7 @@ const AppointmentsPage = () => {
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
                 onClick={goToToday}
               >
-                Today
+                {t('appointments.today')}
               </button>
               <button 
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
@@ -388,7 +405,7 @@ const AppointmentsPage = () => {
                 }`}
                 onClick={() => setView('day')}
               >
-                Day
+                {t('appointments.view.day')}
               </button>
               <button 
                 className={`inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -396,7 +413,7 @@ const AppointmentsPage = () => {
                 }`}
                 onClick={() => setView('week')}
               >
-                Week
+                {t('appointments.view.week')}
               </button>
               <button 
                 className={`inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
@@ -404,13 +421,13 @@ const AppointmentsPage = () => {
                 }`}
                 onClick={() => setView('list')}
               >
-                List
+                {t('appointments.view.list')}
               </button>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <input
                   type="search"
-                  placeholder="Search appointments..."
+                  placeholder={t('common.search')}
                   className="w-full md:w-48 rounded-md border border-input bg-background pl-8 pr-3 py-1.5 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -418,7 +435,7 @@ const AppointmentsPage = () => {
               </div>
               <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors">
                 <Filter className="mr-2 h-4 w-4" />
-                Filter
+                {t('common.filter')}
               </button>
             </div>
           </div>
@@ -427,7 +444,6 @@ const AppointmentsPage = () => {
         {view === 'day' && (
           <div className="p-4">
             <div className="grid grid-cols-[64px_repeat(2,1fr)] gap-4">
-              {/* Time column */}
               <div className="space-y-4 pr-4 pt-8">
                 {TIME_SLOTS.map((time) => (
                   <div key={time} className="h-16 text-right text-sm text-muted-foreground">
@@ -436,7 +452,6 @@ const AppointmentsPage = () => {
                 ))}
               </div>
               
-              {/* Schedule columns for each dentist */}
               {DENTISTS.map((dentist) => (
                 <div key={dentist.id} className="border-l pl-4">
                   <div className="h-8 mb-4 flex items-center font-medium">
@@ -475,7 +490,9 @@ const AppointmentsPage = () => {
                               }}
                               className="h-full w-full rounded-md border border-dashed border-muted hover:border-muted-foreground transition-colors cursor-pointer flex items-center justify-center"
                             >
-                              <div className="text-xs text-muted-foreground">Available</div>
+                              <div className="text-xs text-muted-foreground">
+                                {t('appointments.available')}
+                              </div>
                             </button>
                           )}
                         </div>
@@ -511,7 +528,7 @@ const AppointmentsPage = () => {
                           <span 
                             className="ml-2 rounded-full px-2 py-0.5 text-xs font-medium bg-primary/10 text-primary"
                           >
-                            {appointment.status.charAt(0).toUpperCase() + appointment.status.slice(1)}
+                            {t(`appointments.status.${appointment.status}`)}
                           </span>
                         </div>
                         <div className="mt-1 flex items-center text-sm text-muted-foreground">
@@ -528,7 +545,7 @@ const AppointmentsPage = () => {
                         </div>
                         {appointment.notes && (
                           <div className="mt-1 text-sm text-muted-foreground">
-                            Notes: {appointment.notes}
+                            {t('appointments.notes')}: {appointment.notes}
                           </div>
                         )}
                       </div>
@@ -573,7 +590,7 @@ const AppointmentsPage = () => {
               ))
             ) : (
               <div className="py-12 text-center text-muted-foreground">
-                No appointments found for the selected date.
+                {t('appointments.noAppointments')}
               </div>
             )}
           </div>
