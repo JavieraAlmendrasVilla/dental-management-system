@@ -30,7 +30,17 @@ export interface Translations {
         paid: string;
         pending: string;
         overdue: string;
-      }
+      };
+      layout: string;
+      pageStructure: string;
+      design: string;
+      colorsAndFonts: string;
+      customCode: string;
+      cssAndJavaScript: string;
+      error: string;
+      perMonth: string;
+      getStarted: string;
+      allPlansInclude: string;
     };
     auth: {
       signIn: string;
@@ -49,29 +59,47 @@ export interface Translations {
       websiteBuilder: string;
       doctors: string;
     };
-    doctors: {
+    settings: {
       title: string;
       subtitle: string;
-      addDoctor: string;
-      editDoctor: string;
-      search: string;
-      noResults: string;
-      form: {
-        name: string;
-        email: string;
-        specialization: string;
-        phone: string;
-        workingHours: string;
-        startTime: string;
-        endTime: string;
-        daysOff: string;
-        confirmDelete: string;
+      account: {
+        title: string;
+        personalInfo: string;
+        passwordSecurity: string;
+        notifications: string;
       };
-      actions: {
-        save: string;
-        cancel: string;
-        edit: string;
-        delete: string;
+      appearance: {
+        title: string;
+        darkMode: string;
+        colors: string;
+        typography: {
+          title: string;
+          baseFont: string;
+          headingFont: string;
+        };
+        borderRadius: {
+          title: string;
+          none: string;
+          small: string;
+          medium: string;
+          large: string;
+          extraLarge: string;
+        };
+      };
+    };
+    membership: {
+      title: string;
+      subtitle: string;
+      mostPopular: string;
+      perMonth: string;
+      getStarted: string;
+      allPlansInclude: string;
+      freeTier: {
+        name: string;
+        trial: string;
+      };
+      proTier: {
+        name: string;
       };
     };
     // ... rest of the existing translations
