@@ -16,7 +16,21 @@ export async function generateWebsite(prompt: string) {
       messages: [
         {
           role: "system",
-          content: "You are an expert web designer and developer. Generate modern, professional website content and design suggestions based on the user's requirements."
+          content: `You are an expert web designer and developer specializing in dental websites. 
+          Generate modern, professional website content and design suggestions based on the user's requirements.
+          Focus on creating content that is:
+          1. Professional and trustworthy
+          2. Patient-focused
+          3. SEO-optimized
+          4. Conversion-oriented
+          
+          Include specific sections for:
+          - Hero/Banner content
+          - Services description
+          - About the practice
+          - Team/Staff section
+          - Contact information
+          - Call-to-action phrases`
         },
         {
           role: "user",
