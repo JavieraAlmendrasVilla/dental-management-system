@@ -156,6 +156,21 @@ export const translations: Translations = {
         notifications: 'Notifications',
         security: 'Security'
       }
+    },
+    membership: {
+      title: 'Membership',
+      subtitle: 'Choose the plan that best fits your needs',
+      mostPopular: 'Most Popular',
+      perMonth: '/month',
+      getStarted: 'Get Started',
+      allPlansInclude: 'All plans include updates and customer support',
+      freeTier: {
+        name: 'Free',
+        trial: '90-day free trial'
+      },
+      proTier: {
+        name: 'Pro'
+      }
     }
   },
   es: {
@@ -312,6 +327,21 @@ export const translations: Translations = {
         appearance: 'Apariencia',
         notifications: 'Notificaciones',
         security: 'Seguridad'
+      }
+    },
+    membership: {
+      title: 'Membresía',
+      subtitle: 'Elige el plan que mejor se adapte a tus necesidades',
+      mostPopular: 'Más Popular',
+      perMonth: '/mes',
+      getStarted: 'Comenzar',
+      allPlansInclude: 'Todos los planes incluyen actualizaciones y soporte al cliente',
+      freeTier: {
+        name: 'Gratuito',
+        trial: '90 días de prueba gratis'
+      },
+      proTier: {
+        name: 'Pro'
       }
     }
   }
