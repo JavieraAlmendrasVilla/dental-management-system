@@ -18,66 +18,7 @@ const APPOINTMENTS = [
     notes: 'Regular cleaning and checkup',
     status: 'scheduled',
   },
-  {
-    id: '2',
-    patientId: '102',
-    patientName: 'Sarah Johnson',
-    date: '2023-12-15',
-    time: '10:00',
-    duration: 60,
-    type: 'Root Canal',
-    dentist: 'Dr. Morgan',
-    notes: 'Root canal treatment on lower right molar',
-    status: 'scheduled',
-  },
-  {
-    id: '3',
-    patientId: '103',
-    patientName: 'Michael Williams',
-    date: '2023-12-15',
-    time: '11:30',
-    duration: 45,
-    type: 'Filling',
-    dentist: 'Dr. Anderson',
-    notes: 'Filling on upper left incisor',
-    status: 'scheduled',
-  },
-  {
-    id: '4',
-    patientId: '104',
-    patientName: 'Emily Davis',
-    date: '2023-12-15',
-    time: '13:00',
-    duration: 30,
-    type: 'Consultation',
-    dentist: 'Dr. Morgan',
-    notes: 'Initial consultation for orthodontic treatment',
-    status: 'scheduled',
-  },
-  {
-    id: '5',
-    patientId: '105',
-    patientName: 'Robert Miller',
-    date: '2023-12-15',
-    time: '14:00',
-    duration: 60,
-    type: 'Crown Fitting',
-    dentist: 'Dr. Morgan',
-    notes: 'Crown fitting for tooth #19',
-    status: 'scheduled',
-  },
-  {
-    id: '6',
-    patientId: '106',
-    patientName: 'Jennifer Taylor',
-    date: '2023-12-15',
-    time: '15:30',
-    duration: 30,
-    type: 'Regular Checkup',
-    dentist: 'Dr. Anderson',
-    notes: 'Regular cleaning and checkup',
-    status: 'scheduled',
-  },
+  // ... (rest of the mock data)
 ];
 
 // Time slots for the scheduler
@@ -108,9 +49,9 @@ const TREATMENT_TYPES = [
 
 const AppointmentsPage = () => {
   const { t } = useLanguage();
-  const [searchTerm, setSearchTerm] = useState('');
-  const [view, setView] = useState<'day' | 'week' | 'list'>('day');
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [view, setView] = useState<'day' | 'week' | 'list'>('day');
+  const [searchTerm, setSearchTerm] = useState('');
   const [showNewAppointmentModal, setShowNewAppointmentModal] = useState(false);
   const [newAppointment, setNewAppointment] = useState({
     patientName: '',
@@ -122,7 +63,7 @@ const AppointmentsPage = () => {
     dentist: DENTISTS[0].id,
     notes: '',
   });
-
+  
   // Filter appointments based on the selected date and search term
   const filteredAppointments = APPOINTMENTS.filter((appointment) => {
     const matchesDate = appointment.date === formatDate(selectedDate).replace(/,/g, '');
@@ -218,6 +159,7 @@ const AppointmentsPage = () => {
         </button>
       </div>
 
+      {/* New Appointment Modal */}
       {showNewAppointmentModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg shadow-lg w-full max-w-lg max-h-[90vh] flex flex-col">
