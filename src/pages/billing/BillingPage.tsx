@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Calendar, CreditCard, Download, Filter, Plus, Search, User } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../lib/utils';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 // Mock invoices data
 const INVOICES = [
@@ -52,6 +53,7 @@ const PAYMENT_STATS = {
 };
 
 const BillingPage = () => {
+  const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
 
@@ -67,14 +69,14 @@ const BillingPage = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Billing</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('billing.title')}</h1>
           <p className="text-muted-foreground">
-            Manage invoices and payments
+            {t('billing.subtitle')}
           </p>
         </div>
         <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
           <Plus className="mr-2 h-4 w-4" />
-          Create Invoice
+          {t('billing.createInvoice')}
         </button>
       </div>
 
@@ -83,18 +85,18 @@ const BillingPage = () => {
         <div className="rounded-lg border bg-card p-4">
           <div className="flex items-center gap-2">
             <CreditCard className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Total Revenue</span>
+            <span className="text-sm font-medium">{t('billing.totalRevenue')}</span>
           </div>
           <div className="mt-3">
             <p className="text-2xl font-bold">${PAYMENT_STATS.totalRevenue}</p>
-            <p className="text-xs text-muted-foreground">This month</p>
+            <p className="text-xs text-muted-foreground">{t('common.today')}</p>
           </div>
         </div>
 
         <div className="rounded-lg border bg-card p-4">
           <div className="flex items-center gap-2">
             <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-sm font-medium">Pending Payments</span>
+            <span className="text-sm font-medium">{t('billing.pendingPayments')}</span>
           </div>
           <div className="mt-3">
             <p className="text-2xl font-bold">${PAYMENT_STATS.pendingPayments}</p>
@@ -119,7 +121,7 @@ const BillingPage = () => {
               <path d="M12 8v4l3 3" />
               <circle cx="12" cy="12" r="10" />
             </svg>
-            <span className="text-sm font-medium">Overdue Payments</span>
+            <span className="text-sm font-medium">{t('billing.overduePayments')}</span>
           </div>
           <div className="mt-3">
             <p className="text-2xl font-bold text-error">${PAYMENT_STATS.overduePayments}</p>
@@ -144,7 +146,7 @@ const BillingPage = () => {
               <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0-18 0" />
               <path d="M12 7v5l3 3" />
             </svg>
-            <span className="text-sm font-medium">Average Payment Time</span>
+            <span className="text-sm font-medium">{t('billing.averagePaymentTime')}</span>
           </div>
           <div className="mt-3">
             <p className="text-2xl font-bold">{PAYMENT_STATS.averagePaymentTime} days</p>
@@ -161,7 +163,7 @@ const BillingPage = () => {
               <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
               <input
                 type="search"
-                placeholder="Search invoices..."
+                placeholder={t('common.search')}
                 className="w-full md:w-80 rounded-md border border-input bg-background pl-8 pr-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -174,13 +176,13 @@ const BillingPage = () => {
                 onChange={(e) => setStatusFilter(e.target.value)}
               >
                 <option value="all">All Status</option>
-                <option value="paid">Paid</option>
-                <option value="pending">Pending</option>
-                <option value="overdue">Overdue</option>
+                <option value="paid">{t('common.status.paid')}</option>
+                <option value="pending">{t('common.status.pending')}</option>
+                <option value="overdue">{t('common.status.overdue')}</option>
               </select>
               <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-muted transition-colors">
                 <Filter className="mr-2 h-4 w-4" />
-                Filter
+                {t('common.filter')}
               </button>
             </div>
           </div>
@@ -226,7 +228,7 @@ const BillingPage = () => {
                           : 'bg-error/10 text-error'
                       }`}
                     >
-                      {invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1)}
+                      {t(`common.status.${invoice.status}`)}
                     </span>
                   </div>
                   <button className="inline-flex items-center justify-center rounded-md border border-input bg-background h-8 w-8 hover:bg-muted">
