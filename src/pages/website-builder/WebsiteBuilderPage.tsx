@@ -56,7 +56,11 @@ const WebsiteBuilderPage = () => {
       setGeneratedContent(content);
       setShowAIPrompt(false);
     } catch (err) {
-      setError('Failed to generate website content. Please try again.');
+      if (err instanceof Error && err.message.includes('API key is not configured')) {
+        setError('AI Website Generator is not yet available. Please try again later or contact support.');
+      } else {
+        setError('Failed to generate website content. Please try again.');
+      }
     } finally {
       setIsGenerating(false);
     }
@@ -96,11 +100,16 @@ const WebsiteBuilderPage = () => {
               disabled={isGenerating}
             />
             {error && (
-              <p className="text-sm text-error mb-4">{error}</p>
+              <div className="bg-error/10 text-error px-4 py-3 rounded-md mb-4">
+                {error}
+              </div>
             )}
             <div className="flex justify-end gap-2">
               <button
-                onClick={() => setShowAIPrompt(false)}
+                onClick={() => {
+                  setShowAIPrompt(false);
+                  setError(null);
+                }}
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 disabled={isGenerating}
               >
