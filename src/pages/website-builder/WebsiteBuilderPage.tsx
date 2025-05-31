@@ -9,6 +9,7 @@ const TEMPLATES = [
     name: 'Modern Clinic',
     description: 'A clean, modern design perfect for contemporary dental practices',
     preview: 'https://images.pexels.com/photos/3845625/pexels-photo-3845625.jpeg',
+    url: '/templates/modern-clinic',
     content: {
       hero: {
         title: 'Advanced Dental Care for Your Entire Family',
@@ -45,6 +46,7 @@ const TEMPLATES = [
     name: 'Family Dentistry',
     description: 'Warm and welcoming design ideal for family dental practices',
     preview: 'https://images.pexels.com/photos/3845741/pexels-photo-3845741.jpeg',
+    url: '/templates/family-dentistry',
     content: {
       hero: {
         title: 'Caring for Smiles of All Ages',
@@ -81,6 +83,7 @@ const TEMPLATES = [
     name: 'Specialist Practice',
     description: 'Professional design for specialized dental services',
     preview: 'https://images.pexels.com/photos/3845761/pexels-photo-3845761.jpeg',
+    url: '/templates/specialist-practice',
     content: {
       hero: {
         title: 'Excellence in Specialized Dental Care',
@@ -115,21 +118,17 @@ const TEMPLATES = [
 ];
 
 const WebsiteBuilderPage = () => {
-  const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [showAIPrompt, setShowAIPrompt] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
-  const [editingSection, setEditingSection] = useState<'hero' | 'features' | 'contact' | null>(null);
-  const [editedContent, setEditedContent] = useState<any>(null);
-  
+
   const handleTemplateSelect = (templateId: string) => {
     const template = TEMPLATES.find(t => t.id === templateId);
-    setSelectedTemplate(templateId);
-    setEditedContent(template?.content);
-    setGeneratedContent(null);
+    if (template) {
+      window.open(template.url, '_blank');
+    }
   };
 
   const handleAIGenerate = async () => {
@@ -151,249 +150,6 @@ const WebsiteBuilderPage = () => {
     } finally {
       setIsGenerating(false);
     }
-  };
-
-  const handleContentUpdate = (section: string, field: string, value: string) => {
-    setEditedContent((prev: any) => ({
-      ...prev,
-      [section]: {
-        ...prev[section],
-        [field]: value
-      }
-    }));
-  };
-
-  const renderEditor = () => {
-    if (!editingSection || !editedContent) return null;
-
-    switch (editingSection) {
-      case 'hero':
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Edit Hero Section</h3>
-            <div>
-              <label className="block text-sm font-medium mb-1">Title</label>
-              <input
-                type="text"
-                value={editedContent.hero.title}
-                onChange={(e) => handleContentUpdate('hero', 'title', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Subtitle</label>
-              <input
-                type="text"
-                value={editedContent.hero.subtitle}
-                onChange={(e) => handleContentUpdate('hero', 'subtitle', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Background Image URL</label>
-              <input
-                type="text"
-                value={editedContent.hero.image}
-                onChange={(e) => handleContentUpdate('hero', 'image', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-          </div>
-        );
-
-      case 'features':
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Edit Features</h3>
-            {editedContent.features.map((feature: any, index: number) => (
-              <div key={index} className="space-y-2 p-4 border rounded-md">
-                <div>
-                  <label className="block text-sm font-medium mb-1">Title</label>
-                  <input
-                    type="text"
-                    value={feature.title}
-                    onChange={(e) => {
-                      const newFeatures = [...editedContent.features];
-                      newFeatures[index].title = e.target.value;
-                      handleContentUpdate('features', '', newFeatures);
-                    }}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-1">Description</label>
-                  <input
-                    type="text"
-                    value={feature.description}
-                    onChange={(e) => {
-                      const newFeatures = [...editedContent.features];
-                      newFeatures[index].description = e.target.value;
-                      handleContentUpdate('features', '', newFeatures);
-                    }}
-                    className="w-full rounded-md border border-input bg-background px-3 py-2"
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        );
-
-      case 'contact':
-        return (
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold">Edit Contact Information</h3>
-            <div>
-              <label className="block text-sm font-medium mb-1">Address</label>
-              <input
-                type="text"
-                value={editedContent.contact.address}
-                onChange={(e) => handleContentUpdate('contact', 'address', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Phone</label>
-              <input
-                type="text"
-                value={editedContent.contact.phone}
-                onChange={(e) => handleContentUpdate('contact', 'phone', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Email</label>
-              <input
-                type="text"
-                value={editedContent.contact.email}
-                onChange={(e) => handleContentUpdate('contact', 'email', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-            <div>
-              <label className="block text-sm font-medium mb-1">Hours</label>
-              <input
-                type="text"
-                value={editedContent.contact.hours}
-                onChange={(e) => handleContentUpdate('contact', 'hours', e.target.value)}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-            </div>
-          </div>
-        );
-
-      default:
-        return null;
-    }
-  };
-
-  const renderTemplatePreview = () => {
-    if (!editedContent) return null;
-
-    return (
-      <div className={`transition-all duration-300 ${
-        previewMode === 'mobile' 
-          ? 'max-w-[375px]' 
-          : previewMode === 'tablet' 
-          ? 'max-w-[768px]'
-          : 'max-w-none'
-      }`}>
-        {/* Hero Section */}
-        <div className="relative h-[400px] rounded-lg overflow-hidden mb-8 group">
-          <img 
-            src={editedContent.hero.image} 
-            alt="Hero" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center">
-            <div className="p-8 text-white max-w-2xl">
-              <h1 className="text-4xl font-bold mb-4">{editedContent.hero.title}</h1>
-              <p className="text-xl">{editedContent.hero.subtitle}</p>
-              <button className="mt-6 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors">
-                Book Appointment
-              </button>
-            </div>
-          </div>
-          <button
-            onClick={() => setEditingSection('hero')}
-            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <Type className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* Features Section */}
-        <div className="relative group">
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {editedContent.features.map((feature: any, index: number) => (
-              <div key={index} className="bg-card rounded-lg p-6 text-center">
-                <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                  <feature.icon className="h-6 w-6 text-primary" />
-                </div>
-                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-          <button
-            onClick={() => setEditingSection('features')}
-            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <Grid className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* Contact Section */}
-        <div className="bg-card rounded-lg p-8 relative group">
-          <h2 className="text-2xl font-semibold mb-6">Contact Us</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-primary" />
-                <span>{editedContent.contact.address}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-primary" />
-                <span>{editedContent.contact.phone}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-primary" />
-                <span>{editedContent.contact.email}</span>
-              </div>
-              <div className="flex items-center gap-3">
-                <Clock className="h-5 w-5 text-primary" />
-                <span>{editedContent.contact.hours}</span>
-              </div>
-            </div>
-            <form className="space-y-4">
-              <input
-                type="text"
-                placeholder="Your Name"
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-              <input
-                type="email"
-                placeholder="Email Address"
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-              <textarea
-                placeholder="Message"
-                rows={4}
-                className="w-full rounded-md border border-input bg-background px-3 py-2"
-              />
-              <button className="w-full bg-primary text-white px-4 py-2 rounded-md hover:bg-primary-dark transition-colors">
-                Send Message
-              </button>
-            </form>
-          </div>
-          <button
-            onClick={() => setEditingSection('contact')}
-            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-          >
-            <Mail className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-    );
   };
 
   return (
@@ -467,10 +223,8 @@ const WebsiteBuilderPage = () => {
         {TEMPLATES.map((template) => (
           <div 
             key={template.id}
-            className={`rounded-lg border bg-card overflow-hidden cursor-pointer transition-all hover:shadow-lg ${
-              selectedTemplate === template.id ? 'ring-2 ring-primary' : ''
-            }`}
             onClick={() => handleTemplateSelect(template.id)}
+            className="rounded-lg border bg-card overflow-hidden cursor-pointer transition-all hover:shadow-lg"
           >
             <div className="aspect-video w-full overflow-hidden">
               <img 
@@ -484,6 +238,10 @@ const WebsiteBuilderPage = () => {
               <p className="text-sm text-muted-foreground mt-1">
                 {template.description}
               </p>
+              <button className="mt-4 inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors w-full">
+                <Globe className="mr-2 h-4 w-4" />
+                Preview Template
+              </button>
             </div>
           </div>
         ))}
@@ -503,114 +261,17 @@ const WebsiteBuilderPage = () => {
         </div>
       </div>
 
-      {/* Builder Tools */}
-      {(selectedTemplate || generatedContent) && (
-        <div className="grid gap-6 md:grid-cols-4">
-          <div className="space-y-4">
-            <div className="rounded-lg border bg-card">
-              <div className="p-4 border-b">
-                <h2 className="font-semibold">Layout</h2>
-              </div>
-              <div className="p-4">
-                <button className="w-full flex items-center justify-between rounded-lg border p-3 hover:bg-muted transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <Layout className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Page Structure</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            <div className="rounded-lg border bg-card">
-              <div className="p-4 border-b">
-                <h2 className="font-semibold">Design</h2>
-              </div>
-              <div className="p-4">
-                <button className="w-full flex items-center justify-between rounded-lg border p-3 hover:bg-muted transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <Palette className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Colors & Fonts</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            <div className="rounded-lg border bg-card">
-              <div className="p-4 border-b">
-                <h2 className="font-semibold">Custom Code</h2>
-              </div>
-              <div className="p-4">
-                <button className="w-full flex items-center justify-between rounded-lg border p-3 hover:bg-muted transition-colors">
-                  <div className="flex items-center space-x-3">
-                    <Code className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">CSS & JavaScript</span>
-                  </div>
-                </button>
-              </div>
-            </div>
-
-            {editingSection && (
-              <div className="rounded-lg border bg-card">
-                <div className="p-4 border-b">
-                  <h2 className="font-semibold">Edit Content</h2>
-                </div>
-                <div className="p-4">
-                  {renderEditor()}
-                </div>
-              </div>
-            )}
+      {/* Generated Content Display */}
+      {generatedContent && (
+        <div className="rounded-lg border bg-card">
+          <div className="p-4 border-b">
+            <h2 className="font-semibold">Generated Website Content</h2>
           </div>
-
-          <div className="md:col-span-3 rounded-lg border bg-card">
-            <div className="p-4 border-b flex items-center justify-between">
-              <h2 className="font-semibold">Preview</h2>
-              <div className="flex gap-2">
-                <button 
-                  onClick={() => setPreviewMode('mobile')}
-                  className={`inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                    previewMode === 'mobile'
-                      ? 'bg-primary text-white'
-                      : 'border border-input bg-background hover:bg-muted'
-                  }`}
-                >
-                  Mobile
-                </button>
-                <button 
-                  onClick={() => setPreviewMode('tablet')}
-                  className={`inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                    previewMode === 'tablet'
-                      ? 'bg-primary text-white'
-                      : 'border border-input bg-background hover:bg-muted'
-                  }`}
-                >
-                  Tablet
-                </button>
-                <button 
-                  onClick={() => setPreviewMode('desktop')}
-                  className={`inline-flex items-center justify-center rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                    previewMode === 'desktop'
-                      ? 'bg-primary text-white'
-                      : 'border border-input bg-background hover:bg-muted'
-                  }`}
-                >
-                  Desktop
-                </button>
-              </div>
-            </div>
-            <div className="p-4 overflow-x-auto">
-              {generatedContent ? (
-                <div className="prose max-w-none">
-                  <pre className="whitespace-pre-wrap text-sm">
-                    {generatedContent}
-                  </pre>
-                </div>
-              ) : selectedTemplate ? (
-                renderTemplatePreview()
-              ) : (
-                <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
-                  Select a template or use the AI generator to get started
-                </div>
-              )}
+          <div className="p-4">
+            <div className="prose max-w-none">
+              <pre className="whitespace-pre-wrap text-sm">
+                {generatedContent}
+              </pre>
             </div>
           </div>
         </div>
