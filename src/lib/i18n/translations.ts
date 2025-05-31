@@ -28,6 +28,12 @@ export const translations: Translations = {
         overdue: 'Overdue'
       }
     },
+    auth: {
+      signIn: 'Sign In',
+      signOut: 'Sign Out',
+      welcome: 'Welcome Back',
+      continueWithGoogle: 'Continue with Google',
+    },
     navigation: {
       dashboard: 'Dashboard',
       patients: 'Patients',
@@ -38,6 +44,49 @@ export const translations: Translations = {
       settings: 'Settings',
       websiteBuilder: 'Website Builder',
       doctors: 'Doctors'
+    },
+    dashboard: {
+      welcome: 'Welcome back, Dr. Morgan',
+      todayOverview: "Today's Overview",
+      stats: {
+        appointments: "Today's Appointments",
+        completed: 'Completed',
+        newPatients: 'New Patients',
+        totalPatients: 'Total Patients',
+        treatments: 'Treatments',
+      }
+    },
+    appointments: {
+      title: 'Appointments',
+      subtitle: 'Schedule and manage patient appointments',
+      newAppointment: 'New Appointment',
+      today: 'Today',
+      available: 'Available',
+      noAppointments: 'No appointments found for the selected date.',
+      schedule: 'Schedule Appointment',
+      view: {
+        day: 'Day',
+        week: 'Week',
+        list: 'List'
+      },
+      form: {
+        patientName: 'Patient Name',
+        patientId: 'Patient ID',
+        date: 'Date',
+        time: 'Time',
+        duration: 'Duration (minutes)',
+        type: 'Type',
+        dentist: 'Doctor',
+        notes: 'Notes',
+        notesPlaceholder: 'Add any additional notes...',
+        createAppointment: 'Create Appointment'
+      },
+      status: {
+        scheduled: 'Scheduled',
+        completed: 'Completed',
+        cancelled: 'Cancelled',
+        'in-progress': 'In Progress'
+      }
     },
     patients: {
       title: 'Patients',
@@ -107,22 +156,6 @@ export const translations: Translations = {
         notifications: 'Notifications',
         security: 'Security'
       }
-    },
-    membership: {
-      title: 'Membership',
-      subtitle: 'Choose the plan that best fits your needs',
-      mostPopular: 'Most Popular',
-      perMonth: '/month',
-      getStarted: 'Get Started',
-      allPlansInclude: 'All plans include basic features',
-      freeTier: {
-        name: 'Free',
-        trial: '3 months free trial, then €15/month'
-      },
-      proTier: {
-        name: 'Pro',
-        description: 'Advanced features for growing practices'
-      }
     }
   },
   es: {
@@ -152,6 +185,12 @@ export const translations: Translations = {
         overdue: 'Vencido'
       }
     },
+    auth: {
+      signIn: 'Iniciar Sesión',
+      signOut: 'Cerrar Sesión',
+      welcome: 'Bienvenido de nuevo',
+      continueWithGoogle: 'Continuar con Google',
+    },
     navigation: {
       dashboard: 'Panel de Control',
       patients: 'Pacientes',
@@ -162,6 +201,49 @@ export const translations: Translations = {
       settings: 'Configuración',
       websiteBuilder: 'Constructor de Sitio Web',
       doctors: 'Doctores'
+    },
+    dashboard: {
+      welcome: 'Bienvenido de nuevo, Dr. Morgan',
+      todayOverview: "Resumen del Día",
+      stats: {
+        appointments: "Citas de Hoy",
+        completed: 'Completadas',
+        newPatients: 'Nuevos Pacientes',
+        totalPatients: 'Total de Pacientes',
+        treatments: 'Tratamientos',
+      }
+    },
+    appointments: {
+      title: 'Citas',
+      subtitle: 'Programar y gestionar citas de pacientes',
+      newAppointment: 'Nueva Cita',
+      today: 'Hoy',
+      available: 'Disponible',
+      noAppointments: 'No se encontraron citas para la fecha seleccionada.',
+      schedule: 'Programar Cita',
+      view: {
+        day: 'Día',
+        week: 'Semana',
+        list: 'Lista'
+      },
+      form: {
+        patientName: 'Nombre del Paciente',
+        patientId: 'ID del Paciente',
+        date: 'Fecha',
+        time: 'Hora',
+        duration: 'Duración (minutos)',
+        type: 'Tipo',
+        dentist: 'Doctor',
+        notes: 'Notas',
+        notesPlaceholder: 'Agregar notas adicionales...',
+        createAppointment: 'Crear Cita'
+      },
+      status: {
+        scheduled: 'Programada',
+        completed: 'Completada',
+        cancelled: 'Cancelada',
+        'in-progress': 'En Proceso'
+      }
     },
     patients: {
       title: 'Pacientes',
@@ -230,22 +312,6 @@ export const translations: Translations = {
         appearance: 'Apariencia',
         notifications: 'Notificaciones',
         security: 'Seguridad'
-      }
-    },
-    membership: {
-      title: 'Membresía',
-      subtitle: 'Elige el plan que mejor se adapte a tus necesidades',
-      mostPopular: 'Más Popular',
-      perMonth: '/mes',
-      getStarted: 'Comenzar',
-      allPlansInclude: 'Todos los planes incluyen características básicas',
-      freeTier: {
-        name: 'Gratuito',
-        trial: '3 meses de prueba gratis, luego €15/mes'
-      },
-      proTier: {
-        name: 'Pro',
-        description: 'Características avanzadas para clínicas en crecimiento'
       }
     }
   }
