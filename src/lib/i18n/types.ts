@@ -19,6 +19,10 @@ export interface Translations {
       available: string;
       notes: string;
       actions: string;
+      name: string;
+      email: string;
+      phone: string;
+      schedule: string;
       status: {
         completed: string;
         inProgress: string;
@@ -45,55 +49,30 @@ export interface Translations {
       websiteBuilder: string;
       doctors: string;
     };
-    dashboard: {
-      welcome: string;
-      todayOverview: string;
-      stats: {
-        appointments: string;
-        completed: string;
-        newPatients: string;
-        totalPatients: string;
-        treatments: string;
-      }
-    };
-    websiteBuilder: {
+    doctors: {
       title: string;
       subtitle: string;
-      aiGenerator: string;
-      generateWebsite: string;
-      previewTemplate: string;
-      selectTemplate: string;
-      customTemplate: {
-        title: string;
-        description: string;
+      addDoctor: string;
+      editDoctor: string;
+      search: string;
+      noResults: string;
+      form: {
+        name: string;
+        email: string;
+        specialization: string;
+        phone: string;
+        workingHours: string;
+        startTime: string;
+        endTime: string;
+        daysOff: string;
+        confirmDelete: string;
       };
-      templates: {
-        modernClinic: {
-          name: string;
-          description: string;
-        };
-        familyDentistry: {
-          name: string;
-          description: string;
-        };
-        specialistPractice: {
-          name: string;
-          description: string;
-        };
+      actions: {
+        save: string;
+        cancel: string;
+        edit: string;
+        delete: string;
       };
-      preview: {
-        title: string;
-        mobile: string;
-        tablet: string;
-        desktop: string;
-      };
-      ai: {
-        title: string;
-        description: string;
-        placeholder: string;
-        generating: string;
-        error: string;
-      }
     };
     // ... rest of the existing translations
   };
