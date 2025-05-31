@@ -43,11 +43,15 @@ const WebsiteBuilderPage = () => {
     setError(null);
     
     try {
+      if (!import.meta.env.VITE_OPENAI_API_KEY) {
+        throw new Error('OpenAI API key is not configured. Please add VITE_OPENAI_API_KEY to your environment variables.');
+      }
+      
       const content = await generateWebsite(aiPrompt);
       setGeneratedContent(content);
       setShowAIPrompt(false);
     } catch (err) {
-      setError('Failed to generate website content. Please try again.');
+      setError(err instanceof Error ? err.message : 'Failed to generate website content. Please try again.');
     } finally {
       setIsGenerating(false);
     }
