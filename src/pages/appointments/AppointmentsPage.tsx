@@ -108,9 +108,9 @@ const TREATMENT_TYPES = [
 
 const AppointmentsPage = () => {
   const { t } = useLanguage();
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [view, setView] = useState<'day' | 'week' | 'list'>('day');
   const [searchTerm, setSearchTerm] = useState('');
+  const [view, setView] = useState<'day' | 'week' | 'list'>('day');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [showNewAppointmentModal, setShowNewAppointmentModal] = useState(false);
   const [newAppointment, setNewAppointment] = useState({
     patientName: '',
@@ -122,7 +122,7 @@ const AppointmentsPage = () => {
     dentist: DENTISTS[0].id,
     notes: '',
   });
-  
+
   // Filter appointments based on the selected date and search term
   const filteredAppointments = APPOINTMENTS.filter((appointment) => {
     const matchesDate = appointment.date === formatDate(selectedDate).replace(/,/g, '');
@@ -386,7 +386,7 @@ const AppointmentsPage = () => {
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
                 onClick={goToToday}
               >
-                {t('appointments.today')}
+                {t('common.today')}
               </button>
               <button 
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted"
@@ -490,9 +490,7 @@ const AppointmentsPage = () => {
                               }}
                               className="h-full w-full rounded-md border border-dashed border-muted hover:border-muted-foreground transition-colors cursor-pointer flex items-center justify-center"
                             >
-                              <div className="text-xs text-muted-foreground">
-                                {t('appointments.available')}
-                              </div>
+                              <div className="text-xs text-muted-foreground">{t('appointments.available')}</div>
                             </button>
                           )}
                         </div>
