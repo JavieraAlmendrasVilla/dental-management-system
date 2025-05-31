@@ -1,22 +1,24 @@
 import { useState } from 'react';
 import { MEMBERSHIPS } from '../../lib/types/membership';
 import MembershipCard from '../../components/membership/MembershipCard';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 const MembershipSection = () => {
+  const { t } = useLanguage();
   const [selectedTier, setSelectedTier] = useState<string | null>(null);
 
   const handleSelectTier = (tier: string) => {
     setSelectedTier(tier);
     // Here you would typically integrate with a payment provider
-    alert(`Selected ${tier} tier. In a production environment, this would redirect to payment.`);
+    alert(`Plan ${tier} seleccionado. En un entorno de producción, esto redireccionaría al pago.`);
   };
 
   return (
     <div className="rounded-lg border bg-card">
       <div className="p-6 border-b">
-        <h2 className="text-lg font-semibold">Membership Plans</h2>
+        <h2 className="text-lg font-semibold">{t('membership.title')}</h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Choose the plan that best fits your practice
+          {t('membership.subtitle')}
         </p>
       </div>
       <div className="p-6">
@@ -32,7 +34,7 @@ const MembershipSection = () => {
           />
         </div>
         <p className="text-sm text-muted-foreground text-center mt-6">
-          All plans include updates and basic customer support
+          {t('membership.allPlansInclude')}
         </p>
       </div>
     </div>

@@ -276,5 +276,40 @@ export const translations: Translations = {
         desktop: 'Escritorio',
       },
     },
-  },
+    membership: {
+      title: 'Planes de Membresía',
+      subtitle: 'Elige el plan que mejor se adapte a tu práctica',
+      freeTier: {
+        name: 'Plan Gratuito',
+        price: '15€',
+        trial: '90 días de prueba gratis',
+        features: [
+          'Gestión de Pacientes',
+          'Programación de Citas',
+          'Planificación Básica de Tratamientos',
+          'Fichas Dentales Digitales',
+          'Informes Básicos',
+          'Soporte por Email'
+        ]
+      },
+      proTier: {
+        name: 'Plan Pro',
+        price: '50€',
+        features: [
+          'Todo lo incluido en el Plan Gratuito',
+          'Resumen de Citas con IA',
+          'Creación de Plan de Tratamiento con IA',
+          'Análisis Avanzado',
+          'Informes Personalizados',
+          'Soporte Prioritario',
+          'Capacitación del Personal',
+          'Soporte para Múltiples Ubicaciones'
+        ]
+      },
+      mostPopular: 'Más Popular',
+      perMonth: '/mes',
+      getStarted: 'Comenzar',
+      allPlansInclude: 'Todos los planes incluyen actualizaciones y soporte básico al cliente'
+    }
+  }
 };

@@ -1,5 +1,6 @@
 import { ArrowRight, Check } from 'lucide-react';
 import { Membership } from '../../lib/types/membership';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 interface MembershipCardProps {
   membership: Membership;
@@ -8,27 +9,29 @@ interface MembershipCardProps {
 }
 
 const MembershipCard = ({ membership, isPopular, onSelect }: MembershipCardProps) => {
+  const { t } = useLanguage();
+
   return (
     <div className={`relative bg-card rounded-lg border p-6 ${isPopular ? 'border-primary shadow-lg' : ''}`}>
       {isPopular && (
         <div className="absolute -top-3 left-1/2 -translate-x-1/2">
           <span className="bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
-            Most Popular
+            {t('membership.mostPopular')}
           </span>
         </div>
       )}
       
       <div className="mb-6">
         <h3 className="text-lg font-semibold capitalize mb-2">
-          {membership.tier} Plan
+          {t(`membership.${membership.tier}Tier.name`)}
         </h3>
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-bold">€{membership.price}</span>
-          <span className="text-muted-foreground">/month</span>
+          <span className="text-muted-foreground">{t('membership.perMonth')}</span>
         </div>
         {membership.trialDays && (
           <p className="text-sm text-muted-foreground mt-2">
-            {membership.trialDays} days free trial
+            {t('membership.freeTier.trial')}
           </p>
         )}
       </div>
@@ -50,7 +53,7 @@ const MembershipCard = ({ membership, isPopular, onSelect }: MembershipCardProps
             : 'border border-input hover:bg-muted'
         }`}
       >
-        Get Started
+        {t('membership.getStarted')}
         <ArrowRight className="h-4 w-4" />
       </button>
     </div>
