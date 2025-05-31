@@ -48,7 +48,7 @@ const TEMPLATES = [
     content: {
       hero: {
         title: 'Caring for Smiles of All Ages',
-        subtitle: 'Your family's dental health is our top priority',
+        subtitle: 'Your family\'s dental health is our top priority',
         image: 'https://images.pexels.com/photos/3845741/pexels-photo-3845741.jpeg'
       },
       features: [
