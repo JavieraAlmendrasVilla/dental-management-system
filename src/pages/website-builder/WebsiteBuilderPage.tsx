@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Code, Layout, Palette, Plus, Wand2, Loader2, ArrowRight } from 'lucide-react';
 import { generateWebsite } from '../../lib/openai';
 import { useNavigate } from 'react-router-dom';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 // Website templates
 const TEMPLATES = [
@@ -30,6 +31,7 @@ const TEMPLATES = [
 
 const WebsiteBuilderPage = () => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
   const [selectedTemplate, setSelectedTemplate] = useState<string | null>(null);
   const [showAIPrompt, setShowAIPrompt] = useState(false);
   const [aiPrompt, setAiPrompt] = useState('');
@@ -57,9 +59,9 @@ const WebsiteBuilderPage = () => {
       setShowAIPrompt(false);
     } catch (err) {
       if (err instanceof Error && err.message.includes('API key is not configured')) {
-        setError('AI Website Generator is not yet available. Please try again later or contact support.');
+        setError(t('websiteBuilder.ai.error'));
       } else {
-        setError('Failed to generate website content. Please try again.');
+        setError(t('common.error'));
       }
     } finally {
       setIsGenerating(false);
@@ -70,9 +72,9 @@ const WebsiteBuilderPage = () => {
     <div className="space-y-6 animate-fade-in">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Website Builder</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('websiteBuilder.title')}</h1>
           <p className="text-muted-foreground">
-            Create a professional website for your dental practice
+            {t('websiteBuilder.subtitle')}
           </p>
         </div>
         <button 
@@ -80,7 +82,7 @@ const WebsiteBuilderPage = () => {
           className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
         >
           <Wand2 className="mr-2 h-4 w-4" />
-          AI Website Generator
+          {t('websiteBuilder.aiGenerator')}
         </button>
       </div>
 
@@ -88,14 +90,14 @@ const WebsiteBuilderPage = () => {
       {showAIPrompt && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg shadow-lg w-full max-w-lg p-6">
-            <h2 className="text-lg font-semibold mb-4">AI Website Generator</h2>
+            <h2 className="text-lg font-semibold mb-4">{t('websiteBuilder.ai.title')}</h2>
             <p className="text-sm text-muted-foreground mb-4">
-              Describe your ideal dental practice website, and our AI will generate a custom design for you.
+              {t('websiteBuilder.ai.description')}
             </p>
             <textarea
               value={aiPrompt}
               onChange={(e) => setAiPrompt(e.target.value)}
-              placeholder="Example: I want a modern, professional website for my orthodontic practice with a focus on teen and adult patients..."
+              placeholder={t('websiteBuilder.ai.placeholder')}
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm min-h-[120px] mb-4"
               disabled={isGenerating}
             />
@@ -113,7 +115,7 @@ const WebsiteBuilderPage = () => {
                 className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 disabled={isGenerating}
               >
-                Cancel
+                {t('common.cancel')}
               </button>
               <button
                 onClick={handleAIGenerate}
@@ -123,12 +125,12 @@ const WebsiteBuilderPage = () => {
                 {isGenerating ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
+                    {t('websiteBuilder.ai.generating')}
                   </>
                 ) : (
                   <>
                     <Wand2 className="mr-2 h-4 w-4" />
-                    Generate Website
+                    {t('websiteBuilder.generateWebsite')}
                   </>
                 )}
               </button>
@@ -150,17 +152,17 @@ const WebsiteBuilderPage = () => {
             <div className="aspect-video w-full overflow-hidden">
               <img 
                 src={template.preview} 
-                alt={template.name}
+                alt={t(`websiteBuilder.templates.${template.id}.name`)}
                 className="w-full h-full object-cover"
               />
             </div>
             <div className="p-4">
-              <h3 className="font-semibold">{template.name}</h3>
+              <h3 className="font-semibold">{t(`websiteBuilder.templates.${template.id}.name`)}</h3>
               <p className="text-sm text-muted-foreground mt-1">
-                {template.description}
+                {t(`websiteBuilder.templates.${template.id}.description`)}
               </p>
               <button className="mt-4 text-primary font-medium flex items-center gap-2 group">
-                Preview Template 
+                {t('websiteBuilder.previewTemplate')}
                 <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </button>
             </div>
@@ -172,9 +174,9 @@ const WebsiteBuilderPage = () => {
           <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
             <Plus className="h-6 w-6 text-primary" />
           </div>
-          <h3 className="font-semibold">Custom Template</h3>
+          <h3 className="font-semibold">{t('websiteBuilder.customTemplate.title')}</h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Create a unique design from scratch
+            {t('websiteBuilder.customTemplate.description')}
           </p>
         </div>
       </div>
@@ -185,13 +187,13 @@ const WebsiteBuilderPage = () => {
           <div className="space-y-4">
             <div className="rounded-lg border bg-card">
               <div className="p-4 border-b">
-                <h2 className="font-semibold">Layout</h2>
+                <h2 className="font-semibold">{t('common.layout')}</h2>
               </div>
               <div className="p-4">
                 <button className="w-full flex items-center justify-between rounded-lg border p-3 hover:bg-muted transition-colors">
                   <div className="flex items-center space-x-3">
                     <Layout className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Page Structure</span>
+                    <span className="text-sm font-medium">{t('common.pageStructure')}</span>
                   </div>
                 </button>
               </div>
@@ -199,13 +201,13 @@ const WebsiteBuilderPage = () => {
 
             <div className="rounded-lg border bg-card">
               <div className="p-4 border-b">
-                <h2 className="font-semibold">Design</h2>
+                <h2 className="font-semibold">{t('common.design')}</h2>
               </div>
               <div className="p-4">
                 <button className="w-full flex items-center justify-between rounded-lg border p-3 hover:bg-muted transition-colors">
                   <div className="flex items-center space-x-3">
                     <Palette className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">Colors & Fonts</span>
+                    <span className="text-sm font-medium">{t('common.colorsAndFonts')}</span>
                   </div>
                 </button>
               </div>
@@ -213,13 +215,13 @@ const WebsiteBuilderPage = () => {
 
             <div className="rounded-lg border bg-card">
               <div className="p-4 border-b">
-                <h2 className="font-semibold">Custom Code</h2>
+                <h2 className="font-semibold">{t('common.customCode')}</h2>
               </div>
               <div className="p-4">
                 <button className="w-full flex items-center justify-between rounded-lg border p-3 hover:bg-muted transition-colors">
                   <div className="flex items-center space-x-3">
                     <Code className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm font-medium">CSS & JavaScript</span>
+                    <span className="text-sm font-medium">{t('common.cssAndJavaScript')}</span>
                   </div>
                 </button>
               </div>
@@ -228,16 +230,16 @@ const WebsiteBuilderPage = () => {
 
           <div className="md:col-span-3 rounded-lg border bg-card">
             <div className="p-4 border-b flex items-center justify-between">
-              <h2 className="font-semibold">Preview</h2>
+              <h2 className="font-semibold">{t('websiteBuilder.preview.title')}</h2>
               <div className="flex gap-2">
                 <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors">
-                  Mobile
+                  {t('websiteBuilder.preview.mobile')}
                 </button>
                 <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-1.5 text-sm font-medium hover:bg-muted transition-colors">
-                  Tablet
+                  {t('websiteBuilder.preview.tablet')}
                 </button>
                 <button className="inline-flex items-center justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
-                  Desktop
+                  {t('websiteBuilder.preview.desktop')}
                 </button>
               </div>
             </div>
@@ -250,7 +252,7 @@ const WebsiteBuilderPage = () => {
                 </div>
               ) : (
                 <div className="aspect-[16/9] bg-muted rounded-lg flex items-center justify-center text-muted-foreground">
-                  Select a template to preview
+                  {t('websiteBuilder.selectTemplate')}
                 </div>
               )}
             </div>

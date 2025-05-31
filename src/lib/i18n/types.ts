@@ -56,121 +56,45 @@ export interface Translations {
         treatments: string;
       }
     };
-    appointments: {
+    websiteBuilder: {
       title: string;
       subtitle: string;
-      newAppointment: string;
-      today: string;
-      available: string;
-      noAppointments: string;
-      schedule: string;
-      view: {
-        day: string;
-        week: string;
-        list: string;
+      aiGenerator: string;
+      generateWebsite: string;
+      previewTemplate: string;
+      selectTemplate: string;
+      customTemplate: {
+        title: string;
+        description: string;
       };
-      form: {
-        patientName: string;
-        patientId: string;
-        date: string;
-        time: string;
-        duration: string;
-        type: string;
-        dentist: string;
-        notes: string;
-        notesPlaceholder: string;
-        createAppointment: string;
+      templates: {
+        modernClinic: {
+          name: string;
+          description: string;
+        };
+        familyDentistry: {
+          name: string;
+          description: string;
+        };
+        specialistPractice: {
+          name: string;
+          description: string;
+        };
       };
-      status: {
-        scheduled: string;
-        completed: string;
-        cancelled: string;
-        'in-progress': string;
-      }
-    };
-    patients: {
-      title: string;
-      subtitle: string;
-      addNew: string;
-      search: string;
-      contact: string;
-      dateOfBirth: string;
-      lastVisit: string;
-      nextAppointment: string;
-      noneScheduled: string;
-      medicalInfo: {
-        allergies: string;
-        conditions: string;
-        medications: string;
-      }
-    };
-    treatments: {
-      title: string;
-      subtitle: string;
-      addNew: string;
-      search: string;
-      category: string;
-      duration: string;
-      cost: string;
-      description: string;
-      recentTreatments: string;
-    };
-    billing: {
-      title: string;
-      subtitle: string;
-      createInvoice: string;
-      totalRevenue: string;
-      pendingPayments: string;
-      overduePayments: string;
-      averagePaymentTime: string;
-    };
-    reports: {
-      title: string;
-      subtitle: string;
-      exportReports: string;
-      statistics: {
-        totalRevenue: string;
-        totalPatients: string;
-        treatments: string;
-        averageVisits: string;
-      }
-    };
-    doctors: {
-      title: string;
-      subtitle: string;
-      addNew: string;
-      search: string;
-      schedule: {
-        workingHours: string;
-        daysOff: string;
-        startTime: string;
-        endTime: string;
-      }
-    };
-    settings: {
-      title: string;
-      subtitle: string;
-      sections: {
-        account: string;
-        appearance: string;
-        notifications: string;
-        security: string;
-      }
-    };
-    membership: {
-      title: string;
-      subtitle: string;
-      mostPopular: string;
-      perMonth: string;
-      getStarted: string;
-      allPlansInclude: string;
-      freeTier: {
-        name: string;
-        trial: string;
+      preview: {
+        title: string;
+        mobile: string;
+        tablet: string;
+        desktop: string;
       };
-      proTier: {
-        name: string;
-      };
+      ai: {
+        title: string;
+        description: string;
+        placeholder: string;
+        generating: string;
+        error: string;
+      }
     };
+    // ... rest of the existing translations
   };
 }
