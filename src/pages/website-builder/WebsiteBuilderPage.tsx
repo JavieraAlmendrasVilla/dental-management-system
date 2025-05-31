@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Code, Layout, Palette, Plus, Wand2, Loader2, Globe, Phone, Mail, MapPin, Calendar, Clock, User, Shield } from 'lucide-react';
+import { Code, Layout, Palette, Plus, Wand2, Loader2, Globe, Phone, Mail, MapPin, Calendar, Clock, User, Shield, ChevronDown, Image, Type, Grid } from 'lucide-react';
 import { generateWebsite } from '../../lib/openai';
 
 // Website templates
@@ -122,9 +122,13 @@ const WebsiteBuilderPage = () => {
   const [generatedContent, setGeneratedContent] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState<'desktop' | 'tablet' | 'mobile'>('desktop');
+  const [editingSection, setEditingSection] = useState<'hero' | 'features' | 'contact' | null>(null);
+  const [editedContent, setEditedContent] = useState<any>(null);
   
   const handleTemplateSelect = (templateId: string) => {
+    const template = TEMPLATES.find(t => t.id === templateId);
     setSelectedTemplate(templateId);
+    setEditedContent(template?.content);
     setGeneratedContent(null);
   };
 
@@ -149,12 +153,141 @@ const WebsiteBuilderPage = () => {
     }
   };
 
-  const selectedTemplateContent = selectedTemplate 
-    ? TEMPLATES.find(t => t.id === selectedTemplate)?.content 
-    : null;
+  const handleContentUpdate = (section: string, field: string, value: string) => {
+    setEditedContent((prev: any) => ({
+      ...prev,
+      [section]: {
+        ...prev[section],
+        [field]: value
+      }
+    }));
+  };
+
+  const renderEditor = () => {
+    if (!editingSection || !editedContent) return null;
+
+    switch (editingSection) {
+      case 'hero':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Edit Hero Section</h3>
+            <div>
+              <label className="block text-sm font-medium mb-1">Title</label>
+              <input
+                type="text"
+                value={editedContent.hero.title}
+                onChange={(e) => handleContentUpdate('hero', 'title', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Subtitle</label>
+              <input
+                type="text"
+                value={editedContent.hero.subtitle}
+                onChange={(e) => handleContentUpdate('hero', 'subtitle', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Background Image URL</label>
+              <input
+                type="text"
+                value={editedContent.hero.image}
+                onChange={(e) => handleContentUpdate('hero', 'image', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+          </div>
+        );
+
+      case 'features':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Edit Features</h3>
+            {editedContent.features.map((feature: any, index: number) => (
+              <div key={index} className="space-y-2 p-4 border rounded-md">
+                <div>
+                  <label className="block text-sm font-medium mb-1">Title</label>
+                  <input
+                    type="text"
+                    value={feature.title}
+                    onChange={(e) => {
+                      const newFeatures = [...editedContent.features];
+                      newFeatures[index].title = e.target.value;
+                      handleContentUpdate('features', '', newFeatures);
+                    }}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1">Description</label>
+                  <input
+                    type="text"
+                    value={feature.description}
+                    onChange={(e) => {
+                      const newFeatures = [...editedContent.features];
+                      newFeatures[index].description = e.target.value;
+                      handleContentUpdate('features', '', newFeatures);
+                    }}
+                    className="w-full rounded-md border border-input bg-background px-3 py-2"
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        );
+
+      case 'contact':
+        return (
+          <div className="space-y-4">
+            <h3 className="text-lg font-semibold">Edit Contact Information</h3>
+            <div>
+              <label className="block text-sm font-medium mb-1">Address</label>
+              <input
+                type="text"
+                value={editedContent.contact.address}
+                onChange={(e) => handleContentUpdate('contact', 'address', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Phone</label>
+              <input
+                type="text"
+                value={editedContent.contact.phone}
+                onChange={(e) => handleContentUpdate('contact', 'phone', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Email</label>
+              <input
+                type="text"
+                value={editedContent.contact.email}
+                onChange={(e) => handleContentUpdate('contact', 'email', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium mb-1">Hours</label>
+              <input
+                type="text"
+                value={editedContent.contact.hours}
+                onChange={(e) => handleContentUpdate('contact', 'hours', e.target.value)}
+                className="w-full rounded-md border border-input bg-background px-3 py-2"
+              />
+            </div>
+          </div>
+        );
+
+      default:
+        return null;
+    }
+  };
 
   const renderTemplatePreview = () => {
-    if (!selectedTemplateContent) return null;
+    if (!editedContent) return null;
 
     return (
       <div className={`transition-all duration-300 ${
@@ -165,56 +298,70 @@ const WebsiteBuilderPage = () => {
           : 'max-w-none'
       }`}>
         {/* Hero Section */}
-        <div className="relative h-[400px] rounded-lg overflow-hidden mb-8">
+        <div className="relative h-[400px] rounded-lg overflow-hidden mb-8 group">
           <img 
-            src={selectedTemplateContent.hero.image} 
+            src={editedContent.hero.image} 
             alt="Hero" 
             className="w-full h-full object-cover"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-transparent flex items-center">
             <div className="p-8 text-white max-w-2xl">
-              <h1 className="text-4xl font-bold mb-4">{selectedTemplateContent.hero.title}</h1>
-              <p className="text-xl">{selectedTemplateContent.hero.subtitle}</p>
+              <h1 className="text-4xl font-bold mb-4">{editedContent.hero.title}</h1>
+              <p className="text-xl">{editedContent.hero.subtitle}</p>
               <button className="mt-6 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary-dark transition-colors">
                 Book Appointment
               </button>
             </div>
           </div>
+          <button
+            onClick={() => setEditingSection('hero')}
+            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Type className="h-4 w-4" />
+          </button>
         </div>
 
         {/* Features Section */}
-        <div className="grid md:grid-cols-3 gap-8 mb-8">
-          {selectedTemplateContent.features.map((feature, index) => (
-            <div key={index} className="bg-card rounded-lg p-6 text-center">
-              <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                <feature.icon className="h-6 w-6 text-primary" />
+        <div className="relative group">
+          <div className="grid md:grid-cols-3 gap-8 mb-8">
+            {editedContent.features.map((feature: any, index: number) => (
+              <div key={index} className="bg-card rounded-lg p-6 text-center">
+                <div className="mx-auto w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <feature.icon className="h-6 w-6 text-primary" />
+                </div>
+                <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
+                <p className="text-muted-foreground">{feature.description}</p>
               </div>
-              <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-              <p className="text-muted-foreground">{feature.description}</p>
-            </div>
-          ))}
+            ))}
+          </div>
+          <button
+            onClick={() => setEditingSection('features')}
+            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Grid className="h-4 w-4" />
+          </button>
         </div>
 
         {/* Contact Section */}
-        <div className="bg-card rounded-lg p-8">
+        <div className="bg-card rounded-lg p-8 relative group">
           <h2 className="text-2xl font-semibold mb-6">Contact Us</h2>
           <div className="grid md:grid-cols-2 gap-8">
             <div className="space-y-4">
               <div className="flex items-center gap-3">
                 <MapPin className="h-5 w-5 text-primary" />
-                <span>{selectedTemplateContent.contact.address}</span>
+                <span>{editedContent.contact.address}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-primary" />
-                <span>{selectedTemplateContent.contact.phone}</span>
+                <span>{editedContent.contact.phone}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-primary" />
-                <span>{selectedTemplateContent.contact.email}</span>
+                <span>{editedContent.contact.email}</span>
               </div>
               <div className="flex items-center gap-3">
                 <Clock className="h-5 w-5 text-primary" />
-                <span>{selectedTemplateContent.contact.hours}</span>
+                <span>{editedContent.contact.hours}</span>
               </div>
             </div>
             <form className="space-y-4">
@@ -238,6 +385,12 @@ const WebsiteBuilderPage = () => {
               </button>
             </form>
           </div>
+          <button
+            onClick={() => setEditingSection('contact')}
+            className="absolute top-4 right-4 bg-black/50 text-white p-2 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+          >
+            <Mail className="h-4 w-4" />
+          </button>
         </div>
       </div>
     );
@@ -395,6 +548,17 @@ const WebsiteBuilderPage = () => {
                 </button>
               </div>
             </div>
+
+            {editingSection && (
+              <div className="rounded-lg border bg-card">
+                <div className="p-4 border-b">
+                  <h2 className="font-semibold">Edit Content</h2>
+                </div>
+                <div className="p-4">
+                  {renderEditor()}
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="md:col-span-3 rounded-lg border bg-card">
