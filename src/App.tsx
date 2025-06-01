@@ -40,8 +40,8 @@ function App() {
 
         {!isAuthenticated ? (
           <>
-            <Route path="/login" element={<Login />} />
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="/login\" element={<Login />} />
+            <Route path="*" element={<Navigate to="/login\" replace />} />
           </>
         ) : (
           <>
@@ -66,7 +66,7 @@ function App() {
             <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
 
             {/* Redirect unknown routes to root */}
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<Navigate to="/\" replace />} />
           </>
         )}
       </Routes>
