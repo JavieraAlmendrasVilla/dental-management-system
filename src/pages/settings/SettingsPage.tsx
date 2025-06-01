@@ -1,9 +1,7 @@
 import { useState } from 'react';
-import { Bell, Globe, Lock, Mail, Moon, Palette, Shield, Sun, User, Plus, Pencil, Trash2 } from 'lucide-react';
+import { Bell, Globe, Lock, Mail, Moon, Palette, Shield, Sun, User } from 'lucide-react';
 import { useTheme } from '../../lib/theme/ThemeContext';
-import { useDoctors, Doctor } from '../../lib/doctors/DoctorsContext';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
-import MembershipSection from './MembershipSection';
 
 const FONT_OPTIONS = [
   'Inter',
@@ -44,8 +42,6 @@ const SettingsPage = () => {
           {t('settings.subtitle')}
         </p>
       </div>
-
-      <MembershipSection />
 
       <div className="grid gap-6 md:grid-cols-2">
         {/* Account Settings */}

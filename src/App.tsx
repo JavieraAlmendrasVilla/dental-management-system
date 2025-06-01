@@ -18,6 +18,7 @@ const Login = lazy(() => import('./pages/auth/LoginPage'));
 const Settings = lazy(() => import('./pages/settings/SettingsPage'));
 const WebsiteBuilder = lazy(() => import('./pages/website-builder/WebsiteBuilderPage'));
 const Doctors = lazy(() => import('./pages/doctors/DoctorsPage'));
+const Membership = lazy(() => import('./pages/membership/MembershipPage'));
 
 // Template routes
 const ModernClinicTemplate = lazy(() => import('./pages/templates/ModernClinicTemplate'));
@@ -36,7 +37,7 @@ function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login\" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     );
@@ -58,6 +59,7 @@ function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="website-builder" element={<WebsiteBuilder />} />
           <Route path="doctors" element={<Doctors />} />
+          <Route path="membership" element={<Membership />} />
         </Route>
 
         {/* Template Routes */}
@@ -65,8 +67,8 @@ function App() {
         <Route path="/templates/family-dentistry" element={<FamilyDentistryTemplate />} />
         <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
 
-        <Route path="/login" element={<Navigate to="/\" replace />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
