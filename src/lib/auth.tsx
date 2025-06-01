@@ -6,12 +6,18 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  // For development, use mock authentication if env vars are not set
+  if (import.meta.env.DEV && (!import.meta.env.VITE_AUTH0_DOMAIN || !import.meta.env.VITE_AUTH0_CLIENT_ID)) {
+    console.warn('Using mock authentication for development. Please set Auth0 environment variables for production.');
+    return <>{children}</>;
+  }
+
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
-  const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
+  const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL || window.location.origin;
 
-  if (!domain || !clientId || !redirectUri) {
-    console.error('Auth0 configuration is missing');
+  if (!domain || !clientId) {
+    console.error('Auth0 configuration is missing. Please check your environment variables.');
     return <>{children}</>;
   }
 
