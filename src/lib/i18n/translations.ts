@@ -105,6 +105,29 @@ export const translations: Translations = {
         completed: 'Completed',
         scheduled: 'Scheduled'
       }
+    },
+    treatments: {
+      title: 'Treatments',
+      subtitle: 'Manage dental treatments and procedures',
+      addNew: 'Add New Treatment',
+      search: 'Search treatments...',
+      name: 'Treatment Name',
+      category: 'Category',
+      duration: 'Duration',
+      cost: 'Cost',
+      description: 'Description',
+      recentTreatments: 'Recent Treatments',
+      noResults: 'No treatments found',
+      allTreatments: 'All Treatments',
+      createTreatment: 'Create Treatment',
+      form: {
+        name: 'Treatment Name',
+        category: 'Category',
+        duration: 'Duration (minutes)',
+        cost: 'Cost ($)',
+        description: 'Description',
+        descriptionPlaceholder: 'Enter treatment details and notes'
+      }
     }
   },
   es: {
@@ -210,6 +233,29 @@ export const translations: Translations = {
       status: {
         completed: 'Completada',
         scheduled: 'Programada'
+      }
+    },
+    treatments: {
+      title: 'Tratamientos',
+      subtitle: 'Gestiona tratamientos y procedimientos dentales',
+      addNew: 'Agregar Nuevo Tratamiento',
+      search: 'Buscar tratamientos...',
+      name: 'Nombre del Tratamiento',
+      category: 'Categoría',
+      duration: 'Duración',
+      cost: 'Costo',
+      description: 'Descripción',
+      recentTreatments: 'Tratamientos Recientes',
+      noResults: 'No se encontraron tratamientos',
+      allTreatments: 'Todos los Tratamientos',
+      createTreatment: 'Crear Tratamiento',
+      form: {
+        name: 'Nombre del Tratamiento',
+        category: 'Categoría',
+        duration: 'Duración (minutos)',
+        cost: 'Costo ($)',
+        description: 'Descripción',
+        descriptionPlaceholder: 'Ingrese detalles y notas del tratamiento'
       }
     }
   }
