@@ -23,7 +23,9 @@ const MembershipCard = ({ membership, isPopular, onSelect }: MembershipCardProps
       
       <div className="mb-6">
         <h3 className="text-lg font-semibold capitalize mb-2">
-          {t(`membership.${membership.tier}Tier.name`)}
+          {membership.tier === 'free' 
+            ? t('membership.freeTier.name')
+            : t('membership.proTier.name')}
         </h3>
         <div className="flex items-baseline gap-1">
           <span className="text-3xl font-bold">€{membership.price}</span>
