@@ -9,7 +9,7 @@ const TREATMENT_TYPES = [
   { id: 'filling', name: 'Filling', color: '#3b82f6', cost: 150 },
   { id: 'crown', name: 'Crown', color: '#f59e0b', cost: 800 },
   { id: 'extraction', name: 'Extraction', color: '#ef4444', cost: 200 },
-  { id: 'root-canal', name: 'Root Canal', color: '#8b5cf6', cost: 1000 },
+  { id: 'rootcanal', name: 'Root Canal', color: '#8b5cf6', cost: 1000 },
   { id: 'implant', name: 'Implant', color: '#10b981', cost: 3000 },
   { id: 'bridge', name: 'Bridge', color: '#6366f1', cost: 2000 },
 ];
