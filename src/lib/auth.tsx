@@ -6,18 +6,13 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  // For development, use mock authentication if env vars are not set
-  if (import.meta.env.DEV && (!import.meta.env.VITE_AUTH0_DOMAIN || !import.meta.env.VITE_AUTH0_CLIENT_ID)) {
-    console.warn('Using mock authentication for development. Please set Auth0 environment variables for production.');
-    return <>{children}</>;
-  }
-
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
-  const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL || window.location.origin;
+  const redirectUri = window.location.origin;
 
+  // For development, use mock authentication if env vars are not set
   if (!domain || !clientId) {
-    console.error('Auth0 configuration is missing. Please check your environment variables.');
+    console.warn('Auth0 configuration is missing. Please check your environment variables.');
     return <>{children}</>;
   }
 
@@ -27,9 +22,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
-        connection: 'google-oauth2',
-        prompt: 'select_account',
-        scope: 'openid profile email'
+        scope: 'openid profile email',
+        response_type: 'code',
+        response_mode: 'query'
       }}
       useRefreshTokens={true}
       cacheLocation="localstorage"
