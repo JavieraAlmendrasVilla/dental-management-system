@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Calendar, FilePlus, History, Printer, Save, Clock, X, Plus, Trash2 } from 'lucide-react';
 import DentalChart from './components/DentalChart';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 const TREATMENT_TYPES = [
   { id: 'caries', name: 'Caries', color: '#dc2626', cost: 0 },
@@ -13,7 +14,6 @@ const TREATMENT_TYPES = [
   { id: 'bridge', name: 'Bridge', color: '#6366f1', cost: 2000 },
 ];
 
-// Available time slots
 const TIME_SLOTS = [
   '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
   '14:00', '14:30', '15:00', '15:30', '16:00', '16:30'
@@ -29,6 +29,7 @@ interface TreatmentPlanItem {
 }
 
 const DentalChartPage = () => {
+  const { t } = useLanguage();
   const { patientId } = useParams<{ patientId: string }>();
   const [selectedTreatment, setSelectedTreatment] = useState(TREATMENT_TYPES[0].id);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
@@ -48,6 +49,10 @@ const DentalChartPage = () => {
   });
 
   const patientName = 'John Smith';
+
+  const getTreatmentName = (treatmentId: string) => {
+    return t(`dentalChart.treatments.${treatmentId}`);
+  };
 
   const handleSaveChart = (teeth: any) => {
     console.log('Saving dental chart:', teeth);
@@ -111,7 +116,6 @@ const DentalChartPage = () => {
     setShowTreatmentPlanModal(false);
   };
 
-  // Get tomorrow's date as the minimum date for scheduling
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
   const minDate = tomorrow.toISOString().split('T')[0];
@@ -122,19 +126,19 @@ const DentalChartPage = () => {
     <div className="space-y-6 animate-fade-in max-w-7xl mx-auto px-4">
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Dental Chart</h1>
+          <h1 className="text-2xl font-bold tracking-tight">{t('dentalChart.title')}</h1>
           <p className="text-muted-foreground">
-            Patient: {patientName} (ID: {patientId})
+            {t('dentalChart.patient')}: {patientName} ({t('dentalChart.patientId')}: {patientId})
           </p>
         </div>
         <div className="flex gap-2">
           <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
             <History className="mr-2 h-4 w-4" />
-            History
+            {t('dentalChart.history')}
           </button>
           <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors">
             <Printer className="mr-2 h-4 w-4" />
-            Print
+            {t('dentalChart.print')}
           </button>
           {hasUnsavedChanges && (
             <button 
@@ -142,7 +146,7 @@ const DentalChartPage = () => {
               className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
             >
               <Save className="mr-2 h-4 w-4" />
-              Save Changes
+              {t('dentalChart.saveChanges')}
             </button>
           )}
         </div>
@@ -153,7 +157,7 @@ const DentalChartPage = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg shadow-lg w-full max-w-md">
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold">Schedule Appointment</h2>
+              <h2 className="text-lg font-semibold">{t('dentalChart.schedule.title')}</h2>
               <button 
                 onClick={() => setShowScheduleModal(false)}
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -163,7 +167,7 @@ const DentalChartPage = () => {
             </div>
             <form onSubmit={handleScheduleAppointment} className="p-4 space-y-4">
               <div>
-                <label className="block text-sm font-medium mb-1">Date</label>
+                <label className="block text-sm font-medium mb-1">{t('dentalChart.schedule.date')}</label>
                 <input
                   type="date"
                   min={minDate}
@@ -174,28 +178,28 @@ const DentalChartPage = () => {
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Time</label>
+                <label className="block text-sm font-medium mb-1">{t('dentalChart.schedule.time')}</label>
                 <select
                   value={appointmentTime}
                   onChange={(e) => setAppointmentTime(e.target.value)}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   required
                 >
-                  <option value="">Select a time</option>
+                  <option value="">{t('dentalChart.schedule.selectTime')}</option>
                   {TIME_SLOTS.map((time) => (
                     <option key={time} value={time}>{time}</option>
                   ))}
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Doctor</label>
+                <label className="block text-sm font-medium mb-1">{t('dentalChart.schedule.doctor')}</label>
                 <select
                   value={selectedDoctor}
                   onChange={(e) => setSelectedDoctor(e.target.value)}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   required
                 >
-                  <option value="">Select a doctor</option>
+                  <option value="">{t('dentalChart.schedule.selectDoctor')}</option>
                   <option value="dr-morgan">Dr. Morgan</option>
                   <option value="dr-anderson">Dr. Anderson</option>
                 </select>
@@ -206,13 +210,13 @@ const DentalChartPage = () => {
                   onClick={() => setShowScheduleModal(false)}
                   className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 >
-                  Cancel
+                  {t('dentalChart.schedule.cancel')}
                 </button>
                 <button
                   type="submit"
                   className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
                 >
-                  Schedule Appointment
+                  {t('dentalChart.schedule.schedule')}
                 </button>
               </div>
             </form>
@@ -225,7 +229,7 @@ const DentalChartPage = () => {
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div className="bg-card rounded-lg shadow-lg w-full max-w-2xl">
             <div className="flex items-center justify-between p-4 border-b">
-              <h2 className="text-lg font-semibold">Create Treatment Plan</h2>
+              <h2 className="text-lg font-semibold">{t('dentalChart.treatmentPlanModal.title')}</h2>
               <button 
                 onClick={() => setShowTreatmentPlanModal(false)}
                 className="text-muted-foreground hover:text-foreground transition-colors"
@@ -237,17 +241,17 @@ const DentalChartPage = () => {
               {/* Add Treatment Form */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div>
-                  <label className="block text-sm font-medium mb-1">Tooth #</label>
+                  <label className="block text-sm font-medium mb-1">{t('dentalChart.treatmentPlanModal.toothNumber')}</label>
                   <input
                     type="text"
                     value={newTreatmentItem.toothNumber}
                     onChange={(e) => setNewTreatmentItem({...newTreatmentItem, toothNumber: e.target.value})}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-                    placeholder="e.g., 18"
+                    placeholder={t('dentalChart.treatmentPlanModal.toothPlaceholder')}
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Treatment</label>
+                  <label className="block text-sm font-medium mb-1">{t('dentalChart.treatmentPlanModal.treatment')}</label>
                   <select
                     value={newTreatmentItem.treatment}
                     onChange={(e) => handleTreatmentChange(e.target.value)}
@@ -255,13 +259,13 @@ const DentalChartPage = () => {
                   >
                     {TREATMENT_TYPES.map((treatment) => (
                       <option key={treatment.id} value={treatment.id}>
-                        {treatment.name}
+                        {getTreatmentName(treatment.id)}
                       </option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Cost ($)</label>
+                  <label className="block text-sm font-medium mb-1">{t('dentalChart.treatmentPlanModal.cost')}</label>
                   <input
                     type="number"
                     value={newTreatmentItem.cost}
@@ -270,26 +274,26 @@ const DentalChartPage = () => {
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium mb-1">Priority</label>
+                  <label className="block text-sm font-medium mb-1">{t('dentalChart.treatmentPlanModal.priority')}</label>
                   <select
                     value={newTreatmentItem.priority}
                     onChange={(e) => setNewTreatmentItem({...newTreatmentItem, priority: e.target.value as 'high' | 'medium' | 'low'})}
                     className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   >
-                    <option value="high">High</option>
-                    <option value="medium">Medium</option>
-                    <option value="low">Low</option>
+                    <option value="high">{t('dentalChart.treatmentPlanModal.priorities.high')}</option>
+                    <option value="medium">{t('dentalChart.treatmentPlanModal.priorities.medium')}</option>
+                    <option value="low">{t('dentalChart.treatmentPlanModal.priorities.low')}</option>
                   </select>
                 </div>
               </div>
               <div>
-                <label className="block text-sm font-medium mb-1">Notes</label>
+                <label className="block text-sm font-medium mb-1">{t('dentalChart.treatmentPlanModal.notes')}</label>
                 <textarea
                   value={newTreatmentItem.notes}
                   onChange={(e) => setNewTreatmentItem({...newTreatmentItem, notes: e.target.value})}
                   className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                   rows={2}
-                  placeholder="Add any additional notes..."
+                  placeholder={t('dentalChart.treatmentPlanModal.notesPlaceholder')}
                 />
               </div>
               <button
@@ -297,20 +301,20 @@ const DentalChartPage = () => {
                 className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
               >
                 <Plus className="mr-2 h-4 w-4" />
-                Add Treatment
+                {t('dentalChart.treatmentPlanModal.addTreatment')}
               </button>
 
               {/* Treatment List */}
               <div className="mt-6">
-                <h3 className="text-sm font-medium mb-2">Treatment Items</h3>
+                <h3 className="text-sm font-medium mb-2">{t('dentalChart.treatmentPlanModal.treatmentItems')}</h3>
                 <div className="border rounded-md divide-y">
                   {treatmentPlan.map((item) => (
                     <div key={item.id} className="p-3 flex items-center justify-between">
                       <div>
                         <div className="flex items-center gap-2">
-                          <span className="font-medium">Tooth #{item.toothNumber}</span>
+                          <span className="font-medium">#{item.toothNumber}</span>
                           <span className="text-muted-foreground">
-                            {TREATMENT_TYPES.find(t => t.id === item.treatment)?.name}
+                            {getTreatmentName(item.treatment)}
                           </span>
                           <span
                             className={`inline-flex rounded-full px-2 py-0.5 text-xs font-medium ${
@@ -321,7 +325,7 @@ const DentalChartPage = () => {
                                 : 'bg-success/10 text-success'
                             }`}
                           >
-                            {item.priority}
+                            {t(`dentalChart.treatmentPlanModal.priorities.${item.priority}`)}
                           </span>
                         </div>
                         {item.notes && (
@@ -341,7 +345,7 @@ const DentalChartPage = () => {
                   ))}
                   {treatmentPlan.length === 0 && (
                     <div className="p-4 text-center text-muted-foreground">
-                      No treatments added yet
+                      {t('dentalChart.treatmentPlanModal.noTreatments')}
                     </div>
                   )}
                 </div>
@@ -350,7 +354,7 @@ const DentalChartPage = () => {
               {/* Total Cost */}
               {treatmentPlan.length > 0 && (
                 <div className="flex items-center justify-between pt-4 border-t">
-                  <span className="font-medium">Total Cost</span>
+                  <span className="font-medium">{t('dentalChart.treatmentPlanModal.totalCost')}</span>
                   <span className="text-lg font-bold">${totalCost}</span>
                 </div>
               )}
@@ -361,14 +365,14 @@ const DentalChartPage = () => {
                   onClick={() => setShowTreatmentPlanModal(false)}
                   className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
                 <button
                   onClick={handleSaveTreatmentPlan}
                   disabled={treatmentPlan.length === 0}
                   className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Save Treatment Plan
+                  {t('dentalChart.treatmentPlanModal.save')}
                 </button>
               </div>
             </div>
@@ -383,7 +387,7 @@ const DentalChartPage = () => {
           {/* Treatment Types */}
           <div className="rounded-lg border bg-card">
             <div className="p-4 border-b">
-              <h2 className="font-semibold">Treatment Types</h2>
+              <h2 className="font-semibold">{t('dentalChart.treatmentTypes')}</h2>
             </div>
             <div className="p-4 space-y-2">
               {TREATMENT_TYPES.map((treatment) => (
@@ -400,7 +404,7 @@ const DentalChartPage = () => {
                     className="mr-2 h-3 w-3 rounded-full"
                     style={{ backgroundColor: treatment.color }}
                   />
-                  {treatment.name}
+                  {getTreatmentName(treatment.id)}
                 </button>
               ))}
             </div>
@@ -409,15 +413,15 @@ const DentalChartPage = () => {
           {/* Patient Info */}
           <div className="rounded-lg border bg-card">
             <div className="p-4 border-b">
-              <h2 className="font-semibold">Patient Information</h2>
+              <h2 className="font-semibold">{t('dentalChart.patientInformation')}</h2>
             </div>
             <div className="p-4">
               <div className="space-y-2">
-                <p className="text-sm text-muted-foreground">Last Updated</p>
+                <p className="text-sm text-muted-foreground">{t('dentalChart.lastUpdated')}</p>
                 <p className="text-sm">November 15, 2023</p>
               </div>
               <div className="mt-4 space-y-2">
-                <p className="text-sm text-muted-foreground">Next Appointment</p>
+                <p className="text-sm text-muted-foreground">{t('dentalChart.nextAppointment')}</p>
                 <p className="text-sm">December 15, 2023</p>
               </div>
               <div className="mt-4">
@@ -426,7 +430,7 @@ const DentalChartPage = () => {
                   className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium w-full hover:bg-muted transition-colors"
                 >
                   <Calendar className="mr-2 h-4 w-4" />
-                  Schedule Appointment
+                  {t('dentalChart.scheduleAppointment')}
                 </button>
               </div>
             </div>
@@ -435,7 +439,7 @@ const DentalChartPage = () => {
           {/* Treatment Plan */}
           <div className="rounded-lg border bg-card">
             <div className="p-4 border-b">
-              <h2 className="font-semibold">Treatment Plan</h2>
+              <h2 className="font-semibold">{t('dentalChart.treatmentPlan')}</h2>
             </div>
             <div className="p-4">
               <button 
@@ -443,7 +447,7 @@ const DentalChartPage = () => {
                 className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium w-full text-white hover:bg-primary-dark transition-colors"
               >
                 <FilePlus className="mr-2 h-4 w-4" />
-                Create Treatment Plan
+                {t('dentalChart.createTreatmentPlan')}
               </button>
             </div>
           </div>
