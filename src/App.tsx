@@ -19,6 +19,8 @@ const Settings = lazy(() => import('./pages/settings/SettingsPage'));
 const WebsiteBuilder = lazy(() => import('./pages/website-builder/WebsiteBuilderPage'));
 const Doctors = lazy(() => import('./pages/doctors/DoctorsPage'));
 const Membership = lazy(() => import('./pages/membership/MembershipPage'));
+const CallbackPage = lazy(() => import('./pages/auth/CallbackPage'));
+
 
 // Template routes
 const ModernClinicTemplate = lazy(() => import('./pages/templates/ModernClinicTemplate'));
