@@ -1,17 +1,23 @@
 import { useEffect } from 'react';
-import { useAuth0 } from '@auth0/auth0-react';
 import { useNavigate } from 'react-router-dom';
-import LoadingScreen from '../../components/ui/LoadingScreen';
+import { useAuth0 } from '@auth0/auth0-react';
 
-export default function CallbackPage() {
-  const { isLoading, isAuthenticated } = useAuth0();
+const CallbackPage = () => {
+  const { handleRedirectCallback } = useAuth0();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && isAuthenticated) {
-      navigate('/', { replace: true }); // or '/dashboard'
-    }
-  }, [isLoading, isAuthenticated, navigate]);
+    const processCallback = async () => {
+      const result = await handleRedirectCallback();
+      const returnTo = result.appState?.returnTo || '/';
+      navigate(returnTo, { replace: true });
+    };
 
-  return <LoadingScreen />;
-}
+    processCallback();
+  }, [handleRedirectCallback, navigate]);
+
+  return <div>Loading...</div>;
+};
+
+export default CallbackPage;
+
