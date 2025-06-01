@@ -51,6 +51,29 @@ export const translations: Translations = {
       thisQuarter: 'This Quarter',
       thisYear: 'This Year'
     },
+    doctors: {
+      title: 'Doctors',
+      subtitle: 'Manage doctors and staff information',
+      addDoctor: 'Add Doctor',
+      editDoctor: 'Edit Doctor',
+      search: 'Search doctors...',
+      noResults: 'No doctors found',
+      form: {
+        name: 'Doctor Name',
+        email: 'Email Address',
+        specialization: 'Specialization',
+        phone: 'Phone Number',
+        workingHours: 'Working Hours',
+        startTime: 'Start Time',
+        endTime: 'End Time',
+        daysOff: 'Days Off',
+        confirmDelete: 'Are you sure you want to delete this doctor?'
+      },
+      actions: {
+        save: 'Save Changes',
+        cancel: 'Cancel'
+      }
+    },
     dashboard: {
       title: 'Dashboard',
       todayAppointments: "Today's Appointments",
@@ -257,6 +280,29 @@ export const translations: Translations = {
       thisMonth: 'Este Mes',
       thisQuarter: 'Este Trimestre',
       thisYear: 'Este Año'
+    },
+    doctors: {
+      title: 'Doctores',
+      subtitle: 'Gestiona la información de doctores y personal',
+      addDoctor: 'Agregar Doctor',
+      editDoctor: 'Editar Doctor',
+      search: 'Buscar doctores...',
+      noResults: 'No se encontraron doctores',
+      form: {
+        name: 'Nombre del Doctor',
+        email: 'Correo Electrónico',
+        specialization: 'Especialización',
+        phone: 'Número de Teléfono',
+        workingHours: 'Horario de Trabajo',
+        startTime: 'Hora de Inicio',
+        endTime: 'Hora de Fin',
+        daysOff: 'Días Libres',
+        confirmDelete: '¿Estás seguro de que deseas eliminar este doctor?'
+      },
+      actions: {
+        save: 'Guardar Cambios',
+        cancel: 'Cancelar'
+      }
     },
     dashboard: {
       title: 'Panel de Control',
