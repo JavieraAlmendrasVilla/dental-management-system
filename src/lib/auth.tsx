@@ -1,24 +1,9 @@
-import { Auth0Provider, useAuth0 } from '@auth0/auth0-react';
-import { ReactNode, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Auth0Provider } from '@auth0/auth0-react';
+import { ReactNode } from 'react';
 
 interface AuthProviderProps {
   children: ReactNode;
 }
-
-// Callback component to handle redirect after login
-const AuthCallback = () => {
-  const navigate = useNavigate();
-  const { isAuthenticated } = useAuth0();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/');
-    }
-  }, [isAuthenticated, navigate]);
-
-  return null;
-};
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
@@ -45,7 +30,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       cacheLocation="localstorage"
     >
       {children}
-      <AuthCallback />
     </Auth0Provider>
   );
 }
