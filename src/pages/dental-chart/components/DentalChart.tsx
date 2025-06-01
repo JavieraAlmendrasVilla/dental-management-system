@@ -28,7 +28,7 @@ const TREATMENT_COLORS: Record<string, string> = {
   'filling': '#3b82f6',
   'crown': '#f59e0b',
   'extraction': '#ef4444',
-  'root-canal': '#8b5cf6',
+  'rootcanal': '#8b5cf6',
   'implant': '#10b981',
   'bridge': '#6366f1',
 };
