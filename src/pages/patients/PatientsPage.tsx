@@ -156,18 +156,21 @@ const PatientsPage = () => {
                       <Link
                         to={`/dental-chart/${patient.id}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
+                        title={t('patients.dentalChart')}
                       >
                         <Stethoscope className="h-4 w-4" />
                       </Link>
                       <Link
                         to={`/periodontogram/${patient.id}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
+                        title={t('patients.periodontogram')}
                       >
                         <Activity className="h-4 w-4" />
                       </Link>
                       <Link
                         to={`/patients/${patient.id}`}
                         className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-input bg-background hover:bg-muted"
+                        title={t('patients.records')}
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

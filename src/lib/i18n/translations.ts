@@ -62,7 +62,21 @@ export const translations: Translations = {
       treatments: 'Treatments',
       viewTreatments: 'View Treatments'
     },
-    // ... rest of the English translations
+    patients: {
+      title: 'Patients',
+      subtitle: 'Manage your patient records and information',
+      addNew: 'Add New Patient',
+      search: 'Search patients...',
+      contact: 'Contact Information',
+      dateOfBirth: 'Date of Birth',
+      lastVisit: 'Last Visit',
+      nextAppointment: 'Next Appointment',
+      noneScheduled: 'None Scheduled',
+      noResults: 'No patients found',
+      dentalChart: 'Dental Chart',
+      periodontogram: 'Periodontogram',
+      records: 'Patient Records'
+    }
   },
   es: {
     common: {
@@ -125,6 +139,20 @@ export const translations: Translations = {
       treatments: 'Tratamientos',
       viewTreatments: 'Ver Tratamientos'
     },
-    // ... rest of the Spanish translations
+    patients: {
+      title: 'Pacientes',
+      subtitle: 'Gestiona los registros e información de pacientes',
+      addNew: 'Agregar Nuevo Paciente',
+      search: 'Buscar pacientes...',
+      contact: 'Información de Contacto',
+      dateOfBirth: 'Fecha de Nacimiento',
+      lastVisit: 'Última Visita',
+      nextAppointment: 'Próxima Cita',
+      noneScheduled: 'Sin Citas Programadas',
+      noResults: 'No se encontraron pacientes',
+      dentalChart: 'Odontograma',
+      periodontogram: 'Periodontograma',
+      records: 'Registros del Paciente'
+    }
   }
 };
