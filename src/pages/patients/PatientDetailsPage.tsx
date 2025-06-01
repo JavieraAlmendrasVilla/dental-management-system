@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { Calendar, Clock, FileText, History, Mail, MapPin, Phone, Bluetooth as Tooth, User } from 'lucide-react';
+import { Calendar, Clock, FileText, History, Mail, MapPin, Phone, CalendarHeart as Tooth, User } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 
 // Mock patient data - would be fetched from an API in a real app
