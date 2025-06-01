@@ -6,17 +6,12 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  // Use mock authentication for development
-  if (import.meta.env.DEV) {
-    return <>{children}</>;
-  }
-
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;
 
   if (!domain || !clientId || !redirectUri) {
-    console.warn('Auth0 configuration is missing, using mock authentication');
+    console.warn('Auth0 configuration is missing');
     return <>{children}</>;
   }
 
@@ -26,6 +21,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
+        connection: 'google-oauth2'
       }}
       cacheLocation="localstorage"
     >

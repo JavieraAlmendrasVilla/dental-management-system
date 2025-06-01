@@ -1,8 +1,10 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import { Bluetooth as Tooth } from 'lucide-react';
+import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 const LoginPage = () => {
   const { loginWithRedirect } = useAuth0();
+  const { t } = useLanguage();
 
   const handleGoogleLogin = () => {
     loginWithRedirect({
@@ -64,9 +66,9 @@ const LoginPage = () => {
           </div>
           
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold">Welcome Back</h2>
+            <h2 className="text-2xl font-bold">{t('auth.welcome')}</h2>
             <p className="text-muted-foreground mt-2">
-              Sign in to access your account
+              {t('auth.signIn')}
             </p>
           </div>
           
@@ -79,7 +81,7 @@ const LoginPage = () => {
               alt="Google" 
               className="w-5 h-5 mr-3" 
             />
-            Continue with Google
+            {t('auth.continueWithGoogle')}
           </button>
           
           <div className="mt-6 text-center text-sm text-muted-foreground">

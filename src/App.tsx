@@ -25,15 +25,7 @@ const FamilyDentistryTemplate = lazy(() => import('./pages/templates/FamilyDenti
 const SpecialistPracticeTemplate = lazy(() => import('./pages/templates/SpecialistPracticeTemplate'));
 
 function App() {
-  // Use mock authentication for development
-  const mockAuth = {
-    isAuthenticated: true,
-    isLoading: false
-  };
-
-  // Comment out real Auth0 hook for development
-  // const { isAuthenticated, isLoading } = useAuth0();
-  const { isAuthenticated, isLoading } = mockAuth;
+  const { isAuthenticated, isLoading } = useAuth0();
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -44,7 +36,7 @@ function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login\" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     );
@@ -73,8 +65,8 @@ function App() {
         <Route path="/templates/family-dentistry" element={<FamilyDentistryTemplate />} />
         <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
 
-        <Route path="/login" element={<Navigate to="/\" replace />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
