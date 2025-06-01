@@ -51,6 +51,49 @@ export const translations: Translations = {
       thisQuarter: 'This Quarter',
       thisYear: 'This Year'
     },
+    settings: {
+      title: 'Settings',
+      subtitle: 'Manage your account settings and preferences',
+      account: {
+        title: 'Account Settings',
+        personalInfo: 'Personal Information',
+        passwordSecurity: 'Password & Security',
+        notifications: 'Notifications'
+      },
+      appearance: {
+        title: 'Appearance',
+        darkMode: 'Dark Mode',
+        colors: 'Colors',
+        typography: {
+          title: 'Typography',
+          baseFont: 'Base Font',
+          headingFont: 'Heading Font'
+        },
+        borderRadius: {
+          title: 'Border Radius',
+          none: 'None',
+          small: 'Small',
+          medium: 'Medium',
+          large: 'Large',
+          extraLarge: 'Extra Large'
+        }
+      },
+      membership: {
+        title: 'Membership',
+        subtitle: 'Manage your subscription and billing',
+        mostPopular: 'Most Popular',
+        perMonth: 'per month',
+        getStarted: 'Get Started',
+        allPlansInclude: 'All plans include updates and basic support',
+        freeTier: {
+          name: 'Free',
+          trial: '90-day free trial'
+        },
+        proTier: {
+          name: 'Pro'
+        }
+      }
+    },
     doctors: {
       title: 'Doctors',
       subtitle: 'Manage doctors and staff information',
@@ -281,6 +324,49 @@ export const translations: Translations = {
       thisQuarter: 'Este Trimestre',
       thisYear: 'Este Año'
     },
+    settings: {
+      title: 'Configuración',
+      subtitle: 'Administra la configuración y preferencias de tu cuenta',
+      account: {
+        title: 'Configuración de la Cuenta',
+        personalInfo: 'Información Personal',
+        passwordSecurity: 'Contraseña y Seguridad',
+        notifications: 'Notificaciones'
+      },
+      appearance: {
+        title: 'Apariencia',
+        darkMode: 'Modo Oscuro',
+        colors: 'Colores',
+        typography: {
+          title: 'Tipografía',
+          baseFont: 'Fuente Base',
+          headingFont: 'Fuente de Encabezados'
+        },
+        borderRadius: {
+          title: 'Radio de Borde',
+          none: 'Ninguno',
+          small: 'Pequeño',
+          medium: 'Mediano',
+          large: 'Grande',
+          extraLarge: 'Extra Grande'
+        }
+      },
+      membership: {
+        title: 'Membresía',
+        subtitle: 'Administra tu suscripción y facturación',
+        mostPopular: 'Más Popular',
+        perMonth: 'por mes',
+        getStarted: 'Comenzar',
+        allPlansInclude: 'Todos los planes incluyen actualizaciones y soporte básico',
+        freeTier: {
+          name: 'Gratuito',
+          trial: '90 días de prueba gratis'
+        },
+        proTier: {
+          name: 'Pro'
+        }
+      }
+    },
     doctors: {
       title: 'Doctores',
       subtitle: 'Gestiona la información de doctores y personal',
@@ -462,3 +548,5 @@ export const translations: Translations = {
     }
   }
 };
+
+export { translations }
