@@ -68,7 +68,7 @@ export const translations = {
         filling: 'Filling',
         crown: 'Crown',
         extraction: 'Extraction',
-        'root-canal': 'Root Canal',
+        rootcanal: 'Root Canal',
         implant: 'Implant',
         bridge: 'Bridge'
       },
@@ -128,7 +128,7 @@ export const translations = {
         filling: 'Empaste',
         crown: 'Corona',
         extraction: 'Extracción',
-        'root-canal': 'Endodoncia',
+        rootcanal: 'Endodoncia',
         implant: 'Implante',
         bridge: 'Puente'
       },
