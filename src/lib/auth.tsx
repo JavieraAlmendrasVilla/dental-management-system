@@ -8,7 +8,7 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
-  const redirectUri = window.location.origin + '/callback';
+  const redirectUri = `${window.location.origin}/callback`;
 
   // For development, use mock authentication if env vars are not set
   if (!domain || !clientId) {
@@ -22,9 +22,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
-        scope: 'openid profile email',
-        response_type: 'code',
-        response_mode: 'query'
+        connection: 'google-oauth2',
+        prompt: 'select_account',
+        scope: 'openid profile email'
       }}
       useRefreshTokens={true}
       cacheLocation="localstorage"
