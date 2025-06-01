@@ -128,6 +128,28 @@ export const translations: Translations = {
         description: 'Description',
         descriptionPlaceholder: 'Enter treatment details and notes'
       }
+    },
+    billing: {
+      title: 'Billing',
+      subtitle: 'Manage invoices and payments',
+      createInvoice: 'Create Invoice',
+      totalRevenue: 'Total Revenue',
+      pendingPayments: 'Pending Payments',
+      overduePayments: 'Overdue Payments',
+      averagePaymentTime: 'Average Payment Time',
+      revenueOverview: 'Revenue Overview',
+      treatmentDistribution: 'Treatment Distribution',
+      allTreatments: 'All Treatments',
+      completedTreatments: 'Completed Treatments',
+      canceledTreatments: 'Canceled Treatments',
+      rescheduledTreatments: 'Rescheduled Treatments',
+      exportReports: 'Export Reports',
+      statistics: {
+        totalRevenue: 'Total Revenue',
+        totalPatients: 'Total Patients',
+        treatments: 'Treatments',
+        averageVisits: 'Average Visits'
+      }
     }
   },
   es: {
@@ -256,6 +278,28 @@ export const translations: Translations = {
         cost: 'Costo ($)',
         description: 'Descripción',
         descriptionPlaceholder: 'Ingrese detalles y notas del tratamiento'
+      }
+    },
+    billing: {
+      title: 'Facturación',
+      subtitle: 'Gestiona facturas y pagos',
+      createInvoice: 'Crear Factura',
+      totalRevenue: 'Ingresos Totales',
+      pendingPayments: 'Pagos Pendientes',
+      overduePayments: 'Pagos Vencidos',
+      averagePaymentTime: 'Tiempo Promedio de Pago',
+      revenueOverview: 'Resumen de Ingresos',
+      treatmentDistribution: 'Distribución de Tratamientos',
+      allTreatments: 'Todos los Tratamientos',
+      completedTreatments: 'Tratamientos Completados',
+      canceledTreatments: 'Tratamientos Cancelados',
+      rescheduledTreatments: 'Tratamientos Reprogramados',
+      exportReports: 'Exportar Informes',
+      statistics: {
+        totalRevenue: 'Ingresos Totales',
+        totalPatients: 'Total de Pacientes',
+        treatments: 'Tratamientos',
+        averageVisits: 'Visitas Promedio'
       }
     }
   }
