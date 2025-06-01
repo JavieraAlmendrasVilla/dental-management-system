@@ -167,6 +167,45 @@ export const translations: Translations = {
         treatments: 'Treatments',
         averageVisits: 'Average Visits'
       }
+    },
+    websiteBuilder: {
+      title: 'Website Builder',
+      subtitle: 'Create and customize your dental practice website',
+      aiGenerator: 'AI Generator',
+      generateWebsite: 'Generate Website',
+      previewTemplate: 'Preview Template',
+      selectTemplate: 'Select a template to preview',
+      templates: {
+        'modern-clinic': {
+          name: 'Modern Clinic',
+          description: 'A clean, modern design perfect for contemporary dental practices'
+        },
+        'family-dentistry': {
+          name: 'Family Dentistry',
+          description: 'Warm and welcoming design ideal for family dental practices'
+        },
+        'specialist-practice': {
+          name: 'Specialist Practice',
+          description: 'Professional design for specialized dental services'
+        }
+      },
+      customTemplate: {
+        title: 'Custom Template',
+        description: 'Start from scratch and create your own unique design'
+      },
+      preview: {
+        title: 'Preview',
+        mobile: 'Mobile',
+        tablet: 'Tablet',
+        desktop: 'Desktop'
+      },
+      ai: {
+        title: 'AI Website Generator',
+        description: 'Describe your ideal website and let AI create it for you',
+        placeholder: 'Describe your dental practice and desired website features...',
+        generating: 'Generating...',
+        error: 'OpenAI API key is not configured. Please add it to your environment variables.'
+      }
     }
   },
   es: {
@@ -334,6 +373,45 @@ export const translations: Translations = {
         totalPatients: 'Total de Pacientes',
         treatments: 'Tratamientos',
         averageVisits: 'Visitas Promedio'
+      }
+    },
+    websiteBuilder: {
+      title: 'Constructor de Sitios Web',
+      subtitle: 'Crea y personaliza el sitio web de tu práctica dental',
+      aiGenerator: 'Generador IA',
+      generateWebsite: 'Generar Sitio Web',
+      previewTemplate: 'Vista Previa',
+      selectTemplate: 'Selecciona una plantilla para previsualizar',
+      templates: {
+        'modern-clinic': {
+          name: 'Clínica Moderna',
+          description: 'Un diseño limpio y moderno perfecto para clínicas dentales contemporáneas'
+        },
+        'family-dentistry': {
+          name: 'Dentista Familiar',
+          description: 'Diseño cálido y acogedor ideal para clínicas dentales familiares'
+        },
+        'specialist-practice': {
+          name: 'Práctica Especializada',
+          description: 'Diseño profesional para servicios dentales especializados'
+        }
+      },
+      customTemplate: {
+        title: 'Plantilla Personalizada',
+        description: 'Comienza desde cero y crea tu propio diseño único'
+      },
+      preview: {
+        title: 'Vista Previa',
+        mobile: 'Móvil',
+        tablet: 'Tableta',
+        desktop: 'Escritorio'
+      },
+      ai: {
+        title: 'Generador de Sitios Web IA',
+        description: 'Describe tu sitio web ideal y deja que la IA lo cree por ti',
+        placeholder: 'Describe tu práctica dental y las características deseadas del sitio web...',
+        generating: 'Generando...',
+        error: 'La clave API de OpenAI no está configurada. Por favor, agrégala a tus variables de entorno.'
       }
     }
   }
