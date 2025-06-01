@@ -3,7 +3,34 @@ import { Translations } from './types';
 export const translations: Translations = {
   en: {
     common: {
-      // ... existing common translations
+      loading: 'Loading...',
+      save: 'Save',
+      cancel: 'Cancel',
+      edit: 'Edit',
+      delete: 'Delete',
+      search: 'Search',
+      filter: 'Filter',
+      viewAll: 'View All',
+      today: 'Today',
+      upcoming: 'Upcoming',
+      completed: 'Completed',
+      registered: 'Registered',
+      completedToday: 'Completed Today',
+      available: 'Available',
+      notes: 'Notes',
+      actions: 'Actions',
+      name: 'Name',
+      email: 'Email',
+      phone: 'Phone',
+      schedule: 'Schedule',
+      status: {
+        completed: 'Completed',
+        inProgress: 'In Progress',
+        scheduled: 'Scheduled',
+        paid: 'Paid',
+        pending: 'Pending',
+        overdue: 'Overdue',
+      },
       layout: 'Layout',
       pageStructure: 'Page Structure',
       design: 'Design',
@@ -13,56 +40,60 @@ export const translations: Translations = {
       error: 'An error occurred',
       perMonth: 'per month',
       getStarted: 'Get Started',
-      allPlansInclude: 'All plans include updates and basic support'
-    },
-    settings: {
-      title: 'Settings',
-      subtitle: 'Manage your account settings and preferences',
-      account: {
-        title: 'Account Settings',
-        personalInfo: 'Personal Information',
-        passwordSecurity: 'Password & Security',
-        notifications: 'Notifications'
-      },
-      appearance: {
-        title: 'Appearance',
-        darkMode: 'Dark Mode',
-        colors: 'Colors',
-        typography: {
-          title: 'Typography',
-          baseFont: 'Base Font',
-          headingFont: 'Heading Font'
-        },
-        borderRadius: {
-          title: 'Border Radius',
-          none: 'None',
-          small: 'Small',
-          medium: 'Medium',
-          large: 'Large',
-          extraLarge: 'Extra Large'
-        }
-      }
-    },
-    membership: {
-      title: 'Membership',
-      subtitle: 'Manage your subscription and billing',
-      mostPopular: 'Most Popular',
-      perMonth: 'per month',
-      getStarted: 'Get Started',
       allPlansInclude: 'All plans include updates and basic support',
-      freeTier: {
-        name: 'Free',
-        trial: '90-day free trial'
-      },
-      proTier: {
-        name: 'Pro'
-      }
+      fromLastMonth: 'from last month',
+      newThisMonth: 'new this month',
+      outOf: 'out of',
+      total: 'total',
+      perPatient: 'per patient',
+      thisWeek: 'This Week',
+      thisMonth: 'This Month',
+      thisQuarter: 'This Quarter',
+      thisYear: 'This Year'
+    },
+    dashboard: {
+      title: 'Dashboard',
+      todayAppointments: "Today's Appointments",
+      viewSchedule: 'View Schedule',
+      totalPatients: 'Total Patients',
+      viewPatients: 'View Patients',
+      activeStaff: 'Active Staff',
+      viewStaff: 'View Staff',
+      treatments: 'Treatments',
+      viewTreatments: 'View Treatments'
     },
     // ... rest of the English translations
   },
   es: {
     common: {
-      // ... existing common translations
+      loading: 'Cargando...',
+      save: 'Guardar',
+      cancel: 'Cancelar',
+      edit: 'Editar',
+      delete: 'Eliminar',
+      search: 'Buscar',
+      filter: 'Filtrar',
+      viewAll: 'Ver Todo',
+      today: 'Hoy',
+      upcoming: 'Próximo',
+      completed: 'Completado',
+      registered: 'Registrado',
+      completedToday: 'Completado Hoy',
+      available: 'Disponible',
+      notes: 'Notas',
+      actions: 'Acciones',
+      name: 'Nombre',
+      email: 'Correo',
+      phone: 'Teléfono',
+      schedule: 'Horario',
+      status: {
+        completed: 'Completado',
+        inProgress: 'En Progreso',
+        scheduled: 'Programado',
+        paid: 'Pagado',
+        pending: 'Pendiente',
+        overdue: 'Vencido',
+      },
       layout: 'Diseño',
       pageStructure: 'Estructura de Página',
       design: 'Diseño',
@@ -72,50 +103,27 @@ export const translations: Translations = {
       error: 'Ocurrió un error',
       perMonth: 'por mes',
       getStarted: 'Comenzar',
-      allPlansInclude: 'Todos los planes incluyen actualizaciones y soporte básico'
-    },
-    settings: {
-      title: 'Configuración',
-      subtitle: 'Administra la configuración y preferencias de tu cuenta',
-      account: {
-        title: 'Configuración de la Cuenta',
-        personalInfo: 'Información Personal',
-        passwordSecurity: 'Contraseña y Seguridad',
-        notifications: 'Notificaciones'
-      },
-      appearance: {
-        title: 'Apariencia',
-        darkMode: 'Modo Oscuro',
-        colors: 'Colores',
-        typography: {
-          title: 'Tipografía',
-          baseFont: 'Fuente Base',
-          headingFont: 'Fuente de Encabezados'
-        },
-        borderRadius: {
-          title: 'Radio de Borde',
-          none: 'Ninguno',
-          small: 'Pequeño',
-          medium: 'Mediano',
-          large: 'Grande',
-          extraLarge: 'Extra Grande'
-        }
-      }
-    },
-    membership: {
-      title: 'Membresía',
-      subtitle: 'Administra tu suscripción y facturación',
-      mostPopular: 'Más Popular',
-      perMonth: 'por mes',
-      getStarted: 'Comenzar',
       allPlansInclude: 'Todos los planes incluyen actualizaciones y soporte básico',
-      freeTier: {
-        name: 'Gratuito',
-        trial: '90 días de prueba gratis'
-      },
-      proTier: {
-        name: 'Pro'
-      }
+      fromLastMonth: 'desde el mes pasado',
+      newThisMonth: 'nuevos este mes',
+      outOf: 'de',
+      total: 'total',
+      perPatient: 'por paciente',
+      thisWeek: 'Esta Semana',
+      thisMonth: 'Este Mes',
+      thisQuarter: 'Este Trimestre',
+      thisYear: 'Este Año'
+    },
+    dashboard: {
+      title: 'Panel de Control',
+      todayAppointments: 'Citas de Hoy',
+      viewSchedule: 'Ver Agenda',
+      totalPatients: 'Total de Pacientes',
+      viewPatients: 'Ver Pacientes',
+      activeStaff: 'Personal Activo',
+      viewStaff: 'Ver Personal',
+      treatments: 'Tratamientos',
+      viewTreatments: 'Ver Tratamientos'
     },
     // ... rest of the Spanish translations
   }
