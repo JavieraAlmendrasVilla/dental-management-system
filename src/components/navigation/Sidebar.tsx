@@ -36,15 +36,15 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
   const { t } = useLanguage();
 
   const navItems = [
-    { to: '/', icon: <Home className="h-5 w-5" />, label: t('navigation.dashboard') },
-    { to: '/patients', icon: <Users className="h-5 w-5" />, label: t('navigation.patients') },
-    { to: '/appointments', icon: <Calendar className="h-5 w-5" />, label: t('navigation.appointments') },
-    { to: '/treatments', icon: <Tooth className="h-5 w-5" />, label: t('navigation.treatments') },
-    { to: '/billing', icon: <CreditCard className="h-5 w-5" />, label: t('navigation.billing') },
-    { to: '/reports', icon: <PieChart className="h-5 w-5" />, label: t('navigation.reports') },
-    { to: '/website-builder', icon: <Globe className="h-5 w-5" />, label: t('navigation.websiteBuilder') },
-    { to: '/doctors', icon: <UserCog className="h-5 w-5" />, label: 'Doctors' },
-    { to: '/settings', icon: <Settings className="h-5 w-5" />, label: t('navigation.settings') },
+    { to: '/', icon: <Home className="h-5 w-5" />, label: t('dashboard.title') },
+    { to: '/patients', icon: <Users className="h-5 w-5" />, label: t('patients.title') },
+    { to: '/appointments', icon: <Calendar className="h-5 w-5" />, label: t('appointments.title') },
+    { to: '/treatments', icon: <Tooth className="h-5 w-5" />, label: t('treatments.title') },
+    { to: '/billing', icon: <CreditCard className="h-5 w-5" />, label: t('billing.title') },
+    { to: '/reports', icon: <PieChart className="h-5 w-5" />, label: t('reports.title') },
+    { to: '/website-builder', icon: <Globe className="h-5 w-5" />, label: t('websiteBuilder.title') },
+    { to: '/doctors', icon: <UserCog className="h-5 w-5" />, label: t('doctors.title') },
+    { to: '/settings', icon: <Settings className="h-5 w-5" />, label: t('settings.title') },
   ];
 
   return (
