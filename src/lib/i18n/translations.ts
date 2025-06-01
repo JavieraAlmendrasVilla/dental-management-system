@@ -547,6 +547,4 @@ export const translations: Translations = {
       }
     }
   }
-};
-
-export { translations }
+}
