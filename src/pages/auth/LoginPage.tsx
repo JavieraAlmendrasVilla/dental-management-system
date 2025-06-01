@@ -1,5 +1,5 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { calendar-heart as Tooth } from 'lucide-react';
+import { Calendar-heart as Tooth } from 'lucide-react';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 const LoginPage = () => {
