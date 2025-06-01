@@ -150,6 +150,23 @@ export const translations: Translations = {
         treatments: 'Treatments',
         averageVisits: 'Average Visits'
       }
+    },
+    reports: {
+      title: 'Reports',
+      subtitle: 'View and analyze practice performance',
+      exportReports: 'Export Reports',
+      revenueOverview: 'Revenue Overview',
+      treatmentDistribution: 'Treatment Distribution',
+      allTreatments: 'All Treatments',
+      completedTreatments: 'Completed Treatments',
+      canceledTreatments: 'Canceled Treatments',
+      rescheduledTreatments: 'Rescheduled Treatments',
+      statistics: {
+        totalRevenue: 'Total Revenue',
+        totalPatients: 'Total Patients',
+        treatments: 'Treatments',
+        averageVisits: 'Average Visits'
+      }
     }
   },
   es: {
@@ -295,6 +312,23 @@ export const translations: Translations = {
       canceledTreatments: 'Tratamientos Cancelados',
       rescheduledTreatments: 'Tratamientos Reprogramados',
       exportReports: 'Exportar Informes',
+      statistics: {
+        totalRevenue: 'Ingresos Totales',
+        totalPatients: 'Total de Pacientes',
+        treatments: 'Tratamientos',
+        averageVisits: 'Visitas Promedio'
+      }
+    },
+    reports: {
+      title: 'Informes',
+      subtitle: 'Ver y analizar el rendimiento de la práctica',
+      exportReports: 'Exportar Informes',
+      revenueOverview: 'Resumen de Ingresos',
+      treatmentDistribution: 'Distribución de Tratamientos',
+      allTreatments: 'Todos los Tratamientos',
+      completedTreatments: 'Tratamientos Completados',
+      canceledTreatments: 'Tratamientos Cancelados',
+      rescheduledTreatments: 'Tratamientos Reprogramados',
       statistics: {
         totalRevenue: 'Ingresos Totales',
         totalPatients: 'Total de Pacientes',
