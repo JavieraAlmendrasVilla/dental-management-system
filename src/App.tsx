@@ -34,46 +34,48 @@ function App() {
     return <LoadingScreen />;
   }
 
-  if (!isAuthenticated) {
-    return (
-      <Suspense fallback={<LoadingScreen />}>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login\" replace />} />
-        </Routes>
-      </Suspense>
-    );
-  }
-
   return (
     <Suspense fallback={<LoadingScreen />}>
       <Routes>
-        <Route path="/" element={<DashboardLayout />}>
-          <Route index element={<Dashboard />} />
-          <Route path="patients" element={<Patients />} />
-          <Route path="patients/:id" element={<PatientDetails />} />
-          <Route path="periodontogram/:patientId" element={<Periodontogram />} />
-          <Route path="appointments" element={<Appointments />} />
-          <Route path="dental-chart/:patientId" element={<DentalChart />} />
-          <Route path="treatments" element={<Treatments />} />
-          <Route path="billing" element={<Billing />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="website-builder" element={<WebsiteBuilder />} />
-          <Route path="doctors" element={<Doctors />} />
-          <Route path="membership" element={<Membership />} />
-        </Route>
+        {/* Auth0 Callback Route - always accessible */}
+        <Route path="/callback" element={<CallbackPage />} />
 
-        {/* Template Routes */}
-        <Route path="/templates/modern-clinic" element={<ModernClinicTemplate />} />
-        <Route path="/templates/family-dentistry" element={<FamilyDentistryTemplate />} />
-        <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
+        {!isAuthenticated ? (
+          <>
+            <Route path="/login" element={<Login />} />
+            <Route path="*" element={<Navigate to="/login" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path="/" element={<DashboardLayout />}>
+              <Route index element={<Dashboard />} />
+              <Route path="patients" element={<Patients />} />
+              <Route path="patients/:id" element={<PatientDetails />} />
+              <Route path="periodontogram/:patientId" element={<Periodontogram />} />
+              <Route path="appointments" element={<Appointments />} />
+              <Route path="dental-chart/:patientId" element={<DentalChart />} />
+              <Route path="treatments" element={<Treatments />} />
+              <Route path="billing" element={<Billing />} />
+              <Route path="reports" element={<Reports />} />
+              <Route path="settings" element={<Settings />} />
+              <Route path="website-builder" element={<WebsiteBuilder />} />
+              <Route path="doctors" element={<Doctors />} />
+              <Route path="membership" element={<Membership />} />
+            </Route>
 
-        <Route path="/login" element={<Navigate to="/\" replace />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+            {/* Template Routes */}
+            <Route path="/templates/modern-clinic" element={<ModernClinicTemplate />} />
+            <Route path="/templates/family-dentistry" element={<FamilyDentistryTemplate />} />
+            <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
+
+            {/* Redirect unknown routes to root */}
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        )}
       </Routes>
     </Suspense>
   );
 }
+
 
 export default App;
