@@ -6,6 +6,12 @@ interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  // Use mock authentication for development
+  if (import.meta.env.DEV) {
+    console.warn('Using mock authentication for development');
+    return <>{children}</>;
+  }
+
   const domain = import.meta.env.VITE_AUTH0_DOMAIN;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
   const redirectUri = import.meta.env.VITE_AUTH0_CALLBACK_URL;

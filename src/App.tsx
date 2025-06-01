@@ -36,7 +36,7 @@ function App() {
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           <Route path="/login" element={<Login />} />
-          <Route path="*" element={<Navigate to="/login\" replace />} />
+          <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </Suspense>
     );
@@ -65,8 +65,8 @@ function App() {
         <Route path="/templates/family-dentistry" element={<FamilyDentistryTemplate />} />
         <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
 
-        <Route path="/login" element={<Navigate to="/\" replace />} />
-        <Route path="*" element={<Navigate to="/\" replace />} />
+        <Route path="/login" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Suspense>
   );
