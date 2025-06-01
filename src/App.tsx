@@ -18,9 +18,7 @@ const Login = lazy(() => import('./pages/auth/LoginPage'));
 const Settings = lazy(() => import('./pages/settings/SettingsPage'));
 const WebsiteBuilder = lazy(() => import('./pages/website-builder/WebsiteBuilderPage'));
 const Doctors = lazy(() => import('./pages/doctors/DoctorsPage'));
-const Membership = lazy(() => import('./pages/membership/MembershipPage'));
 const CallbackPage = lazy(() => import('./pages/auth/CallbackPage'));
-
 
 // Template routes
 const ModernClinicTemplate = lazy(() => import('./pages/templates/ModernClinicTemplate'));
@@ -60,7 +58,6 @@ function App() {
               <Route path="settings" element={<Settings />} />
               <Route path="website-builder" element={<WebsiteBuilder />} />
               <Route path="doctors" element={<Doctors />} />
-              <Route path="membership" element={<Membership />} />
             </Route>
 
             {/* Template Routes */}
@@ -76,6 +73,5 @@ function App() {
     </Suspense>
   );
 }
-
 
 export default App;
