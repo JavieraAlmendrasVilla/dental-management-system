@@ -51,6 +51,60 @@ export const translations: Translations = {
       thisQuarter: 'This Quarter',
       thisYear: 'This Year'
     },
+    dentalChart: {
+      title: 'Dental Chart',
+      patient: 'Patient',
+      patientId: 'ID',
+      treatmentTypes: 'Treatment Types',
+      patientInformation: 'Patient Information',
+      lastUpdated: 'Last Updated',
+      nextAppointment: 'Next Appointment',
+      scheduleAppointment: 'Schedule Appointment',
+      treatmentPlan: 'Treatment Plan',
+      createTreatmentPlan: 'Create Treatment Plan',
+      history: 'History',
+      print: 'Print',
+      saveChanges: 'Save Changes',
+      treatments: {
+        caries: 'Caries',
+        filling: 'Filling',
+        crown: 'Crown',
+        extraction: 'Extraction',
+        rootCanal: 'Root Canal',
+        implant: 'Implant',
+        bridge: 'Bridge'
+      },
+      schedule: {
+        title: 'Schedule Appointment',
+        date: 'Date',
+        time: 'Time',
+        selectTime: 'Select a time',
+        doctor: 'Doctor',
+        selectDoctor: 'Select a doctor',
+        cancel: 'Cancel',
+        schedule: 'Schedule'
+      },
+      treatmentPlanModal: {
+        title: 'Create Treatment Plan',
+        toothNumber: 'Tooth #',
+        toothPlaceholder: 'e.g., 18',
+        treatment: 'Treatment',
+        cost: 'Cost ($)',
+        priority: 'Priority',
+        notes: 'Notes',
+        notesPlaceholder: 'Add any additional notes...',
+        addTreatment: 'Add Treatment',
+        treatmentItems: 'Treatment Items',
+        noTreatments: 'No treatments added yet',
+        totalCost: 'Total Cost',
+        save: 'Save Treatment Plan',
+        priorities: {
+          high: 'High',
+          medium: 'Medium',
+          low: 'Low'
+        }
+      }
+    },
     settings: {
       title: 'Settings',
       subtitle: 'Manage your account settings and preferences',
@@ -324,6 +378,60 @@ export const translations: Translations = {
       thisQuarter: 'Este Trimestre',
       thisYear: 'Este Año'
     },
+    dentalChart: {
+      title: 'Odontograma',
+      patient: 'Paciente',
+      patientId: 'ID',
+      treatmentTypes: 'Tipos de Tratamiento',
+      patientInformation: 'Información del Paciente',
+      lastUpdated: 'Última Actualización',
+      nextAppointment: 'Próxima Cita',
+      scheduleAppointment: 'Programar Cita',
+      treatmentPlan: 'Plan de Tratamiento',
+      createTreatmentPlan: 'Crear Plan de Tratamiento',
+      history: 'Historial',
+      print: 'Imprimir',
+      saveChanges: 'Guardar Cambios',
+      treatments: {
+        caries: 'Caries',
+        filling: 'Empaste',
+        crown: 'Corona',
+        extraction: 'Extracción',
+        rootCanal: 'Endodoncia',
+        implant: 'Implante',
+        bridge: 'Puente'
+      },
+      schedule: {
+        title: 'Programar Cita',
+        date: 'Fecha',
+        time: 'Hora',
+        selectTime: 'Seleccionar hora',
+        doctor: 'Doctor',
+        selectDoctor: 'Seleccionar doctor',
+        cancel: 'Cancelar',
+        schedule: 'Programar'
+      },
+      treatmentPlanModal: {
+        title: 'Crear Plan de Tratamiento',
+        toothNumber: 'Diente #',
+        toothPlaceholder: 'ej., 18',
+        treatment: 'Tratamiento',
+        cost: 'Costo ($)',
+        priority: 'Prioridad',
+        notes: 'Notas',
+        notesPlaceholder: 'Agregar notas adicionales...',
+        addTreatment: 'Agregar Tratamiento',
+        treatmentItems: 'Tratamientos',
+        noTreatments: 'No hay tratamientos agregados',
+        totalCost: 'Costo Total',
+        save: 'Guardar Plan de Tratamiento',
+        priorities: {
+          high: 'Alta',
+          medium: 'Media',
+          low: 'Baja'
+        }
+      }
+    },
     settings: {
       title: 'Configuración',
       subtitle: 'Administra la configuración y preferencias de tu cuenta',
@@ -547,4 +655,4 @@ export const translations: Translations = {
       }
     }
   }
-}
+};
