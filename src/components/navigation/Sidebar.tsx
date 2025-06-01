@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Calendar, CreditCard, FileText, Globe, Home, PieChart, Settings, CalendarHeart as Tooth, Users, UserCog, CreditCard as Membership } from 'lucide-react';
+import { Calendar, CreditCard, FileText, Globe, Home, PieChart, Settings, CalendarHeart as Tooth, Users, UserCog } from 'lucide-react';
 import { cn } from '../../lib/utils';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
@@ -44,7 +44,6 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
     { to: '/reports', icon: <PieChart className="h-5 w-5" />, label: t('reports.title') },
     { to: '/website-builder', icon: <Globe className="h-5 w-5" />, label: t('websiteBuilder.title') },
     { to: '/doctors', icon: <UserCog className="h-5 w-5" />, label: t('doctors.title') },
-    { to: '/membership', icon: <Membership className="h-5 w-5" />, label: t('membership.title') },
     { to: '/settings', icon: <Settings className="h-5 w-5" />, label: t('settings.title') },
   ];
 
