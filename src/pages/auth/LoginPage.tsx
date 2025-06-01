@@ -21,7 +21,7 @@ const LoginPage = () => {
         <div className="max-w-md text-white">
           <div className="flex items-center mb-8">
             <Tooth className="h-12 w-12 mr-4" />
-            <h1 className="text-3xl font-bold">DentaSync</h1>
+            <h1 className="text-3xl font-bold">InnoDent</h1>
           </div>
           <h2 className="text-2xl font-bold mb-6">Welcome to the future of dental practice management</h2>
           <p className="mb-6 text-primary-light">
@@ -62,13 +62,13 @@ const LoginPage = () => {
         <div className="w-full max-w-md">
           <div className="sm:hidden flex items-center justify-center mb-8">
             <Tooth className="h-8 w-8 text-primary mr-2" />
-            <h1 className="text-2xl font-bold">DentaSync</h1>
+            <h1 className="text-2xl font-bold">InnoDent</h1>
           </div>
           
           <div className="text-center mb-8">
-            <h2 className="text-2xl font-bold">{t('auth.welcome')}</h2>
+            <h2 className="text-2xl font-bold">Welcome to InnoDent</h2>
             <p className="text-muted-foreground mt-2">
-              {t('auth.signIn')}
+              Sign in to continue to your account
             </p>
           </div>
           
@@ -81,7 +81,7 @@ const LoginPage = () => {
               alt="Google" 
               className="w-5 h-5 mr-3" 
             />
-            {t('auth.continueWithGoogle')}
+            Continue with Google
           </button>
           
           <div className="mt-6 text-center text-sm text-muted-foreground">
