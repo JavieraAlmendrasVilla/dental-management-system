@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bluetooth as Tooth } from 'lucide-react';
+import { CalendarHeart as Tooth } from 'lucide-react';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 const LoadingScreen: React.FC = () => {
