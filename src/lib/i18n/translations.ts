@@ -76,6 +76,35 @@ export const translations: Translations = {
       dentalChart: 'Dental Chart',
       periodontogram: 'Periodontogram',
       records: 'Patient Records'
+    },
+    appointments: {
+      title: 'Appointments',
+      subtitle: 'Manage and schedule patient appointments',
+      newAppointment: 'New Appointment',
+      search: 'Search appointments...',
+      available: 'Available',
+      noAppointments: 'No appointments found',
+      view: {
+        day: 'Day',
+        week: 'Week',
+        list: 'List'
+      },
+      form: {
+        patientName: 'Patient Name',
+        patientId: 'Patient ID',
+        date: 'Date',
+        time: 'Time',
+        duration: 'Duration (minutes)',
+        type: 'Type',
+        dentist: 'Dentist',
+        notes: 'Notes',
+        notesPlaceholder: 'Add any additional notes or instructions',
+        createAppointment: 'Create Appointment'
+      },
+      status: {
+        completed: 'Completed',
+        scheduled: 'Scheduled'
+      }
     }
   },
   es: {
@@ -153,6 +182,35 @@ export const translations: Translations = {
       dentalChart: 'Odontograma',
       periodontogram: 'Periodontograma',
       records: 'Registros del Paciente'
+    },
+    appointments: {
+      title: 'Citas',
+      subtitle: 'Gestiona y programa citas de pacientes',
+      newAppointment: 'Nueva Cita',
+      search: 'Buscar citas...',
+      available: 'Disponible',
+      noAppointments: 'No se encontraron citas',
+      view: {
+        day: 'Día',
+        week: 'Semana',
+        list: 'Lista'
+      },
+      form: {
+        patientName: 'Nombre del Paciente',
+        patientId: 'ID del Paciente',
+        date: 'Fecha',
+        time: 'Hora',
+        duration: 'Duración (minutos)',
+        type: 'Tipo',
+        dentist: 'Dentista',
+        notes: 'Notas',
+        notesPlaceholder: 'Agregar notas o instrucciones adicionales',
+        createAppointment: 'Crear Cita'
+      },
+      status: {
+        completed: 'Completada',
+        scheduled: 'Programada'
+      }
     }
   }
 };
