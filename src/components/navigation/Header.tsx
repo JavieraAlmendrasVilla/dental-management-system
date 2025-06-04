@@ -18,7 +18,7 @@ const Header = ({ onMenuClick }: HeaderProps) => {
   const handleLogout = () => {
     logout({ 
       logoutParams: {
-        returnTo: `${window.location.origin}/login`
+        returnTo: window.location.origin
       }
     });
   };
