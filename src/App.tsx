@@ -47,7 +47,7 @@ function App() {
         <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
 
         {/* Redirect unknown routes to root */}
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/\" replace />} />
       </Routes>
     </Suspense>
   );
