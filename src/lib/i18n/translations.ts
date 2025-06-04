@@ -223,6 +223,71 @@ export const translations = {
         generating: 'Generating...',
         error: 'OpenAI API key is not configured. Please add it to your environment variables.'
       }
+    },
+    billing: {
+      title: 'Billing',
+      subtitle: 'Manage invoices and payments',
+      createInvoice: 'Create Invoice',
+      totalRevenue: 'Total Revenue',
+      pendingPayments: 'Pending Payments',
+      overduePayments: 'Overdue Payments',
+      averagePaymentTime: 'Average Payment Time',
+      search: 'Search invoices...',
+      noResults: 'No invoices found'
+    },
+    dentalChart: {
+      title: 'Dental Chart',
+      patient: 'Patient',
+      patientId: 'ID',
+      treatmentTypes: 'Treatment Types',
+      patientInformation: 'Patient Information',
+      lastUpdated: 'Last Updated',
+      nextAppointment: 'Next Appointment',
+      scheduleAppointment: 'Schedule Appointment',
+      treatmentPlan: 'Treatment Plan',
+      createTreatmentPlan: 'Create Treatment Plan',
+      history: 'History',
+      print: 'Print',
+      saveChanges: 'Save Changes',
+      treatments: {
+        caries: 'Caries',
+        filling: 'Filling',
+        crown: 'Crown',
+        extraction: 'Extraction',
+        rootcanal: 'Root Canal',
+        implant: 'Implant',
+        bridge: 'Bridge'
+      },
+      schedule: {
+        title: 'Schedule Appointment',
+        date: 'Date',
+        time: 'Time',
+        selectTime: 'Select a time',
+        doctor: 'Doctor',
+        selectDoctor: 'Select a doctor',
+        cancel: 'Cancel',
+        schedule: 'Schedule'
+      },
+      treatmentPlanModal: {
+        title: 'Create Treatment Plan',
+        toothNumber: 'Tooth #',
+        toothPlaceholder: 'e.g., 18',
+        treatment: 'Treatment',
+        cost: 'Cost ($)',
+        priority: 'Priority',
+        notes: 'Notes',
+        notesPlaceholder: 'Add any additional notes...',
+        addTreatment: 'Add Treatment',
+        treatmentItems: 'Treatment Items',
+        noTreatments: 'No treatments added yet',
+        totalCost: 'Total Cost',
+        save: 'Save Treatment Plan',
+        priorities: {
+          high: 'High',
+          medium: 'Medium',
+          low: 'Low'
+        }
+      }
     }
   },
   es: {
@@ -448,6 +513,71 @@ export const translations = {
         placeholder: 'Describe tu práctica dental y las características deseadas del sitio web...',
         generating: 'Generando...',
         error: 'La clave API de OpenAI no está configurada. Por favor, agrégala a tus variables de entorno.'
+      }
+    },
+    billing: {
+      title: 'Facturación',
+      subtitle: 'Gestionar facturas y pagos',
+      createInvoice: 'Crear Factura',
+      totalRevenue: 'Ingresos Totales',
+      pendingPayments: 'Pagos Pendientes',
+      overduePayments: 'Pagos Vencidos',
+      averagePaymentTime: 'Tiempo Promedio de Pago',
+      search: 'Buscar facturas...',
+      noResults: 'No se encontraron facturas'
+    },
+    dentalChart: {
+      title: 'Odontograma',
+      patient: 'Paciente',
+      patientId: 'ID',
+      treatmentTypes: 'Tipos de Tratamiento',
+      patientInformation: 'Información del Paciente',
+      lastUpdated: 'Última Actualización',
+      nextAppointment: 'Próxima Cita',
+      scheduleAppointment: 'Programar Cita',
+      treatmentPlan: 'Plan de Tratamiento',
+      createTreatmentPlan: 'Crear Plan de Tratamiento',
+      history: 'Historial',
+      print: 'Imprimir',
+      saveChanges: 'Guardar Cambios',
+      treatments: {
+        caries: 'Caries',
+        filling: 'Empaste',
+        crown: 'Corona',
+        extraction: 'Extracción',
+        rootcanal: 'Endodoncia',
+        implant: 'Implante',
+        bridge: 'Puente'
+      },
+      schedule: {
+        title: 'Programar Cita',
+        date: 'Fecha',
+        time: 'Hora',
+        selectTime: 'Seleccionar hora',
+        doctor: 'Doctor',
+        selectDoctor: 'Seleccionar doctor',
+        cancel: 'Cancelar',
+        schedule: 'Programar'
+      },
+      treatmentPlanModal: {
+        title: 'Crear Plan de Tratamiento',
+        toothNumber: 'Diente #',
+        toothPlaceholder: 'ej., 18',
+        treatment: 'Tratamiento',
+        cost: 'Costo ($)',
+        priority: 'Prioridad',
+        notes: 'Notas',
+        notesPlaceholder: 'Agregar notas adicionales...',
+        addTreatment: 'Agregar Tratamiento',
+        treatmentItems: 'Tratamientos',
+        noTreatments: 'No hay tratamientos agregados',
+        totalCost: 'Costo Total',
+        save: 'Guardar Plan de Tratamiento',
+        priorities: {
+          high: 'Alta',
+          medium: 'Media',
+          low: 'Baja'
+        }
       }
     }
   }
