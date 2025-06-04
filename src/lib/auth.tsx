@@ -10,7 +10,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID;
   const redirectUri = `${window.location.origin}/callback`;
 
-  // For development, use mock authentication if env vars are not set
   if (!domain || !clientId) {
     console.warn('Auth0 configuration is missing. Please check your environment variables.');
     return <>{children}</>;
@@ -22,8 +21,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
       clientId={clientId}
       authorizationParams={{
         redirect_uri: redirectUri,
-        connection: 'google-oauth2',
-        prompt: 'select_account',
         scope: 'openid profile email'
       }}
       useRefreshTokens={true}

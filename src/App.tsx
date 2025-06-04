@@ -37,12 +37,10 @@ function App() {
       <Routes>
         {/* Auth0 Callback Route - always accessible */}
         <Route path="/callback" element={<CallbackPage />} />
+        <Route path="/login" element={<Login />} />
 
         {!isAuthenticated ? (
-          <>
-            <Route path="/login\" element={<Login />} />
-            <Route path="*" element={<Navigate to="/login\" replace />} />
-          </>
+          <Route path="*" element={<Navigate to="/login" replace />} />
         ) : (
           <>
             <Route path="/" element={<DashboardLayout />}>
@@ -66,7 +64,7 @@ function App() {
             <Route path="/templates/specialist-practice" element={<SpecialistPracticeTemplate />} />
 
             {/* Redirect unknown routes to root */}
-            <Route path="*" element={<Navigate to="/\" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </>
         )}
       </Routes>
