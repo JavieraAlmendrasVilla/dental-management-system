@@ -1,10 +1,9 @@
-import { Bell, LogOut, Moon, Search, Sun } from 'lucide-react';
+import { Bell, Moon, Search, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { LanguageSelector } from './LanguageSelector';
 import { DoctorSelector } from './DoctorSelector';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 import { useTheme } from '../../lib/theme/ThemeContext';
-import { useAuth0 } from '@auth0/auth0-react';
 
 interface HeaderProps {
   onMenuClick: () => void;
@@ -13,15 +12,6 @@ interface HeaderProps {
 const Header = ({ onMenuClick }: HeaderProps) => {
   const { t } = useLanguage();
   const { darkMode, toggleDarkMode } = useTheme();
-  const { logout } = useAuth0();
-
-  const handleLogout = () => {
-    logout({ 
-      logoutParams: {
-        returnTo: window.location.origin
-      }
-    });
-  };
 
   return (
     <header className="bg-card border-b border-border sticky top-0 z-30">
@@ -75,14 +65,6 @@ const Header = ({ onMenuClick }: HeaderProps) => {
           <LanguageSelector />
           
           <DoctorSelector />
-
-          <button
-            onClick={handleLogout}
-            className="rounded-full p-1.5 text-muted-foreground hover:bg-muted"
-            title="Logout"
-          >
-            <LogOut className="h-5 w-5" />
-          </button>
         </div>
       </div>
     </header>
