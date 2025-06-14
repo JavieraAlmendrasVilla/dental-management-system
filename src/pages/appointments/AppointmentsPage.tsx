@@ -122,16 +122,26 @@ const AppointmentsPage = () => {
     dentist: DENTISTS[0].id,
     notes: '',
   });
-  
+
+const [appointments, setAppointments] = useState<Appointment[]>([]);
+
+useEffect(() => {
+  fetch('http://localhost:8000/appointments')
+    .then(res => res.json())
+    .then(data => setAppointments(data))
+    .catch(err => console.error(err));
+}, []);
+
   // Filter appointments based on the selected date and search term
-  const filteredAppointments = APPOINTMENTS.filter((appointment) => {
-    const matchesDate = appointment.date === formatDate(selectedDate).replace(/,/g, '');
-    const matchesSearch = 
-      appointment.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      appointment.type.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchesDate && (searchTerm === '' || matchesSearch);
-  });
+  const filteredAppointments = appointments.filter((appointment) => {
+  const matchesDate = appointment.date === formatDate(selectedDate).replace(/,/g, '');
+  const matchesSearch =
+    appointment.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    appointment.type.toLowerCase().includes(searchTerm.toLowerCase());
+
+  return matchesDate && (searchTerm === '' || matchesSearch);
+});
+
 
   // Navigate to previous day
   const prevDay = () => {
@@ -152,32 +162,43 @@ const AppointmentsPage = () => {
     setSelectedDate(new Date());
   };
 
-  const handleCreateAppointment = (e: React.FormEvent) => {
-    e.preventDefault();
-    // In a real app, this would make an API call to create the appointment
-    console.log('Creating appointment:', newAppointment);
-    
-    // Add the new appointment to the list (mock implementation)
-    const appointment = {
-      id: Math.random().toString(36).substr(2, 9),
-      patientId: newAppointment.patientId,
-      patientName: newAppointment.patientName,
-      date: newAppointment.date,
-      time: newAppointment.time,
-      duration: parseInt(newAppointment.duration),
-      type: newAppointment.type,
-      dentist: DENTISTS.find(d => d.id === newAppointment.dentist)?.name || '',
-      notes: newAppointment.notes,
-      status: 'scheduled',
-    };
-    
-    APPOINTMENTS.push(appointment);
-    
-    // Reset form and close modal
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState('');
+
+const handleCreateAppointment = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const errMsg = validate();
+  if (errMsg) {
+    setError(errMsg);
+    return;
+  }
+
+  setLoading(true);
+  setError('');
+
+  const payload = {
+    patient_id: newAppointment.patientId,
+    patient_name: newAppointment.patientName,
+    date: newAppointment.date,
+    time: newAppointment.time,
+    type: newAppointment.type,
+    dentist: DENTISTS.find(d => d.id === newAppointment.dentist)?.name,
+    notes: newAppointment.notes,
+  };
+
+  try {
+    const res = await fetch('http://localhost:8000/appointments', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) throw new Error('Server error');
+    const created = await res.json();
+    setAppointments(prev => [...prev, created]);
     setNewAppointment({
       patientName: '',
       patientId: '',
-      date: formatDate(new Date()).split(',')[0],
+      date: formatDate(new Date()).split(',')[0], // e.g. "2025-06-14"
       time: '09:00',
       duration: '30',
       type: 'Regular Checkup',
@@ -185,7 +206,14 @@ const AppointmentsPage = () => {
       notes: '',
     });
     setShowNewAppointmentModal(false);
-  };
+  } catch (e) {
+    console.error(e);
+    setError('Could not save. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   // Get tomorrow's date as the minimum date for scheduling
   const tomorrow = new Date();
