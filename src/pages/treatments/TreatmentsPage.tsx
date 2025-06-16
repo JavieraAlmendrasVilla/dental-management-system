@@ -1,84 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Filter, Plus, Search, User, Stethoscope, Activity, FileText, Calendar } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { formatDate } from '../../lib/utils';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
-// Mock treatment data
-const TREATMENTS = [
-  {
-    id: '1',
-    name: 'Root Canal Treatment',
-    category: 'Endodontics',
-    duration: 60,
-    cost: 800,
-    description: 'Complete root canal treatment including cleaning and filling',
-  },
-  {
-    id: '2',
-    name: 'Dental Crown',
-    category: 'Restorative',
-    duration: 45,
-    cost: 1200,
-    description: 'Full porcelain crown installation',
-  },
-  {
-    id: '3',
-    name: 'Deep Cleaning',
-    category: 'Periodontics',
-    duration: 60,
-    cost: 300,
-    description: 'Deep cleaning and scaling treatment',
-  },
-  {
-    id: '4',
-    name: 'Tooth Extraction',
-    category: 'Oral Surgery',
-    duration: 30,
-    cost: 200,
-    description: 'Simple tooth extraction procedure',
-  },
-  {
-    id: '5',
-    name: 'Dental Implant',
-    category: 'Implantology',
-    duration: 90,
-    cost: 3000,
-    description: 'Complete dental implant procedure',
-  },
-];
-
-// Mock recent treatments
-const RECENT_TREATMENTS = [
-  {
-    id: '1',
-    patientName: 'John Smith',
-    patientId: '101',
-    treatment: 'Root Canal Treatment',
-    date: '2024-03-10',
-    dentist: 'Dr. Morgan',
-    status: 'completed',
-  },
-  {
-    id: '2',
-    patientName: 'Sarah Johnson',
-    patientId: '102',
-    treatment: 'Dental Crown',
-    date: '2024-03-09',
-    dentist: 'Dr. Anderson',
-    status: 'in-progress',
-  },
-  {
-    id: '3',
-    patientName: 'Michael Brown',
-    patientId: '103',
-    treatment: 'Deep Cleaning',
-    date: '2024-03-08',
-    dentist: 'Dr. Morgan',
-    status: 'scheduled',
-  },
-];
-
+interface Treatment {
+  id: string;
+  name: string;
+  category: string;
+  duration: number;
+  cost: number;
+  description: string;
+}
 const TreatmentsPage = () => {
   const { t } = useLanguage();
   const [searchTerm, setSearchTerm] = useState('');
@@ -92,26 +25,55 @@ const TreatmentsPage = () => {
     description: '',
   });
 
-  const filteredTreatments = TREATMENTS.filter((treatment) => {
+
+  const [treatments, setTreatments] = useState<Treatment[]>([]);
+
+
+   // Fetch treatments from backend API on mount
+  useEffect(() => {
+    async function fetchTreatments() {
+      try {
+        const res = await fetch('http://localhost:8000/treatments');
+        if (!res.ok) throw new Error('Failed to fetch treatments');
+        const data: Treatment[] = await res.json();
+        setTreatments(data);
+      } catch (error) {
+        console.error('Error fetching treatments:', error);
+      }
+    }
+    fetchTreatments();
+  }, []);
+
+  const filteredTreatments = treatments.filter((treatment) => {
     const matchesSearch = treatment.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'all' || treatment.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const categories = ['all', ...new Set(TREATMENTS.map((t) => t.category))];
+  const categories = ['all', ...Array.from(new Set(treatments.map((t) => t.category)))];
 
-  const handleAddTreatment = (e: React.FormEvent) => {
+  const handleAddTreatment = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In a real app, this would make an API call to add the treatment
-    console.log('Adding treatment:', newTreatment);
-    setShowAddTreatmentModal(false);
-    setNewTreatment({
-      name: '',
-      category: '',
-      duration: '',
-      cost: '',
-      description: '',
-    });
+    try {
+      const res = await fetch('http://localhost:8000/treatments', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: newTreatment.name,
+          category: newTreatment.category,
+          duration: Number(newTreatment.duration),
+          cost: Number(newTreatment.cost),
+          description: newTreatment.description,
+        }),
+      });
+      if (!res.ok) throw new Error('Failed to add treatment');
+      const addedTreatment = await res.json();
+      setTreatments((current) => [...current, addedTreatment]);
+      setShowAddTreatmentModal(false);
+      setNewTreatment({ name: '', category: '', duration: '', cost: '', description: '' });
+    } catch (error) {
+      console.error('Error adding treatment:', error);
+    }
   };
 
   return (
@@ -280,54 +242,13 @@ const TreatmentsPage = () => {
             </div>
           </div>
         </div>
-
-        {/* Recent Treatments */}
-        <div className="md:col-span-3">
-          <div className="rounded-lg border bg-card">
-            <div className="p-4 border-b">
-              <h2 className="font-semibold">{t('treatments.recentTreatments')}</h2>
-            </div>
-            <div className="divide-y">
-              {RECENT_TREATMENTS.map((treatment) => (
-                <div key={treatment.id} className="p-4 hover:bg-muted/50 transition-colors">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-                      <User className="h-5 w-5 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <Link
-                        to={`/patients/${treatment.patientId}`}
-                        className="font-medium hover:underline"
-                      >
-                        {treatment.patientName}
-                      </Link>
-                      <div className="mt-1 flex items-center text-sm text-muted-foreground">
-                        <Calendar className="mr-1 h-4 w-4" />
-                        <span>{formatDate(treatment.date)}</span>
-                        <span className="mx-1">•</span>
-                        <span>{treatment.treatment}</span>
-                      </div>
-                    </div>
-                    <span
-                      className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
-                        treatment.status === 'completed'
-                          ? 'bg-success/10 text-success'
-                          : treatment.status === 'in-progress'
-                          ? 'bg-warning/10 text-warning'
-                          : 'bg-primary/10 text-primary'
-                      }`}
-                    >
-                      {t(`common.status.${treatment.status}`)}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+       </div>
       </div>
-    </div>
+
   );
 };
+
+
+
 
 export default TreatmentsPage;

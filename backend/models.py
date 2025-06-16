@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Date, Boolean, Text, ForeignKey
+from sqlalchemy import Column, Integer, String, Date, Boolean, Text, ForeignKey, JSON, Float
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -37,3 +37,29 @@ class Appointment(Base):
     completed = Column(Boolean, default=False)
 
     patient = relationship("Patient", back_populates="appointments")
+
+class Doctors(Base):
+    __tablename__ = "doctors"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False)
+    email = Column(String, unique=True, nullable=False, index=True)
+    specialization = Column(String, nullable=False)
+    phone = Column(String, nullable=True)
+
+    # For schedule, use a JSON column to store dicts/lists like start, end, daysOff
+    schedule = Column(JSON, nullable=True, default={
+        "start": "09:00",
+        "end": "17:00",
+        "daysOff": [0, 6]  # 0=Sunday, 6=Saturday typically
+    })
+
+class TreatmentModel(Base):
+    __tablename__ = "treatments"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True, nullable=False)
+    category = Column(String, index=True, nullable=False)
+    duration = Column(Integer, nullable=False)  # duration in minutes
+    cost = Column(Float, nullable=False)
+    description = Column(String, nullable=True)

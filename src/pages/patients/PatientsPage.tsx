@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Filter, Plus, Search, User, Stethoscope, Activity } from 'lucide-react';
 import { formatDate } from '../../lib/utils';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
+import AddPatientForm from './AddPatientForm'; // adjust path as needed
+
 
 // Mock patient data
 const PATIENTS = [
@@ -57,12 +59,94 @@ const PatientsPage = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const navigate = useNavigate();
   const { t } = useLanguage();
-  
-  const filteredPatients = PATIENTS.filter((patient) =>
-    patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    patient.phone.includes(searchTerm)
-  );
+
+  const [patients, setPatients] = useState<Patient[]>([]);
+
+  useEffect(() => {
+  fetch('http://localhost:8000/patients')
+    .then(res => res.json())
+    .then(setPatients)
+    .catch(err => console.error('Failed to fetch patients:', err));
+}, []);
+
+
+
+   const filteredPatients = patients.filter((patient) =>
+  patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  patient.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+  patient.phone.includes(searchTerm)
+);
+
+
+
+  const [loading, setLoading] = useState(false);
+const [error, setError] = useState('');
+
+  const [showNewPatientModal, setShowNewPatientModal] = useState(false);
+
+const [newPatient, setNewPatient] = useState({
+  name: '',
+  email: '',
+  phone: '',
+  address: '',
+  date_of_birth: '',
+  gender: 'Other',
+  insurance_provider: '',
+  insurance_number: '',
+  allergies: [],
+  medical_conditions: [],
+  medications: [],
+  notes: '',
+});
+
+
+const handleCreatePatient = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
+
+ if (!newPatient.name || !newPatient.date_of_birth) {
+  setError('Name and date of birth are required.');
+}
+
+
+  try {
+    const res = await fetch('http://localhost:8000/patients', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(newPatient),
+    });
+
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(`Server error: ${msg}`);
+    }
+
+    const createdPatient = await res.json();
+    setPatients(prev => [...prev, createdPatient]);
+
+    setNewPatient({
+      fullName: '',
+      email: '',
+      phone: '',
+      dob: '',
+      gender: 'Other',
+      notes: '',
+    });
+
+    setShowNewPatientModal(false);
+  } catch (err) {
+    console.error(err);
+    setError('Failed to save patient. Please try again.');
+  } finally {
+    setLoading(false);
+  }
+};
+
+
+
+
+
 
   return (
     <div className="space-y-6 animate-fade-in">
@@ -74,12 +158,26 @@ const PatientsPage = () => {
           </p>
         </div>
         <div>
-          <button className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
+          <button
+          onClick={() => setShowNewPatientModal(true)}
+          className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors">
             <Plus className="mr-2 h-4 w-4" />
             {t('patients.addNew')}
           </button>
         </div>
       </div>
+
+      {/* Conditionally render the form here */}
+  {showNewPatientModal && (
+    <AddPatientForm
+      onCancel={() => setShowNewPatientModal(false)}
+      onSubmit={handleCreatePatient}
+      patientData={newPatient}
+      setPatientData={setNewPatient}
+      loading={loading}
+      error={error}
+    />
+  )}
 
       <div className="rounded-lg border bg-card overflow-hidden">
         <div className="p-4 border-b">
@@ -94,7 +192,9 @@ const PatientsPage = () => {
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
-            <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-muted transition-colors">
+            <button className="inline-flex items-center justify-center rounded-md border border-input bg-background px-3 py-2 text-sm font-medium hover:bg-muted transition-colors"
+                    onClick={() => navigate('/patients/add')}
+            >
               <Filter className="mr-2 h-4 w-4" />
               {t('common.filter')}
             </button>
@@ -115,8 +215,8 @@ const PatientsPage = () => {
             </thead>
             <tbody className="divide-y">
               {filteredPatients.map((patient) => (
-                <tr 
-                  key={patient.id} 
+                <tr
+                  key={patient.id}
                   className="hover:bg-muted/50 transition-colors"
                 >
                   <td className="py-3 px-4">
@@ -124,7 +224,7 @@ const PatientsPage = () => {
                       <div className="mr-3 flex h-8 w-8 items-center justify-center rounded-full bg-primary/10">
                         <User className="h-4 w-4 text-primary" />
                       </div>
-                      <Link 
+                      <Link
                         to={`/patients/${patient.id}`}
                         className="font-medium hover:underline"
                       >

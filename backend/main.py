@@ -7,6 +7,8 @@ import models, crud, schemas
 from fastapi.middleware.cors import CORSMiddleware
 from models import Appointment as AppointmentModel
 from schemas import Appointment  # Pydantic response model
+from models import Doctors as DoctorModel
+from schemas import Doctor, DoctorCreate
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -15,7 +17,7 @@ app = FastAPI()
 # For frontend communication (React)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Adjust in prod
+    allow_origins=["http://localhost:5173", "https://verdant-chebakia-62a5d1.netlify.app"],  # Adjust in prod
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -37,10 +39,10 @@ def read_root():
 
 @app.get("/patients/{patient_id}", response_model=schemas.Patient)
 def read_patient(patient_id: int, db: Session = Depends(get_db)):
-    db_patient = crud.get_patient(db, patient_id)
-    if not db_patient:
+    patient = crud.get_patient(db, patient_id)
+    if not patient:
         raise HTTPException(status_code=404, detail="Patient not found")
-    return db_patient
+    return patient
 
 
 @app.get("/patients", response_model=List[schemas.Patient])
@@ -80,6 +82,78 @@ def get_patient_appointments(patient_id: int, db: Session = Depends(get_db)):
 @app.post("/appointments", response_model=schemas.Appointment)
 def create_appointment(appointment: schemas.AppointmentCreate, db: Session = Depends(get_db)):
     return crud.create_appointment(db, appointment)
+
+
+@app.get("/doctors", response_model=List[Doctor])
+def read_doctors(db: Session = Depends(get_db)):
+    return db.query(DoctorModel).all()
+
+
+@app.post("/doctors", response_model=Doctor)
+def create_doctor(doctor: DoctorCreate, db: Session = Depends(get_db)):
+    db_doctor = DoctorModel(**doctor.dict())
+    db.add(db_doctor)
+    db.commit()
+    db.refresh(db_doctor)
+    return db_doctor
+
+
+@app.put("/doctors/{doctor_id}", response_model=Doctor)
+def update_doctor(doctor_id: int, doctor: DoctorCreate, db: Session = Depends(get_db)):
+    db_doctor = db.query(DoctorModel).filter(DoctorModel.id == doctor_id).first()
+    if not db_doctor:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    for key, value in doctor.dict().items():
+        setattr(db_doctor, key, value)
+    db.commit()
+    db.refresh(db_doctor)
+    return db_doctor
+
+
+@app.delete("/doctors/{doctor_id}")
+def delete_doctor(doctor_id: int, db: Session = Depends(get_db)):
+    db_doctor = db.query(DoctorModel).filter(DoctorModel.id == doctor_id).first()
+    if not db_doctor:
+        raise HTTPException(status_code=404, detail="Doctor not found")
+    db.delete(db_doctor)
+    db.commit()
+    return {"ok": True}
+
+
+@app.get("/treatments", response_model=List[schemas.Treatment])
+def read_treatments(db: Session = Depends(get_db)):
+    return db.query(models.TreatmentModel).all()
+
+
+@app.post("/treatments", response_model=schemas.Treatment)
+def create_treatment(treatment: schemas.TreatmentCreate, db: Session = Depends(get_db)):
+    db_treatment = models.TreatmentModel(**treatment.dict())
+    db.add(db_treatment)
+    db.commit()
+    db.refresh(db_treatment)
+    return db_treatment
+
+
+@app.put("/treatments/{treatment_id}", response_model=schemas.Treatment)
+def update_treatment(treatment_id: int, treatment: schemas.TreatmentCreate, db: Session = Depends(get_db)):
+    db_treatment = db.query(models.TreatmentModel).filter(models.TreatmentModel.id == treatment_id).first()
+    if not db_treatment:
+        raise HTTPException(status_code=404, detail="Treatment not found")
+    for key, value in treatment.dict().items():
+        setattr(db_treatment, key, value)
+    db.commit()
+    db.refresh(db_treatment)
+    return db_treatment
+
+
+@app.delete("/treatments/{treatment_id}")
+def delete_treatment(treatment_id: int, db: Session = Depends(get_db)):
+    db_treatment = db.query(models.TreatmentModel).filter(models.TreatmentModel.id == treatment_id).first()
+    if not db_treatment:
+        raise HTTPException(status_code=404, detail="Treatment not found")
+    db.delete(db_treatment)
+    db.commit()
+    return {"ok": True}
 
 
 if __name__ == "__main__":

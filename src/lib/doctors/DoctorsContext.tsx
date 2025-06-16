@@ -70,7 +70,7 @@ function isValidDoctor(doctor: any): doctor is Doctor {
   );
 }
 
-// Load and validate doctors from localStorage
+// Load doctors from localStorage (fallback)
 function loadDoctorsFromStorage(): Doctor[] {
   try {
     const saved = localStorage.getItem('dentasync-doctors');
@@ -86,6 +86,8 @@ function loadDoctorsFromStorage(): Doctor[] {
     return initialDoctors;
   }
 }
+
+
 
 // Load and validate current doctor from localStorage
 function loadCurrentDoctorFromStorage(doctors: Doctor[]): Doctor | null {
@@ -108,6 +110,23 @@ export function DoctorsProvider({ children }: { children: ReactNode }) {
   );
 
   useEffect(() => {
+    async function fetchDoctors() {
+      try {
+        const res = await fetch('http://localhost:8000/doctors');
+        if (!res.ok) throw new Error('Failed to fetch doctors');
+        const data: Doctor[] = await res.json();
+        setDoctors(data);
+        setCurrentDoctor(data.length > 0 ? data[0] : null);
+      } catch (error) {
+        console.error('Error fetching doctors:', error);
+        setDoctors(initialDoctors);
+        setCurrentDoctor(initialDoctors[0] || null);
+      }
+    }
+    fetchDoctors();
+  }, []);
+
+  useEffect(() => {
     localStorage.setItem('dentasync-doctors', JSON.stringify(doctors));
   }, [doctors]);
 
@@ -117,32 +136,56 @@ export function DoctorsProvider({ children }: { children: ReactNode }) {
     }
   }, [currentDoctor]);
 
-  const addDoctor = (doctor: Doctor) => {
-    if (!isValidDoctor(doctor)) {
-      console.error('Invalid doctor data:', doctor);
-      return;
-    }
-    setDoctors((current) => [...current, doctor]);
-  };
+  const addDoctor = async (doctor: Omit<Doctor, 'id'>) => {
+  try {
+    const res = await fetch('http://localhost:8000/doctors', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(doctor),
+    });
+    if (!res.ok) throw new Error('Failed to add doctor');
+    const newDoctor = await res.json();
+    setDoctors((current) => [...current, newDoctor]);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  const updateDoctor = (id: string, doctorUpdate: Partial<Doctor>) => {
+
+  const updateDoctor = async (id: string, doctorUpdate: Partial<Doctor>) => {
+  try {
+    const res = await fetch(`/api/doctors/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(doctorUpdate),
+    });
+    if (!res.ok) throw new Error('Failed to update doctor');
+    const updatedDoctor = await res.json();
     setDoctors((current) =>
-      current.map((doc) =>
-        doc.id === id ? { ...doc, ...doctorUpdate } : doc
-      )
+      current.map((doc) => (doc.id === id ? updatedDoctor : doc))
     );
-    
     if (currentDoctor?.id === id) {
-      setCurrentDoctor((current) => current ? { ...current, ...doctorUpdate } : null);
+      setCurrentDoctor(updatedDoctor);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-  const removeDoctor = (id: string) => {
+
+  const removeDoctor = async (id: string) => {
+  try {
+    const res = await fetch(`/api/doctors/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Failed to delete doctor');
     setDoctors((current) => current.filter((doc) => doc.id !== id));
     if (currentDoctor?.id === id) {
       setCurrentDoctor(doctors.find((doc) => doc.id !== id) || null);
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   return (
     <DoctorsContext.Provider
