@@ -1,84 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Bell, Calendar, ChevronLeft, ChevronRight, Clock, Filter, Plus, Search, User, X } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { formatDate, formatTime } from '../../lib/utils';
+import { formatTime } from '../../lib/utils';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
 
 // Mock appointment data
-const APPOINTMENTS = [
-  {
-    id: '1',
-    patientId: '101',
-    patientName: 'John Smith',
-    date: '2023-12-15',
-    time: '09:00',
-    duration: 30,
-    type: 'Regular Checkup',
-    dentist: 'Dr. Morgan',
-    notes: 'Regular cleaning and checkup',
-    status: 'scheduled',
-  },
-  {
-    id: '2',
-    patientId: '102',
-    patientName: 'Sarah Johnson',
-    date: '2023-12-15',
-    time: '10:00',
-    duration: 60,
-    type: 'Root Canal',
-    dentist: 'Dr. Morgan',
-    notes: 'Root canal treatment on lower right molar',
-    status: 'scheduled',
-  },
-  {
-    id: '3',
-    patientId: '103',
-    patientName: 'Michael Williams',
-    date: '2023-12-15',
-    time: '11:30',
-    duration: 45,
-    type: 'Filling',
-    dentist: 'Dr. Anderson',
-    notes: 'Filling on upper left incisor',
-    status: 'scheduled',
-  },
-  {
-    id: '4',
-    patientId: '104',
-    patientName: 'Emily Davis',
-    date: '2023-12-15',
-    time: '13:00',
-    duration: 30,
-    type: 'Consultation',
-    dentist: 'Dr. Morgan',
-    notes: 'Initial consultation for orthodontic treatment',
-    status: 'scheduled',
-  },
-  {
-    id: '5',
-    patientId: '105',
-    patientName: 'Robert Miller',
-    date: '2023-12-15',
-    time: '14:00',
-    duration: 60,
-    type: 'Crown Fitting',
-    dentist: 'Dr. Morgan',
-    notes: 'Crown fitting for tooth #19',
-    status: 'scheduled',
-  },
-  {
-    id: '6',
-    patientId: '106',
-    patientName: 'Jennifer Taylor',
-    date: '2023-12-15',
-    time: '15:30',
-    duration: 30,
-    type: 'Regular Checkup',
-    dentist: 'Dr. Anderson',
-    notes: 'Regular cleaning and checkup',
-    status: 'scheduled',
-  },
-];
+
 
 // Time slots for the scheduler
 const TIME_SLOTS = [
@@ -106,6 +33,11 @@ const TREATMENT_TYPES = [
   'Emergency',
 ];
 
+const formatDate = (date: Date): string => {
+  return date.toISOString().split('T')[0];
+};
+
+
 const AppointmentsPage = () => {
   const { t } = useLanguage();
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -115,13 +47,16 @@ const AppointmentsPage = () => {
   const [newAppointment, setNewAppointment] = useState({
     patientName: '',
     patientId: '',
-    date: formatDate(new Date()).split(',')[0],
+    date: formatDate(new Date()),
     time: '09:00',
     duration: '30',
     type: 'Regular Checkup',
     dentist: DENTISTS[0].id,
     notes: '',
   });
+
+
+
 
 const [appointments, setAppointments] = useState<Appointment[]>([]);
 
@@ -133,7 +68,14 @@ useEffect(() => {
 }, []);
 
   // Filter appointments based on the selected date and search term
+
+
   const filteredAppointments = appointments.filter((appointment) => {
+      if (!appointment.patientName || !appointment.type) {
+  console.warn('Incomplete appointment:', appointment);
+  return false;
+}
+      console.log('Comparing:', appointment.date, 'with', formatDate(selectedDate));
   const matchesDate = appointment.date === formatDate(selectedDate).replace(/,/g, '');
   const matchesSearch =
     appointment.patientName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -141,6 +83,8 @@ useEffect(() => {
 
   return matchesDate && (searchTerm === '' || matchesSearch);
 });
+
+
 
 
   // Navigate to previous day
@@ -165,8 +109,20 @@ useEffect(() => {
 const [loading, setLoading] = useState(false);
 const [error, setError] = useState('');
 
-const handleCreateAppointment = async (e: React.FormEvent) => {
+const handleCreateAppointment = async (e: React.FormEvent<HTMLFormElement>) => {
   e.preventDefault();
+  console.log('Submit handler called');
+
+  const validate = () => {
+  const { date, patientName, type } = newAppointment;
+  if (!date) return "Please select a date.";
+  if (!patientName) return "Please select a patient.";
+  if (!type) return "Please provide a reason.";
+  return null;
+};
+
+
+
   const errMsg = validate();
   if (errMsg) {
     setError(errMsg);
@@ -177,8 +133,8 @@ const handleCreateAppointment = async (e: React.FormEvent) => {
   setError('');
 
   const payload = {
-    patient_id: newAppointment.patientId,
-    patient_name: newAppointment.patientName,
+    patientId: newAppointment.patientId,
+    patientName: newAppointment.patientName,
     date: newAppointment.date,
     time: newAppointment.time,
     type: newAppointment.type,
@@ -186,25 +142,34 @@ const handleCreateAppointment = async (e: React.FormEvent) => {
     notes: newAppointment.notes,
   };
 
+  console.log("Sending payload:", payload);
+
   try {
     const res = await fetch('http://localhost:8000/appointments', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
-    });
-    if (!res.ok) throw new Error('Server error');
+
+    }); alert('Form submitted!');
+    if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Server error: ${res.status} ${errorText}`);
+    }
     const created = await res.json();
+
     setAppointments(prev => [...prev, created]);
     setNewAppointment({
       patientName: '',
       patientId: '',
-      date: formatDate(new Date()).split(',')[0], // e.g. "2025-06-14"
+      date: formatDate(new Date()), // e.g. "2025-06-14"
       time: '09:00',
       duration: '30',
       type: 'Regular Checkup',
       dentist: DENTISTS[0].id,
       notes: '',
     });
+console.log('Created appointment:', created);
+
     setShowNewAppointmentModal(false);
   } catch (e) {
     console.error(e);
@@ -378,9 +343,7 @@ const handleCreateAppointment = async (e: React.FormEvent) => {
                   />
                 </div>
               </div>
-            </form>
-            
-            <div className="p-4 border-t">
+              <div className="p-4 border-t">
               <div className="flex justify-end gap-2">
                 <button
                   type="button"
@@ -390,15 +353,18 @@ const handleCreateAppointment = async (e: React.FormEvent) => {
                   {t('common.cancel')}
                 </button>
                 <button
-                  onClick={handleCreateAppointment}
+
+                  type="submit"
                   className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
                 >
                   {t('appointments.form.createAppointment')}
                 </button>
               </div>
             </div>
+           </form>
           </div>
         </div>
+
       )}
 
       <div className="rounded-lg border bg-card">
