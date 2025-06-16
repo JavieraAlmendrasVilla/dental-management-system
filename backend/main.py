@@ -8,7 +8,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import Appointment as AppointmentModel
 from schemas import Appointment  # Pydantic response model
 
-
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -29,6 +28,7 @@ def get_db():
         yield db
     finally:
         db.close()
+
 
 @app.get("/")
 def read_root():
@@ -51,6 +51,7 @@ def read_patients(db: Session = Depends(get_db)):
 @app.post("/patients", response_model=schemas.Patient)
 def create_patient(patient: schemas.PatientCreate, db: Session = Depends(get_db)):
     return crud.create_patient(db, patient)
+
 
 @app.get("/appointments", response_model=List[schemas.Appointment])
 def get_appointments(db: Session = Depends(get_db)):
@@ -80,7 +81,6 @@ def get_patient_appointments(patient_id: int, db: Session = Depends(get_db)):
 def create_appointment(appointment: schemas.AppointmentCreate, db: Session = Depends(get_db)):
     return crud.create_appointment(db, appointment)
 
+
 if __name__ == "__main__":
-
     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
-
