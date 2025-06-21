@@ -3,7 +3,11 @@ from __future__ import annotations
 from sqlalchemy.orm import Session
 from models import Patient as PatientModel, Appointment, Doctors as DoctorModel
 from schemas import PatientCreate, AppointmentCreate, Patient as PatientSchema, DoctorCreate, Doctor
+from models import Tooth, ToothArea
+from schemas import ToothCreate
 import json
+import schemas
+import models
 
 
 def normalize_list_field(value):
@@ -82,6 +86,7 @@ def create_appointment(db: Session, appointment: AppointmentCreate):
     db.refresh(db_appointment)
     return db_appointment
 
+
 def doctor_to_dict(doctor: DoctorModel) -> dict:
     data = doctor.__dict__.copy()
     data.pop('_sa_instance_state', None)
@@ -96,12 +101,14 @@ def doctor_to_dict(doctor: DoctorModel) -> dict:
         data['schedule'] = {"start": "09:00", "end": "17:00", "daysOff": [0, 6]}
     return data
 
+
 def get_doctor(db: Session, doctor_id: int) -> Doctor | None:
     doctor = db.query(DoctorModel).filter(DoctorModel.id == doctor_id).first()
     if doctor:
         data = doctor_to_dict(doctor)
         return Doctor(**data)
     return None
+
 
 def get_all_doctors(db: Session) -> list[Doctor]:
     doctors = db.query(DoctorModel).all()
@@ -111,6 +118,7 @@ def get_all_doctors(db: Session) -> list[Doctor]:
         results.append(Doctor(**data))
     return results
 
+
 def create_doctor(db: Session, doctor: DoctorCreate) -> DoctorModel:
     existing_doctor = db.query(DoctorModel).filter(DoctorModel.email == doctor.email).first()
     if existing_doctor:
@@ -118,7 +126,7 @@ def create_doctor(db: Session, doctor: DoctorCreate) -> DoctorModel:
 
     doctor_data = doctor.dict()
     # Convert schedule dict to JSON string for DB storage
-    schedule_json = json.dumps(doctor_data.get("schedule", {"start": "09:00", "end": "17:00", "daysOff": [0,6]}))
+    schedule_json = json.dumps(doctor_data.get("schedule", {"start": "09:00", "end": "17:00", "daysOff": [0, 6]}))
     doctor_data["schedule"] = schedule_json
 
     db_doctor = DoctorModel(**doctor_data)
@@ -126,6 +134,7 @@ def create_doctor(db: Session, doctor: DoctorCreate) -> DoctorModel:
     db.commit()
     db.refresh(db_doctor)
     return db_doctor
+
 
 def update_doctor(db: Session, doctor_id: int, updates: dict) -> DoctorModel:
     doctor = db.query(DoctorModel).filter(DoctorModel.id == doctor_id).first()
@@ -142,6 +151,7 @@ def update_doctor(db: Session, doctor_id: int, updates: dict) -> DoctorModel:
     db.refresh(doctor)
     return doctor
 
+
 def delete_doctor(db: Session, doctor_id: int) -> bool:
     doctor = db.query(DoctorModel).filter(DoctorModel.id == doctor_id).first()
     if not doctor:
@@ -149,3 +159,71 @@ def delete_doctor(db: Session, doctor_id: int) -> bool:
     db.delete(doctor)
     db.commit()
     return True
+
+
+def create_tooth(db: Session, tooth_data: ToothCreate):
+    tooth = Tooth(
+        id=tooth_data.id,                # explicitly set the id from frontend if allowed
+        name=tooth_data.name,
+        adult=tooth_data.adult,
+        position=tooth_data.position,
+        type=tooth_data.type,
+        treatments=tooth_data.treatments or [],  # store treatments list
+        conditions=tooth_data.condition or [],  # optional field
+        areas=ToothArea() # initialize areas as empty list
+    )
+    db.add(tooth)
+    db.flush()  # flush to assign id if not set explicitly
+
+    for area_data in tooth_data.areas:
+        area = ToothArea(
+            id=tooth_data.id,  # use the same id as tooth
+            name=area_data.name,
+            treatment=area_data.treatment,
+            condition=area_data.condition,
+            tooth_id=tooth.id
+        )
+        db.add(area)
+
+    db.commit()
+    db.refresh(tooth)
+    return tooth
+
+
+
+from sqlalchemy.orm import Session
+
+
+def create_dental_chart(db: Session, chart: schemas.DentalChartCreate):
+    db_chart = models.DentalChart(**chart.dict())
+    db.add(db_chart)
+    db.commit()
+    db.refresh(db_chart)
+    return db_chart
+
+
+def get_dental_chart(db: Session, chart_id: int):
+    return db.query(models.DentalChart).filter(models.DentalChart.id == chart_id).first()
+
+
+def update_dental_chart(db: Session, chart_id: int, chart_update: schemas.DentalChartUpdate):
+    chart = get_dental_chart(db, chart_id)
+    if not chart:
+        return None
+    for field, value in chart_update.dict(exclude_unset=True).items():
+        setattr(chart, field, value)
+    db.commit()
+    db.refresh(chart)
+    return chart
+
+
+def delete_dental_chart(db: Session, chart_id: int):
+    chart = get_dental_chart(db, chart_id)
+    if chart:
+        db.delete(chart)
+        db.commit()
+    return chart
+
+
+def get_teeth(db: Session):
+    return db.query(Tooth).all()

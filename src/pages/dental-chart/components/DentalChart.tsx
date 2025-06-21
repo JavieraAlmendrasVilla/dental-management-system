@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 interface ToothArea {
+  id : number;
   name: 'lingual' | 'mesial' | 'buccal' | 'distal' | 'occlusal';
   treatment?: string;
   condition?: string;
@@ -11,6 +12,7 @@ interface Tooth {
   name: string;
   adult: boolean;
   treatments: string[];
+  condition: string[];
   position: 'upper' | 'lower';
   type: 'molar' | 'premolar' | 'canine' | 'incisor';
   areas: ToothArea[];
@@ -19,7 +21,7 @@ interface Tooth {
 interface DentalChartProps {
   selectedTreatment: string;
   onSave: (teeth: Tooth[]) => void;
-  onUpdate: () => void;
+  onUpdate: (updatedTeeth: Tooth[]) => void;
   initialTeeth?: Tooth[];
 }
 
@@ -87,7 +89,7 @@ const createAdultTeeth = (): Tooth[] => {
   ];
 };
 
-const ADULT_TEETH = createAdultTeeth();
+export const ADULT_TEETH = createAdultTeeth();
 
 const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, onUpdate, initialTeeth }) => {
   const [teeth, setTeeth] = useState<Tooth[]>(initialTeeth || ADULT_TEETH);
@@ -99,87 +101,74 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   };
 
   const handleAreaClick = (e: React.MouseEvent, toothId: number, areaName: string) => {
-    e.stopPropagation();
-    if (!selectedTreatment) return;
+  e.stopPropagation();
+  if (!selectedTreatment) return;
 
-    const tooth = teeth.find(t => t.id === toothId);
-    if (!tooth) return;
+  // Update teeth state and then call onUpdate with new teeth data
+  setTeeth((prevTeeth) => {
+    const updatedTeeth = prevTeeth.map((t) => {
+      if (t.id !== toothId) return t;
 
-    if (selectedTreatment === 'caries') {
-      // For caries, toggle condition on the clicked area
-      setTeeth((prevTeeth) =>
-        prevTeeth.map((t) =>
-          t.id === toothId
-            ? {
-                ...t,
-                areas: t.areas.map(area => ({
-                  ...area,
-                  condition: area.name === areaName
-                    ? area.condition === 'caries'
-                      ? undefined
-                      : 'caries'
-                    : area.condition
-                }))
-              }
-            : t
-        )
-      );
-    } else if (selectedTreatment === 'extraction' || selectedTreatment === 'bridge') {
-      // For extraction and bridge, apply to all areas
-      const hasTreatment = tooth.areas.some(area => area.treatment === selectedTreatment);
-      setTeeth((prevTeeth) =>
-        prevTeeth.map((t) =>
-          t.id === toothId
-            ? {
-                ...t,
-                areas: t.areas.map(area => ({
-                  ...area,
-                  treatment: hasTreatment ? undefined : selectedTreatment
-                }))
-              }
-            : t
-        )
-      );
-    } else if (selectedTreatment === 'crown') {
-      // For crown, apply to all outer areas (excluding occlusal)
-      const hasCrown = tooth.areas.some(area => area.treatment === 'crown');
-      setTeeth((prevTeeth) =>
-        prevTeeth.map((t) =>
-          t.id === toothId
-            ? {
-                ...t,
-                areas: t.areas.map(area => ({
-                  ...area,
-                  treatment: area.name !== 'occlusal'
-                    ? hasCrown ? undefined : 'crown'
-                    : area.treatment
-                }))
-              }
-            : t
-        )
-      );
-    } else {
-      // For other treatments, toggle only the clicked area
-      setTeeth((prevTeeth) =>
-        prevTeeth.map((t) =>
-          t.id === toothId
-            ? {
-                ...t,
-                areas: t.areas.map(area => ({
-                  ...area,
-                  treatment: area.name === areaName
-                    ? area.treatment === selectedTreatment
-                      ? undefined
-                      : selectedTreatment
-                    : area.treatment
-                }))
-              }
-            : t
-        )
-      );
-    }
-    onUpdate();
-  };
+      switch (selectedTreatment) {
+        case 'caries':
+          return {
+            ...t,
+            areas: t.areas.map(area => ({
+              ...area,
+              condition: area.name === areaName
+                ? area.condition === 'caries'
+                  ? undefined
+                  : 'caries'
+                : area.condition
+            }))
+          };
+
+        case 'extraction':
+        case 'bridge': {
+          const hasTreatment = t.areas.some(area => area.treatment === selectedTreatment);
+          return {
+            ...t,
+            areas: t.areas.map(area => ({
+              ...area,
+              treatment: hasTreatment ? undefined : selectedTreatment
+            }))
+          };
+        }
+
+        case 'crown': {
+          const hasCrown = t.areas.some(area => area.treatment === 'crown');
+          return {
+            ...t,
+            areas: t.areas.map(area => ({
+              ...area,
+              treatment: area.name !== 'occlusal'
+                ? hasCrown ? undefined : 'crown'
+                : area.treatment
+            }))
+          };
+        }
+
+        default:
+          return {
+            ...t,
+            areas: t.areas.map(area => ({
+              ...area,
+              treatment: area.name === areaName
+                ? area.treatment === selectedTreatment
+                  ? undefined
+                  : selectedTreatment
+                : area.treatment
+            }))
+          };
+      }
+    });
+
+
+
+    return updatedTeeth;
+  });
+};
+
 
   const getAreaColor = (area: ToothArea) => {
     if (area.condition === 'caries') return TREATMENT_COLORS['caries'];
@@ -323,6 +312,25 @@ const DentalChart: React.FC<DentalChartProps> = ({ selectedTreatment, onSave, on
   const upperLeft = teeth.filter(t => t.id >= 21 && t.id <= 28).sort((a, b) => a.id - b.id);
   const lowerLeft = teeth.filter(t => t.id >= 31 && t.id <= 38).sort((a, b) => a.id - b.id);
   const lowerRight = teeth.filter(t => t.id >= 41 && t.id <= 48).sort((a, b) => b.id - a.id);
+
+   const saveToDatabase = async (updatedTeeth: Tooth[]) => {
+  try {
+    const response = await fetch('http://localhost:8000/dental-chart/{patient_id}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ teeth: updatedTeeth })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to save dental chart');
+    }
+  } catch (error) {
+    console.error('Error saving to database:', error);
+  }
+};
+
 
   return (
     <div className="flex flex-col items-center">

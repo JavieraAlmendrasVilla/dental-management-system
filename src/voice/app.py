@@ -3,9 +3,8 @@ from transformers import AutoTokenizer, AutoModelForTokenClassification, pipelin
 from config import LANGUAGES
 from recognizer import recognize_from_mic_vosk, extract_entities
 
-
 def main():
-    lang = "es"  # or "en"
+    lang = "en"  # or "en"
     config = LANGUAGES[lang]
 
     # Load ASR model path
@@ -35,4 +34,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-3

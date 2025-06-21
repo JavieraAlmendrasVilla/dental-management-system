@@ -79,7 +79,7 @@ const PatientsPage = () => {
 
 
 
-  const [loading, setLoading] = useState(false);
+const [loading, setLoading] = useState(false);
 const [error, setError] = useState('');
 
   const [showNewPatientModal, setShowNewPatientModal] = useState(false);

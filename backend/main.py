@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from models import Appointment as AppointmentModel
 from schemas import Appointment  # Pydantic response model
 from models import Doctors as DoctorModel
-from schemas import Doctor, DoctorCreate
+from schemas import Doctor, DoctorCreate, DentalChartCreate, DentalChartOut
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -17,7 +17,7 @@ app = FastAPI()
 # For frontend communication (React)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://verdant-chebakia-62a5d1.netlify.app"],  # Adjust in prod
+    allow_origins=["http://localhost:5173"],  # Adjust in prod
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -154,6 +154,31 @@ def delete_treatment(treatment_id: int, db: Session = Depends(get_db)):
     db.delete(db_treatment)
     db.commit()
     return {"ok": True}
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+
+
+@app.post("/dental-chart/{patient_id}", response_model=schemas.Tooth)
+def create_tooth(tooth: schemas.ToothCreate, db: Session = Depends(get_db)):
+    return crud.create_tooth(db, tooth)
+
+
+@app.get("/dental-chart/{patient_id}", response_model=List[schemas.Tooth])
+def read_teeth(db: Session = Depends(get_db)):
+    return crud.get_teeth(db)
+
+@app.post("/dental-chart/{patient_id}", response_model=DentalChartOut)
+def save_dental_chart(chart: DentalChartCreate, db: Session = Depends(get_db)):
+    try:
+        return crud.create_dental_chart(db, chart)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving chart: {e}")
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 from __future__ import annotations
 from pydantic import BaseModel, EmailStr
-from typing import List, Optional
+from typing import List, Optional, Literal
 from datetime import date
 
 
@@ -92,6 +92,70 @@ class TreatmentCreate(TreatmentBase):
 
 
 class Treatment(TreatmentBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class ToothAreaBase(BaseModel):
+    name: str  # e.g., "buccal", "lingual"
+    treatment: Optional[str] = None  # e.g., "filling", "caries"
+    condition: Optional[str] = None  # e.g., "healthy", "decayed"
+
+
+class ToothAreaCreate(ToothAreaBase):
+    name: Optional[str] = None
+
+
+class ToothArea(ToothAreaBase):
+    name: str  # changed from str to int, if your DB uses int IDs
+
+    class Config:
+        orm_mode = True
+
+
+# ----------------------------------------------------
+# Tooth Models (each tooth has multiple areas)
+# ----------------------------------------------------
+
+class ToothBase(BaseModel):
+    id: int  # add id here, since your frontend sends it
+    name: str  # e.g., "11"
+    adult: bool  # True for adult tooth, False for child
+    position: str  # e.g., "upper", "lower"
+    type: str  # e.g., "incisor", "molar"
+    treatments: Optional[List[str]] = []  # added treatments list to match frontend data
+    conditions: Optional[List[str]] = []
+    areas: List[ToothAreaBase]
+
+class ToothCreate(ToothBase):
+    id: Optional[int] = None
+    areas: List[ToothAreaCreate]
+    #treatments: Optional[List[str]] = []
+
+
+class Tooth(ToothBase):
+    areas: List[ToothArea]
+
+    class Config:
+        orm_mode = True
+
+
+class DentalChartBase(BaseModel):
+    patient_id: Optional[int] = None
+    teeth: List[Tooth]
+
+
+class DentalChartCreate(DentalChartBase):
+    pass
+
+
+class DentalChartUpdate(DentalChartBase):
+    pass
+
+
+class DentalChartOut(DentalChartBase):
     id: int
 
     class Config:

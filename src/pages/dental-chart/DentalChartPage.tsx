@@ -3,6 +3,9 @@ import { useParams } from 'react-router-dom';
 import { Calendar, FilePlus, History, Printer, Save, Clock, X, Plus, Trash2 } from 'lucide-react';
 import DentalChart from './components/DentalChart';
 import { useLanguage } from '../../lib/i18n/LanguageContext';
+import { ADULT_TEETH } from './components/DentalChart';  // adjust the path
+
+
 
 const TREATMENT_TYPES = [
   { id: 'caries', name: 'Caries', color: '#dc2626', cost: 0 },
@@ -31,6 +34,7 @@ interface TreatmentPlanItem {
 const DentalChartPage = () => {
   const { t } = useLanguage();
   const { patientId } = useParams<{ patientId: string }>();
+  const { patientName } = useParams<{ patientName: string }>();
   const [selectedTreatment, setSelectedTreatment] = useState(TREATMENT_TYPES[0].id);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
@@ -39,6 +43,7 @@ const DentalChartPage = () => {
   const [appointmentTime, setAppointmentTime] = useState('');
   const [selectedDoctor, setSelectedDoctor] = useState('');
   const [treatmentPlan, setTreatmentPlan] = useState<TreatmentPlanItem[]>([]);
+  const [teethData, setTeethData] = useState<Tooth[]>(ADULT_TEETH);
   const [newTreatmentItem, setNewTreatmentItem] = useState<TreatmentPlanItem>({
     id: '',
     toothNumber: '',
@@ -48,19 +53,64 @@ const DentalChartPage = () => {
     priority: 'medium'
   });
 
-  const patientName = 'John Smith';
+  const payload = {
+  patient_id: parseInt(patientId || '0'),
+  teeth: teethData.map((tooth: any) => ({
+    id: tooth.id,
+    name: tooth.name,
+    adult: tooth.adult,
+    position: tooth.position,
+    type: tooth.type,
+    areas: (tooth.areas || []).map((area: any) => ({
+        id: tooth.id,
+      name: area.name,
+      treatment: area.treatment ?? null,
+      condition: area.condition ?? null
+    }))
+  }))
+};
+
+
+  /*const patientName = 'John Smith';*/
 
   const getTreatmentName = (treatmentId: string) => {
     return t(`dentalChart.treatments.${treatmentId}`);
   };
 
-  const handleSaveChart = (teeth: any) => {
-    console.log('Saving dental chart:', teeth);
-    setHasUnsavedChanges(false);
-    alert('Dental chart saved successfully!');
+  const handleSaveChart = async () => {
+    try {
+      console.log('Saving dental chart:', teethData);
+      console.log("Sending payload:", {
+  patient_id: parseInt(patientId || '0'),
+  teeth: teethData,
+});
+      const response = await fetch(`http://localhost:8000/dental-chart/${patientId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to save dental chart: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Saved dental chart response:', data);
+
+      setHasUnsavedChanges(false);
+      alert('Dental chart saved successfully!');
+    } catch (error) {
+      console.error('Error saving dental chart:', error);
+      alert('Error saving dental chart. Please try again.');
+    }
   };
 
-  const handleTeethUpdate = () => {
+  const handleTeethUpdate = (updatedTeeth: any[]) => {
+    setTeethData(updatedTeeth);
     setHasUnsavedChanges(true);
   };
 
@@ -128,7 +178,7 @@ const DentalChartPage = () => {
         <div>
           <h1 className="text-2xl font-bold tracking-tight">{t('dentalChart.title')}</h1>
           <p className="text-muted-foreground">
-            {t('dentalChart.patient')}: {patientName} ({t('dentalChart.patientId')}: {patientId})
+            {t('dentalChart.patient')} {t('dentalChart.patientId')}: {patientId}
           </p>
         </div>
         <div className="flex gap-2">
@@ -140,15 +190,15 @@ const DentalChartPage = () => {
             <Printer className="mr-2 h-4 w-4" />
             {t('dentalChart.print')}
           </button>
-          {hasUnsavedChanges && (
-            <button 
+          {
+            <button
               onClick={() => handleSaveChart([])}
               className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary-dark transition-colors"
             >
               <Save className="mr-2 h-4 w-4" />
               {t('dentalChart.saveChanges')}
             </button>
-          )}
+          }
         </div>
       </div>
 
@@ -461,6 +511,7 @@ const DentalChartPage = () => {
                 selectedTreatment={selectedTreatment}
                 onSave={handleSaveChart}
                 onUpdate={handleTeethUpdate}
+                initialTeeth={teethData}
               />
             </div>
           </div>
