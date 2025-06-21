@@ -36,15 +36,5 @@ This is an AI-powered, full-stack dental management system designed for dental c
 - “Book a cleaning appointment next Friday at 3 p.m.”
 - “Abrir configuración” → Triggers UI action
 
-## 🧩 System Architecture
 
-```mermaid
-graph LR
-  A[Voice Input] --> B[ASR (VOSK)]
-  B --> C[Language Detection]
-  C --> D[NER Pipeline (spaCy/HuggingFace)]
-  D --> E[Intent & Slot Extraction (LLM)]
-  E --> F[FastAPI Backend]
-  F --> G[SQLite DB]
-  F --> H[React Frontend]
 
